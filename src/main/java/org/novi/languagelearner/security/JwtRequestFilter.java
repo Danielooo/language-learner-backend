@@ -1,0 +1,82 @@
+package org.novi.languagelearner.security;
+
+
+import io.micrometer.common.lang.NonNull;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.FilterChain;
+
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+
+// class JwtRequestFilter extends OncePerRefilter met comp anno
+// dep injection userDetailsService en jwtService
+// constructor JwtRequestFilter args : jwtService, userDetailsService
+
+// func prot void doFilterInternal met override anno
+// args: @NonNull > hpservReq, hpservResp, filterchain >> throws servExc, IOExc
+
+@Component
+public class JwtRequestFilter extends OncePerRequestFilter {
+
+    private final UserDetailsService userDetailsService;
+
+    private final JwtService jwtService;
+
+    public JwtRequestFilter(UserDetailsService userDetailsService, JwtService jwtService) {
+        this.userDetailsService = userDetailsService;
+        this.jwtService = jwtService;
+    }
+
+    protected void doFilterInternal(@NonNull HttpServletRequest httpServletRequest,
+                                    @NonNull HttpServletResponse httpServletResponse,
+                                    @NonNull FilterChain filterChain) throws ServletException, IOException {
+
+        final String authorizationHeader =
+                httpServletRequest.getHeader("Authorization");
+
+        String username = null;
+        List<GrantedAuthority> roles = new ArrayList<GrantedAuthority>();
+        String jwt = null;
+
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            jwt = authorizationHeader.substring(7);
+            username = jwtService.extractUsername(jwt);
+            roles = jwtService.extractSimpleGrantedAuthorities(jwt);
+        }
+
+        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+
+            if (jwtService.validateToken(jwt)) {
+                var usernamePasswordAuthenticationToken = new
+                        UsernamePasswordAuthenticationToken(
+                        username, null,
+                        roles
+                );
+                usernamePasswordAuthenticationToken.setDetails(new
+                        WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
+
+                // dit is een uitbreiding mocht je meer data in je token willen hebben en meer data willen doorgeven.
+
+                // ApiUserDetails apiUserDetails = new ApiUserDetails(username,jwtService.extractRoles(jwt));
+                // usernamePasswordAuthenticationToken.setDetails(apiUserDetails);
+                // SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+            }
+        }
+        filterChain.doFilter(httpServletRequest, httpServletResponse);
+
+
+    }
+
+}

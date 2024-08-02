@@ -1,40 +1,28 @@
-package org.novi.languagelearner.entities;
+package org.novi.languagelearner.models;
 
-import jakarta.persistence.*;
-
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-@Entity
-@Table(name = "users")
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Column(name = "user_name", unique = true, nullable = false)
+public class UserModel {
+
+    private Long id = -1L;
     private String userName;
-    @Column(name = "password", nullable = false)
     private String password;
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "user_role",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
-    private List<Role> roles;
-    @Column(nullable = false)
-    private boolean isExpired = false;
-    @Column(nullable = false)
-    private boolean isLocked = false;
-    @Column(nullable = false)
-    private boolean areCredentialsExpired = false;
-    @Column(nullable = false)
-    private boolean isEnabled = true;
+    private List<RoleModel> roles = new ArrayList<>();
+    private boolean isExpired;
+    private boolean isLocked;
+    private boolean areCredentialsExpired;
+    private boolean isEnabled;
 
-    public User() {
-        id = -1L;
+    public UserModel() {
     }
 
-    public User(Long id) {
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public UserModel(Long id) {
         this.id = id;
     }
 
@@ -58,7 +46,7 @@ public class User {
         return areCredentialsExpired;
     }
 
-    public void setAreCredentialsExpired(boolean areCredentialsExpired) {
+    public void areCredentialsExpired(boolean areCredentialsExpired) {
         this.areCredentialsExpired = areCredentialsExpired;
     }
 
@@ -74,12 +62,18 @@ public class User {
         return id;
     }
 
-    public List<Role> getRoles() {
+    public List<RoleModel> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<Role> roles) {
+    public void setRoles(List<RoleModel> roles) {
         this.roles = roles;
+    }
+
+    public List<String> getRoleNames() {
+        return roles.stream()
+                .map(RoleModel::getRoleName) // Converts each Role object to its name
+                .collect(Collectors.toList());
     }
 
     public String getUserName() {
@@ -98,3 +92,4 @@ public class User {
         this.password = password;
     }
 }
+

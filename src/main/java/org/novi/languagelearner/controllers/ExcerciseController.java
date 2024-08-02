@@ -12,16 +12,18 @@ import java.util.List;
 @RequestMapping("/excercises")
 public class ExcerciseController {
 
-    @Autowired
-    private ExcerciseService excerciseService;
+    private final ExcerciseService excerciseService;
 
-    // Postmapping
+    @Autowired
+    public ExcerciseController(ExcerciseService excerciseService) {
+        this.excerciseService = excerciseService;
+    }
+
     @PostMapping
     public ExcerciseResponseDTO createExcercise(@RequestBody ExcerciseRequestDTO requestDTO) {
         return excerciseService.createExcercise(requestDTO);
     }
 
-    // Getmapping
     @GetMapping
     public List<ExcerciseResponseDTO> getAllExcercises() {
         return excerciseService.getAllExcercises();
