@@ -61,6 +61,12 @@ public class UserService implements UserDetailsService {
     }
 
 
+    public Optional<UserModel> getUserById(Long id) {
+        var user = userRepository.findById(id);
+        return getOptionalUserModel(user);
+    }
+
+
     public Optional<UserModel> getUserByUserNameAndPassword(String username, String password) {
         var user = userRepository.findByUserNameAndPassword(username, password);
         return getOptionalUserModel(user);

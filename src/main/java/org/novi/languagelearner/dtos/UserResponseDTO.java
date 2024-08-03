@@ -1,5 +1,7 @@
 package org.novi.languagelearner.dtos;
 
+import java.util.List;
+
 public class UserResponseDTO {
 
     // username, pw, roles

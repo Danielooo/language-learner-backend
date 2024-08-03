@@ -32,7 +32,7 @@ public class SecurityConfig {
                 .httpBasic(hp -> hp.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/public**").permitAll()
-                        .requestMatchers("/secure").authenticated()
+                        .requestMatchers("/secure**").authenticated()
                         .requestMatchers("/secure/admin").hasRole("ADMIN")
                         .requestMatchers("/users/**").hasRole("ADMIN")
                         .requestMatchers("/secure/user").hasRole("USER")
@@ -57,3 +57,5 @@ public class SecurityConfig {
     }
 
 }
+
+

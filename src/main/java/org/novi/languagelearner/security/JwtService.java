@@ -32,7 +32,9 @@ public class JwtService {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
     }
+
     public String extractUsername(String token) {
+
         return extractClaim(token, Claims::getSubject);
     }
 
@@ -41,6 +43,7 @@ public class JwtService {
     }
 
     public List<String> extractRoles(String token) {
+
         final Claims claims = extractAllClaims(token);
         List<String> roles = claims.get(ROLES_CLAIMS_NAME, List.class);
         if (roles == null) return Collections.emptyList(); // Geen rollen gevonden, retourneer lege lijst

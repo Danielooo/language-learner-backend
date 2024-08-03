@@ -43,9 +43,15 @@ public class ApiUserDetails implements UserDetails {
         return user.getPassword();
     }
 
+//    Remark: changed this to just username, because it's just username in the SQL backend
+//    @Override
+//    public String getUsername() {
+//        return  user.getId() + "::" + user.getUserName();
+//    }
+
     @Override
     public String getUsername() {
-        return  user.getId() + "::" + user.getUserName();
+        return user.getUserName();
     }
 
     @Override

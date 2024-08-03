@@ -3,13 +3,16 @@ package org.novi.languagelearner.controllers;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.novi.languagelearner.dtos.UserChangePasswordRequestDTO;
-import org.novi.languagelearner.dtos.UserDTOMapper;
+import org.novi.languagelearner.mappers.UserDTOMapper;
 import org.novi.languagelearner.dtos.UserRequestDTO;
 import org.novi.languagelearner.helpers.UrlHelper;
+import org.novi.languagelearner.models.UserModel;
 import org.novi.languagelearner.security.JwtService;
 import org.novi.languagelearner.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
@@ -25,6 +28,19 @@ public class UserController {
         this.userService = userService;
         this.request = request;
         this.jwtService = jwtService;
+    }
+
+    // Getmapping getUserInfo
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getUserInfo(@PathVariable Long id) {
+        Optional<UserModel> userModel = userService.getUserById(id);
+        // make usermodel to userResponseDTO
+        if(userModel.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        var userResponseDTO = userDTOMapper.mapToDTO(userModel.get());
+        return ResponseEntity.ok().body(userResponseDTO);
     }
 
     // previously /users

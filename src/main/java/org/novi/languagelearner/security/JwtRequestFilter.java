@@ -20,12 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-// class JwtRequestFilter extends OncePerRefilter met comp anno
-// dep injection userDetailsService en jwtService
-// constructor JwtRequestFilter args : jwtService, userDetailsService
-
-// func prot void doFilterInternal met override anno
-// args: @NonNull > hpservReq, hpservResp, filterchain >> throws servExc, IOExc
 
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
@@ -51,7 +45,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         String jwt = null;
 
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            jwt = authorizationHeader.substring(7);
+            // jwt = delete 'Bearer' from the header and trim the rest of the string
+            jwt = authorizationHeader.substring(7).trim();
             username = jwtService.extractUsername(jwt);
             roles = jwtService.extractSimpleGrantedAuthorities(jwt);
         }
@@ -69,9 +64,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
                 // dit is een uitbreiding mocht je meer data in je token willen hebben en meer data willen doorgeven.
 
-                // ApiUserDetails apiUserDetails = new ApiUserDetails(username,jwtService.extractRoles(jwt));
-                // usernamePasswordAuthenticationToken.setDetails(apiUserDetails);
-                // SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                 ApiUserDetails apiUserDetails = new ApiUserDetails(username,jwtService.extractRoles(jwt));
+                 usernamePasswordAuthenticationToken.setDetails(apiUserDetails);
+                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             }
         }
         filterChain.doFilter(httpServletRequest, httpServletResponse);
