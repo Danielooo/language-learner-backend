@@ -49,6 +49,7 @@ public class UserService implements UserDetailsService {
             role.getUsers().add(user);
         }
     }
+
     @Transactional
     public boolean createUser(UserModel userModel, String[] roles) {
         return createUser(userModel, Arrays.asList(roles));

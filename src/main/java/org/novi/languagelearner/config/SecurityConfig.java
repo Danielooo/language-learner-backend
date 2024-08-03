@@ -31,13 +31,12 @@ public class SecurityConfig {
                 // hp.disable schakelt uit dat er toegang kan worden verkregen met username en password. Je moet een jwt token hebben. Daar zorgt de .addFilterBefore voor.
                 .httpBasic(hp -> hp.disable())
                 .authorizeHttpRequests(auth -> auth
-
                         .requestMatchers("/public**").permitAll()
                         .requestMatchers("/secure").authenticated()
                         .requestMatchers("/secure/admin").hasRole("ADMIN")
                         .requestMatchers("/users/**").hasRole("ADMIN")
                         .requestMatchers("/secure/user").hasRole("USER")
-                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("/login**").permitAll()
                         .requestMatchers("/practice**").hasRole("USER")
                         .anyRequest().denyAll()
                         )
