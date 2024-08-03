@@ -2,8 +2,17 @@ package org.novi.languagelearner.dtos;
 
 public class ExcerciseRequestDTO {
 
+    public Long id;
     public String question;
     public String answer;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getQuestion() {
         return question;

@@ -29,4 +29,18 @@ public class ExcerciseService {
         return excercises.stream().map(ExcerciseMapper::toResponseDTO).collect(Collectors.toList());
     }
 
+    public void deleteExcercise(Long id) {
+        repository.deleteById(id);
+    }
+
+//    public ExcerciseResponseDTO updateExcercise(Long id, ExcerciseRequestDTO requestDTO) {
+
+        // Retrieve the existing Excercise entity from the repository using the provided id.
+        // Update the specific field(s) of the retrieved Excercise entity.
+        // Save the updated Excercise entity back to the repository.
+        // Convert the updated Excercise entity to a ExcerciseResponseDTO and return it.
+
+//    }
+
+
 }

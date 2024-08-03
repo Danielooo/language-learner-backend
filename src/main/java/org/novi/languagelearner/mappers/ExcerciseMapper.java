@@ -24,4 +24,14 @@ public class ExcerciseMapper {
         return responseDTO;
     }
 
+    public ExcerciseResponseDTO toEntityUpdate(Excercise excercise) {
+
+
+        ExcerciseResponseDTO responseDTO = new ExcerciseResponseDTO();
+        responseDTO.setId(excercise.getId());
+        responseDTO.setQuestion(excercise.getQuestion());
+        responseDTO.setAnswer(excercise.getAnswer());
+        return responseDTO;
+    }
+
 }

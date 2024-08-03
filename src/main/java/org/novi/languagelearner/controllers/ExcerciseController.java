@@ -4,6 +4,7 @@ import org.novi.languagelearner.dtos.ExcerciseRequestDTO;
 import org.novi.languagelearner.dtos.ExcerciseResponseDTO;
 import org.novi.languagelearner.services.ExcerciseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,5 +28,19 @@ public class ExcerciseController {
     @GetMapping
     public List<ExcerciseResponseDTO> getAllExcercises() {
         return excerciseService.getAllExcercises();
+    }
+
+    // TODO: putmapping updateExcercise
+        //    @PutMapping("/{id}")
+        //    public ExcerciseResponseDTO updateExcercise(@PathVariable Long id, @RequestBody ExcerciseRequestDTO requestDTO) {
+        //        return excerciseService.updateExcercise(id, requestDTO);
+        //    }
+
+    // TODO: deletemapping deleteExcercise
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteExcercise(@PathVariable Long id) {
+        excerciseService.deleteExcercise(id);
+
+        return ResponseEntity.ok().body(String.format("Excercise with id %d deleted", id));
     }
 }
