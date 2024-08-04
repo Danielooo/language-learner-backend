@@ -33,6 +33,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/excercises**").permitAll()
                         .requestMatchers("/excercises/delete/{id}").permitAll()
+                        .requestMatchers("/excercises/").permitAll()
                         .requestMatchers("/public**").permitAll()
                         .requestMatchers("/secure**").authenticated()
                         .requestMatchers("/secure/admin").hasRole("ADMIN")
@@ -40,7 +41,7 @@ public class SecurityConfig {
                         .requestMatchers("/secure/user").hasRole("USER")
                         .requestMatchers("/login**").permitAll()
                         .requestMatchers("/practice**").hasRole("USER")
-                        .anyRequest().denyAll()
+//                        .anyRequest().denyAll()
                         )
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .csrf(csrf -> csrf.disable())

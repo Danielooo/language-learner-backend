@@ -31,10 +31,12 @@ public class ExcerciseController {
     }
 
     // TODO: putmapping updateExcercise
-        //    @PutMapping("/{id}")
-        //    public ExcerciseResponseDTO updateExcercise(@PathVariable Long id, @RequestBody ExcerciseRequestDTO requestDTO) {
-        //        return excerciseService.updateExcercise(id, requestDTO);
-        //    }
+    @PutMapping("/{id}")
+    public ExcerciseResponseDTO updateExcercise(@PathVariable Long id, @RequestBody ExcerciseRequestDTO requestDTO) {
+
+        return excerciseService.updateExcercise(id, requestDTO);
+    }
+
 
     // TODO: deletemapping deleteExcercise
     @DeleteMapping("/delete/{id}")
@@ -43,4 +45,6 @@ public class ExcerciseController {
 
         return ResponseEntity.ok().body(String.format("Excercise with id %d deleted", id));
     }
+
+    // TODO: Bulk excercise creation PostMapping
 }

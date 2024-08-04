@@ -17,6 +17,10 @@ public class Excercise {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getQuestion() {
         return question;
     }

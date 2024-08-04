@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ExcerciseMapper {
 
-    public static Excercise toEntity(ExcerciseRequestDTO requestDTO) {
+    public Excercise toEntity(ExcerciseRequestDTO requestDTO) {
         Excercise excercise = new Excercise();
         excercise.setQuestion(requestDTO.getQuestion());
         excercise.setAnswer(requestDTO.getAnswer());
@@ -16,7 +16,7 @@ public class ExcerciseMapper {
     }
 
 
-    public static ExcerciseResponseDTO toResponseDTO(Excercise excercise) {
+    public ExcerciseResponseDTO toResponseDTO(Excercise excercise) {
         ExcerciseResponseDTO responseDTO = new ExcerciseResponseDTO();
         responseDTO.setId(excercise.getId());
         responseDTO.setQuestion(excercise.getQuestion());
@@ -24,14 +24,10 @@ public class ExcerciseMapper {
         return responseDTO;
     }
 
-    public ExcerciseResponseDTO toEntityUpdate(Excercise excercise) {
-
-
-        ExcerciseResponseDTO responseDTO = new ExcerciseResponseDTO();
-        responseDTO.setId(excercise.getId());
-        responseDTO.setQuestion(excercise.getQuestion());
-        responseDTO.setAnswer(excercise.getAnswer());
-        return responseDTO;
-    }
+//    // ExercisePutDTO
+//    public Excercise toExcercisePutDTO(ExcercisePutDTO excercisePutDTO) {
+//
+//
+//    }
 
 }
