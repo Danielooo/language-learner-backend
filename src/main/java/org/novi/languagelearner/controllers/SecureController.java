@@ -1,6 +1,5 @@
 package org.novi.languagelearner.controllers;
 
-import org.novi.languagelearner.dtos.UserRequestDTO;
 import org.novi.languagelearner.dtos.UserResponseDTO;
 import org.novi.languagelearner.entities.User;
 import org.novi.languagelearner.mappers.UserMapper;
@@ -15,6 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
 
+// TODO: Test of User en Secure endpoints goed werken,
+// TODO: RoleModel verwijderen en bugfixen
+// TODO: Endpoints testen >> weggooien overbodige bestanden
+// TODO: Mergen naar Main
+
 @RestController
 public class SecureController {
 
@@ -22,11 +26,9 @@ public class SecureController {
     private Authentication authentication;
 
     private final UserService userService;
-    private final JwtService jwtService;
 
     public SecureController(UserService userService, UserMapper userMapper, JwtService jwtService) {
         this.userService = userService;
-        this.jwtService = jwtService;
         this.userMapper = userMapper;
     }
 

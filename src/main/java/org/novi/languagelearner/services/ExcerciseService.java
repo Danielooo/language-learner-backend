@@ -37,7 +37,12 @@ public class ExcerciseService {
     }
 
     public void deleteExcercise(Long id) {
-        excerciseRepository.deleteById(id);
+        if (excerciseRepository.existsById(id)) {
+            excerciseRepository.deleteById(id);
+        } else {
+            throw new RecordNotFoundException("Exercise id is not found in database");
+        }
+
     }
 
     public ExcerciseResponseDTO updateExcercise(Long id, ExcerciseRequestDTO requestDTO) {
