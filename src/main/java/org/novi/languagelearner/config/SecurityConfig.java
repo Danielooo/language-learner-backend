@@ -36,7 +36,7 @@ public class SecurityConfig {
                         .requestMatchers("/excercises/delete/{id}").permitAll()
                         .requestMatchers("/excercises/").permitAll()
                         .requestMatchers("/public/**").permitAll()
-//                        .requestMatchers("/public/more").permitAll()
+                        .requestMatchers("/public/more").permitAll()
                         .requestMatchers("/secure/**").permitAll()
                         .requestMatchers("/secure/admin").hasRole("ADMIN")
                         .requestMatchers("/users/**").hasRole("ADMIN")
