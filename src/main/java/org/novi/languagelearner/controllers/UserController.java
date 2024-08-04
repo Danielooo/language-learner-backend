@@ -4,9 +4,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.novi.languagelearner.dtos.UserChangePasswordRequestDTO;
 import org.novi.languagelearner.dtos.UserRequestDTO;
+import org.novi.languagelearner.entities.User;
 import org.novi.languagelearner.helpers.UrlHelper;
 import org.novi.languagelearner.mappers.UserMapper;
-import org.novi.languagelearner.models.UserModel;
 import org.novi.languagelearner.security.JwtService;
 import org.novi.languagelearner.services.UserService;
 import org.springframework.http.ResponseEntity;
@@ -32,13 +32,13 @@ public class UserController {
     // Getmapping getUserInfo
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserInfo(@PathVariable Long id) {
-        Optional<UserModel> userModel = userService.getUserById(id);
+        Optional<User> user = userService.getUserById(id);
         // make usermodel to userResponseDTO
-        if(userModel.isEmpty()) {
+        if(user.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
-        var userResponseDTO = userMapper.mapToResponseDTO(userModel.get());
+        var userResponseDTO = userMapper.mapToResponseDTO(user.get());
         return ResponseEntity.ok().body(userResponseDTO);
     }
 
@@ -46,19 +46,19 @@ public class UserController {
     @PostMapping
     public ResponseEntity<?> CreateUser(@RequestBody @Valid UserRequestDTO userDTO)
     {
-        var userModel = userMapper.mapToModel(userDTO);
-        userModel.setEnabled(true);
-        if(!userService.createUser(userModel, userDTO.getRoles())) {
+        var user = userMapper.mapToEntity(userDTO);
+        user.setEnabled(true);
+        if(!userService.createUser(user, userDTO.getRoles())) {
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.created(UrlHelper.getCurrentUrlWithId(request, userModel.getId())).build();
+        return ResponseEntity.created(UrlHelper.getCurrentUrlWithId(request, user.getId())).build();
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> ChangePassword(@PathVariable Long id, @RequestBody @Valid UserChangePasswordRequestDTO userDTO)
     {
-        var userModel = userMapper.mapToModel(userDTO, id);
-        if(!userService.updatePassword(userModel)) {
+        var user = userMapper.mapToEntity(userDTO, id);
+        if(!userService.updatePassword(user)) {
             return ResponseEntity.badRequest().build();
         }
         return  ResponseEntity.ok().build();

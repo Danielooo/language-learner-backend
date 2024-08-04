@@ -2,6 +2,7 @@ package org.novi.languagelearner.entities;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,7 +21,7 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private List<Role> roles;
+    private List<Role> roles = new ArrayList<>();
     @Column(nullable = false)
     private boolean isExpired = false;
     @Column(nullable = false)
@@ -36,6 +37,10 @@ public class User {
 
     public User(Long id) {
         this.id = id;
+    }
+
+    public void setId(Long id) {
+
     }
 
     public boolean isExpired() {
@@ -97,4 +102,6 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
+
 }

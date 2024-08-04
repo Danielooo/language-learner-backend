@@ -1,8 +1,9 @@
 package org.novi.languagelearner.controllers;
 
+import org.novi.languagelearner.dtos.UserRequestDTO;
 import org.novi.languagelearner.dtos.UserResponseDTO;
-import org.novi.languagelearner.mappers.UserDTOMapper;
-import org.novi.languagelearner.models.UserModel;
+import org.novi.languagelearner.entities.User;
+import org.novi.languagelearner.mappers.UserMapper;
 import org.novi.languagelearner.security.JwtService;
 import org.novi.languagelearner.services.UserService;
 import org.springframework.http.ResponseEntity;
@@ -17,16 +18,16 @@ import java.util.Optional;
 @RestController
 public class SecureController {
 
+    private final UserMapper userMapper;
     private Authentication authentication;
 
     private final UserService userService;
-    private final UserDTOMapper userDTOMapper;
     private final JwtService jwtService;
 
-    public SecureController(UserService userService, UserDTOMapper userDTOMapper, JwtService jwtService) {
+    public SecureController(UserService userService, UserMapper userMapper, JwtService jwtService) {
         this.userService = userService;
-        this.userDTOMapper = userDTOMapper;
         this.jwtService = jwtService;
+        this.userMapper = userMapper;
     }
 
     @GetMapping("/secure")
@@ -47,12 +48,16 @@ public class SecureController {
 
 
     @GetMapping("/secure/user")
-    public ResponseEntity<Optional<UserResponseDTO>> getUserData() {
+    public ResponseEntity<?> getUserData() {
         setAuthentication(SecurityContextHolder.getContext());
 
-        UserResponseDTO userResponseDTO = userService.getUserByUserName(authentication.getName());
-
-        return ResponseEntity.ok(userResponseDTO);
+        Optional<User> user = userService.getUserByUserName(authentication.getName());
+        if (user.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        } else {
+            UserResponseDTO userResponseDTO = userMapper.mapToResponseDTO(user.get());
+            return ResponseEntity.ok().body(userResponseDTO);
+        }
     }
 
 //    @GetMapping("/secure/user")

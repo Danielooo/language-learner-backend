@@ -1,7 +1,8 @@
 package org.novi.languagelearner.security;
 
+import org.novi.languagelearner.entities.Role;
+import org.novi.languagelearner.entities.User;
 import org.novi.languagelearner.models.RoleModel;
-import org.novi.languagelearner.models.UserModel;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,25 +13,25 @@ import java.util.List;
 
 public class ApiUserDetails implements UserDetails {
 
-    private final UserModel user;
+    private final User user;
 
-    public ApiUserDetails(UserModel user) {
+    public ApiUserDetails(User user) {
         this.user = user;
     }
 
     public ApiUserDetails(String username, List<String> roles) {
-        user = new UserModel();
+        user = new User();
         user.setUserName(username);
 
         for (String role : roles) {
-            user.getRoles().add(new RoleModel(role));
+            user.getRoles().add(new Role(role));
         }
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
-        for (RoleModel role: user.getRoles()) {
+        for (Role role: user.getRoles()) {
             if(role.isActive()) {
                 authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
             }
