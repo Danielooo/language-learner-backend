@@ -32,21 +32,23 @@ public class SecurityConfig {
                 .httpBasic(hp -> hp.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/excercises**").permitAll()
+                        .requestMatchers("/excercises/**").permitAll()
                         .requestMatchers("/excercises/delete/{id}").permitAll()
                         .requestMatchers("/excercises/").permitAll()
-                        .requestMatchers("/public**").permitAll()
-                        .requestMatchers("/secure**").authenticated()
+                        .requestMatchers("/public/**").permitAll()
+//                        .requestMatchers("/public/more").permitAll()
+                        .requestMatchers("/secure/**").permitAll()
                         .requestMatchers("/secure/admin").hasRole("ADMIN")
                         .requestMatchers("/users/**").hasRole("ADMIN")
-                        .requestMatchers("/secure/user").hasRole("USER")
+                        .requestMatchers("/secure/user").permitAll()
                         .requestMatchers("/login**").permitAll()
                         .requestMatchers("/practice**").hasRole("USER")
-//                        .anyRequest().denyAll()
+                        .anyRequest().denyAll()
                         )
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .csrf(csrf -> csrf.disable())
                 // de lege lambda zorgt ervoor dat de default CORS configuratie
-                .cors(cors -> {})
+                .cors(cors -> cors.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 );
                 return httpSecurity.build();

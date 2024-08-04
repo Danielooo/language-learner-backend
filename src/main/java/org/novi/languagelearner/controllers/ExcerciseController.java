@@ -39,7 +39,7 @@ public class ExcerciseController {
 
 
     // TODO: deletemapping deleteExcercise
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteExcercise(@PathVariable Long id) {
         excerciseService.deleteExcercise(id);
 
@@ -47,4 +47,5 @@ public class ExcerciseController {
     }
 
     // TODO: Bulk excercise creation PostMapping
+
 }
