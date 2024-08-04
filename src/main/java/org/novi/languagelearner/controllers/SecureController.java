@@ -10,8 +10,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
@@ -21,9 +19,9 @@ public class SecureController {
 
     private Authentication authentication;
 
-    private UserService userService;
-    private UserDTOMapper userDTOMapper;
-    private JwtService jwtService;
+    private final UserService userService;
+    private final UserDTOMapper userDTOMapper;
+    private final JwtService jwtService;
 
     public SecureController(UserService userService, UserDTOMapper userDTOMapper, JwtService jwtService) {
         this.userService = userService;
@@ -47,17 +45,27 @@ public class SecureController {
         return ResponseEntity.ok("Dit is beveiligde admin data: " + authentication.getName());
     }
 
+
     @GetMapping("/secure/user")
-    public ResponseEntity<UserResponseDTO> getUserData(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<Optional<UserResponseDTO>> getUserData() {
         setAuthentication(SecurityContextHolder.getContext());
 
-        String username = jwtService.extractUsername(token);
-
-        Optional<UserModel> userModel = userService.getUserByUserName(username);
-
-        UserResponseDTO userResponseDTO = userDTOMapper.mapToDTO(userModel.get());
-        System.out.println(authentication.getName());
+        UserResponseDTO userResponseDTO = userService.getUserByUserName(authentication.getName());
 
         return ResponseEntity.ok(userResponseDTO);
     }
+
+//    @GetMapping("/secure/user")
+//    public ResponseEntity<UserResponseDTO> getUserData(@RequestHeader("Authorization") String token) {
+//        setAuthentication(SecurityContextHolder.getContext());
+//
+//        String username = jwtService.extractUsername(token);
+//
+//        Optional<UserModel> userModel = userService.getUserByUserName(username);
+//
+//        UserResponseDTO userResponseDTO = userDTOMapper.mapToDTO(userModel.get());
+//        System.out.println(authentication.getName());
+//
+//        return ResponseEntity.ok(userResponseDTO);
+//    }
 }

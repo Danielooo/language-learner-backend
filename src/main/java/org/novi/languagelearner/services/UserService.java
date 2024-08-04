@@ -55,7 +55,7 @@ public class UserService implements UserDetailsService {
         return createUser(userModel, Arrays.asList(roles));
     }
 
-    public Optional<UserModel> getUserByUserName(String username) {
+    public Optional<UserModel>  getUserByUserName(String username) {
         var user = userRepository.findByUserName(username);
         return getOptionalUserModel(user);
     }
@@ -96,3 +96,4 @@ public class UserService implements UserDetailsService {
         return userRepository.save(entity) != null;
     }
 }
+
