@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.novi.languagelearner.dtos.UserChangePasswordRequestDTO;
 import org.novi.languagelearner.dtos.UserRequestDTO;
+import org.novi.languagelearner.dtos.UserResponseDTO;
 import org.novi.languagelearner.entities.User;
 import org.novi.languagelearner.helpers.UrlHelper;
 import org.novi.languagelearner.mappers.UserMapper;
@@ -29,20 +30,17 @@ public class UserController {
         this.request = request;
     }
 
-    // Getmapping getUserInfo
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserInfo(@PathVariable Long id) {
         Optional<User> user = userService.getUserById(id);
-        // make usermodel to userResponseDTO
         if(user.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
-        var userResponseDTO = userMapper.mapToResponseDTO(user.get());
+        UserResponseDTO userResponseDTO = userMapper.mapToResponseDTO(user.get());
         return ResponseEntity.ok().body(userResponseDTO);
     }
 
-    // previously /users
     @PostMapping
     public ResponseEntity<?> CreateUser(@RequestBody @Valid UserRequestDTO userDTO)
     {

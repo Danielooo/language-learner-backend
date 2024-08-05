@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 public class UserMapper{
 
     private final RoleMapper roleMapper;
-
     private final PasswordEncoder passwordEncoder;
 
     public UserMapper(RoleMapper roleMapper, PasswordEncoder passwordEncoder) {
@@ -48,13 +47,13 @@ public class UserMapper{
         return result;
     }
 
-    // UserModel to a UserResponseDTO
     public UserResponseDTO mapToResponseDTO(User user) {
         var userResponseDTO = new UserResponseDTO();
         userResponseDTO.setId(user.getId());
         userResponseDTO.setUsername(user.getUserName());
-        // just for testing purposes, unsafe to return password
         userResponseDTO.setPassword(user.getPassword());
+        userResponseDTO.setRoles(user.getRoles());
+
 
         return userResponseDTO;
     }
