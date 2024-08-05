@@ -2,8 +2,10 @@ package org.novi.languagelearner.controllers;
 
 import org.novi.languagelearner.dtos.ExcerciseRequestDTO;
 import org.novi.languagelearner.dtos.ExcerciseResponseDTO;
+import org.novi.languagelearner.exceptions.RecordNotFoundException;
 import org.novi.languagelearner.services.ExcerciseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,13 +39,14 @@ public class ExcerciseController {
         return excerciseService.updateExcercise(id, requestDTO);
     }
 
-
-    // TODO: deletemapping deleteExcercise
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteExcercise(@PathVariable Long id) {
-        excerciseService.deleteExcercise(id);
-
-        return ResponseEntity.ok().body(String.format("Excercise with id %d deleted", id));
+    public ResponseEntity<?> deleteExcercise(@PathVariable Long id) {
+        try {
+            excerciseService.deleteExcercise(id);
+            return ResponseEntity.ok().body(String.format("Excercise with id %d is deleted", id));
+        } catch (RecordNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     // TODO: Bulk excercise creation PostMapping

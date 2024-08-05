@@ -1,17 +1,18 @@
 package org.novi.languagelearner.dtos;
 
+import org.novi.languagelearner.entities.Role;
+
 import java.util.List;
 
 public class UserResponseDTO {
 
-    // username, pw, roles
     private Long id;
 
     private String username;
 
     private String password;
 
-    private String[] roles;
+    private List<String> roles;
 
     public Long getId() {
         return id;
@@ -37,11 +38,13 @@ public class UserResponseDTO {
         this.password = password;
     }
 
-    public String[] getRoles() {
+    public List<String> getRoles() {
         return roles;
     }
 
-    public void setRoles(String[] roles) {
+    public void setRoles(List<String> roles) {
         this.roles = roles;
     }
+
+
 }

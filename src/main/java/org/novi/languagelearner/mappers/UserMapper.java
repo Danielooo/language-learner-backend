@@ -1,15 +1,20 @@
 package org.novi.languagelearner.mappers;
 
+import org.novi.languagelearner.dtos.UserChangePasswordRequestDTO;
+import org.novi.languagelearner.dtos.UserRequestDTO;
+import org.novi.languagelearner.dtos.UserResponseDTO;
+import org.novi.languagelearner.entities.Role;
 import org.novi.languagelearner.entities.User;
-import org.novi.languagelearner.models.UserModel;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class UserMapper{
 
     private final RoleMapper roleMapper;
-
     private final PasswordEncoder passwordEncoder;
 
     public UserMapper(RoleMapper roleMapper, PasswordEncoder passwordEncoder) {
@@ -17,34 +22,47 @@ public class UserMapper{
         this.passwordEncoder = passwordEncoder;
     }
 
-    public UserModel fromEntity(User entity) {
-        if (entity == null) {
-            return null;
-        }
-        UserModel model = new UserModel(entity.getId());
-        model.setPassword(entity.getPassword());
-        model.setUserName(entity.getUserName());
-        model.areCredentialsExpired(entity.areCredentialsExpired());
-        model.setEnabled(entity.isEnabled());
-        model.setExpired(entity.isExpired());
-        model.setLocked(entity.isLocked());
-        model.setRoles(roleMapper.fromEntities(entity.getRoles()));
-        return model;
+    //TODO: Delete maybe bc not needed when there's no usermodel
+//    public UserModel fromEntity(User entity) {
+//        if (entity == null) {
+//            return null;
+//        }
+//        User user = new User(entity.getId());
+//        user.setPassword(entity.getPassword());
+//        user.setUserName(entity.getUserName());
+//        user.areCredentialsExpired(entity.areCredentialsExpired());
+//        user.setEnabled(entity.isEnabled());
+//        user.setExpired(entity.isExpired());
+//        user.setLocked(entity.isLocked());
+//        user.setRoles(roleMapper.fromEntities(entity.getRoles()));
+//        return user;
+//    }
+
+    public User mapToEntity(UserRequestDTO userDTO) {
+        var result = new User(-1L);
+        result.setUserName(userDTO.getUserName());
+        result.setPassword(userDTO.getPassword());
+        return result;
     }
 
-    public User toEntity(UserModel model) {
-        if (model == null) {
-            return null;
+    public User mapToEntity(UserChangePasswordRequestDTO userDTO, Long id) {
+        var result = new User(id);
+        result.setPassword(userDTO.getPassword());
+        return result;
+    }
+
+    public UserResponseDTO mapToResponseDTO(User user) {
+        var userResponseDTO = new UserResponseDTO();
+        userResponseDTO.setId(user.getId());
+        userResponseDTO.setUsername(user.getUserName());
+        userResponseDTO.setPassword(user.getPassword());
+        List<String> userRoles = new ArrayList<>();
+        for (Role role : user.getRoles()) {
+            userRoles.add(role.getRoleName());
         }
-        User entity = new User(model.getId());
-        entity.setPassword(passwordEncoder.encode(model.getPassword()));
-        entity.setUserName(model.getUserName());
-        entity.setAreCredentialsExpired(model.areCredentialsExpired());
-        entity.setEnabled(model.isEnabled());
-        entity.setExpired(model.isExpired());
-        entity.setLocked(model.isLocked());
-        entity.setRoles(roleMapper.toEntities(model.getRoles()));
-        return entity;
+        userResponseDTO.setRoles(userRoles);
+
+        return userResponseDTO;
     }
 }
 
