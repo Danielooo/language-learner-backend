@@ -56,9 +56,6 @@ public class UserService implements UserDetailsService {
         return createUser(user, Arrays.asList(roles));
     }
 
-
-
-    // TODO: SME >> Wil je Optional terug op Controller/Client niveau of alleen UserResponseDTO teruggeven vanuit Service?
     public Optional<User> getUserByUserName(String username) {
         Optional<User> user = userRepository.findByUserName(username);
 
@@ -70,7 +67,6 @@ public class UserService implements UserDetailsService {
         var user = userRepository.findById(id);
         return user;
     }
-
 
     public Optional<User> getUserByUserNameAndPassword(String username, String password) {
         var user = userRepository.findByUserNameAndPassword(username, password);

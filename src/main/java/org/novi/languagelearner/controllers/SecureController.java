@@ -14,17 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
 
-// TODO: Test of User en Secure endpoints goed werken,
-// TODO: RoleModel verwijderen en bugfixen
-// TODO: Endpoints testen >> weggooien overbodige bestanden
-// TODO: Mergen naar Main
 
 @RestController
 public class SecureController {
 
     private final UserMapper userMapper;
     private Authentication authentication;
-
     private final UserService userService;
 
     public SecureController(UserService userService, UserMapper userMapper, JwtService jwtService) {

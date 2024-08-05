@@ -27,3 +27,9 @@ insert into user_role (role_id, user_id) values (1,2);
 
 -- Bert is user
 insert into user_role (role_id, user_id) values (2,3);
+
+---------------------
+
+insert into excercises (question, answer) values  ('Friend', 'Amico');
+insert into excercises (question, answer) values  ('Veel', 'Molto');
+

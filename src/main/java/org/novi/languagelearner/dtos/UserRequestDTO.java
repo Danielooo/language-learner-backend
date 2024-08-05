@@ -7,7 +7,7 @@ public class UserRequestDTO {
 
     @NotBlank(message = "Username is required")
     private String userName;
-    @NotBlank(message = "password is required")
+    @NotBlank(message = "Password is required")
     private String password;
     @NotEmpty(message = "At least 1 role is required")
     private String[] roles;
