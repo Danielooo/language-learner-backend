@@ -1,5 +1,7 @@
 package org.novi.languagelearner.models;
 
+// TODO: Refactoring > delete RoleModel, only use Role (entity)
+
 public class RoleModel {
     private Long id;
     private String roleName;
