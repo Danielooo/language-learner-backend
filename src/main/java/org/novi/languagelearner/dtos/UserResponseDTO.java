@@ -12,7 +12,7 @@ public class UserResponseDTO {
 
     private String password;
 
-    private List<Role> roles;
+    private List<String> roles;
 
     public Long getId() {
         return id;
@@ -38,11 +38,11 @@ public class UserResponseDTO {
         this.password = password;
     }
 
-    public List<Role> getRoles() {
+    public List<String> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<Role> roles) {
+    public void setRoles(List<String> roles) {
         this.roles = roles;
     }
 

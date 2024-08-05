@@ -3,9 +3,13 @@ package org.novi.languagelearner.mappers;
 import org.novi.languagelearner.dtos.UserChangePasswordRequestDTO;
 import org.novi.languagelearner.dtos.UserRequestDTO;
 import org.novi.languagelearner.dtos.UserResponseDTO;
+import org.novi.languagelearner.entities.Role;
 import org.novi.languagelearner.entities.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class UserMapper{
@@ -52,8 +56,11 @@ public class UserMapper{
         userResponseDTO.setId(user.getId());
         userResponseDTO.setUsername(user.getUserName());
         userResponseDTO.setPassword(user.getPassword());
-        userResponseDTO.setRoles(user.getRoles());
-
+        List<String> userRoles = new ArrayList<>();
+        for (Role role : user.getRoles()) {
+            userRoles.add(role.getRoleName());
+        }
+        userResponseDTO.setRoles(userRoles);
 
         return userResponseDTO;
     }
