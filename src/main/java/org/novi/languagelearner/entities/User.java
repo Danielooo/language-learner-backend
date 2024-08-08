@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+// TODO: Add List 'stats' containing exercise id, timesright, timeswrong, and lasttime
+
 @Entity
 @Table(name = "users")
 public class User {

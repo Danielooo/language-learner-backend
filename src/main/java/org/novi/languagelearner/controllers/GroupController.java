@@ -13,12 +13,24 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
+
+// MAPPING SEQUENCE
+// service aanroepen
+// maak daar van requestdto een entity
+// vanuit servise persisten
+// vanuit repository krijg je Optional terug in de Service
+// In de service optional logica (isPresent)
+// Vanuit service mappen naar ResponseDTO en en teruggeven aan controller
+// vanuit controller ResponseDTO teruggeven aan client (Of BadRequestException)
+
+// TODO: add GET for group by id
+// TODO: add GET for all groups
+// TODO: add PUT for group by id
+// TODO: add DELETE for group by id
+// TODO: implement exception handling
 
 @RestController
 @RequestMapping("/group")
@@ -26,6 +38,7 @@ public class GroupController {
 
     private final GroupMapper groupMapper;
     private final GroupRepository groupRepository;
+    private final GroupService groupService;
     private Authentication authentication;
 
 
@@ -33,22 +46,49 @@ public class GroupController {
     public GroupController(GroupService groupService, GroupMapper groupMapper, GroupRepository groupRepository) {
         this.groupMapper = groupMapper;
         this.groupRepository = groupRepository;
+        this.groupService = groupService;
     }
 
     private void setAuthentication(SecurityContext context) {
-        this.authentication =context.getAuthentication();
+        this.authentication = context.getAuthentication();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<GroupResponseDTO> getGroupById(@PathVariable Long id) {
+        Optional<Group> group = groupRepository.findById(id);
+        if (group.isPresent()) {
+            return ResponseEntity.ok(groupMapper.mapToResponseDTO(group.get()));
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping
-    public ResponseEntity<Group> createGroup(@RequestBody GroupRequestDTO groupRequestDTO) {
+    public ResponseEntity<?> createGroup(@RequestBody GroupRequestDTO groupRequestDTO) {
         try {
-//            setAuthentication(SecurityContextHolder.getContext());
-//            String userName = authentication.getName();
-            Group group = groupMapper.mapToEntity(groupRequestDTO);
-            groupRepository.save(group);
-            return ResponseEntity.ok(group);
+            GroupResponseDTO groupResponseDTO = groupService.createGroup(groupRequestDTO);
+            return ResponseEntity.ok().body(groupResponseDTO);
         } catch (BadRequestException e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateGroup(@PathVariable Long id, @RequestBody GroupRequestDTO groupRequestDTO) {
+
+        // service aanroepen
+        // maak daar van requestdto een entity
+        // vanuit servise persisten
+        // vanuit repository krijg je Optional terug in de Service
+        // In de service optional logica (isPresent)
+        // Vanuit service mappen naar ResponseDTO en en teruggeven aan controller
+        // vanuit controller ResponseDTO teruggeven aan client (Of BadRequestException)
+
+        try {
+            GroupResponseDTO groupResponseDTO = groupService.updateGroup(id, groupRequestDTO);
+            return ResponseEntity.ok().body(groupResponseDTO);
+        } catch (BadRequestException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 }

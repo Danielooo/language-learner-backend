@@ -38,6 +38,7 @@ public class SecurityConfig {
                         .requestMatchers("/group").permitAll()
                         .requestMatchers("/group**").permitAll()
                         .requestMatchers("/group/**").permitAll()
+                        .requestMatchers("/group/delete/{id}").permitAll()
                         .requestMatchers("/public/**").permitAll()
                         .requestMatchers("/public/more").permitAll()
                         .requestMatchers("/secure/**").permitAll()

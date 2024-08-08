@@ -1,6 +1,7 @@
 package org.novi.languagelearner.mappers;
 
 import org.novi.languagelearner.dtos.GroupRequestDTO;
+import org.novi.languagelearner.dtos.GroupResponseDTO;
 import org.novi.languagelearner.entities.Excercise;
 import org.novi.languagelearner.entities.Group;
 import org.novi.languagelearner.entities.User;
@@ -36,5 +37,12 @@ public class GroupMapper {
         group.setExcercises(excercises);
 
         return group;
+    }
+
+    public GroupResponseDTO mapToResponseDTO(Group group) {
+        var groupResponseDTO = new GroupResponseDTO();
+        groupResponseDTO.setGroupName(group.getGroupName());
+        groupResponseDTO.setExcercises(group.getExcercises());
+        return groupResponseDTO;
     }
 }

@@ -38,4 +38,26 @@ public class GroupService {
 
         return user.get().getId();
     }
+
+    public GroupResponseDTO createGroup(GroupRequestDTO groupRequestDTO) {
+        Group group = groupMapper.mapToEntity(groupRequestDTO);
+        Optional<Group> savedGroup = groupRepository.save(group);
+        if (savedGroup.isEmpty()) {
+            throw new RecordNotFoundException("Group not saved. Record not found");
+        } else {
+            return groupMapper.mapToResponseDTO(savedGroup.get());
+        }
+    }
+
+    public GroupResponseDTO updateGroup(Long id, GroupRequestDTO groupRequestDTO) {
+        Optional<Group> group = groupRepository.findById(id);
+        if (group.isEmpty()) {
+            throw new RecordNotFoundException(String.format("Group with id: %d not found", id));
+        } else {
+            Group updatedGroup = groupMapper.mapToEntity(groupRequestDTO);
+            updatedGroup.setId(id);
+            Group savedGroup = groupRepository.save(updatedGroup);
+            return groupMapper.mapToResponseDTO(savedGroup);
+        }
+    }
 }
