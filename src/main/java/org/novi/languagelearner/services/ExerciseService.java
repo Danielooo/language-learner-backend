@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+// TODO: Update service functions like group (exception handling)
+// TODO: PutMapping updateExercise for partial update (naming 'put' and 'update')
+
 @Service
 public class ExerciseService {
 
