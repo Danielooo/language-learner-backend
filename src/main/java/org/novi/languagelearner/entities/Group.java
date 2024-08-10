@@ -3,6 +3,7 @@ package org.novi.languagelearner.entities;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,7 +20,7 @@ public class Group {
 
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    private List<Exercise> exercises;
+    private List<Exercise> exercises = new ArrayList<>();
 
     public Long getId() {
         return id;

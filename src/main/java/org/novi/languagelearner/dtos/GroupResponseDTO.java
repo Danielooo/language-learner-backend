@@ -6,11 +6,17 @@ import java.util.List;
 
 public class GroupResponseDTO {
 
+    private Long id;
+
     private Long userId;
 
     private String groupName;
 
     private List<Exercise> exercises;
+
+    public Long getId() {
+        return id;
+    }
 
     public Long getUserId() {
         return userId;
@@ -34,6 +40,10 @@ public class GroupResponseDTO {
 
     public void setExercises(List<Exercise> exercises) {
         this.exercises = exercises;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
 

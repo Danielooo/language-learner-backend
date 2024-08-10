@@ -41,7 +41,7 @@ insert into exercises (question, answer) values  ('Veel', 'Molto');
 
 -- GROUP
 -- Insert group
-insert into groups (user_id, group_name) values (null, 'First Group');
+insert into groups (user_id, group_name) values (1, 'First Group');
 
 -- Insert exercises and link to group
 insert into exercises (question, answer, group_id) values ('auto', 'machina', (select id from groups where group_name = 'First Group'));

@@ -11,6 +11,8 @@ import org.novi.languagelearner.repositories.GroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -89,4 +91,26 @@ public class GroupService {
             return groupMapper.mapToResponseDTO(group.get());
         }
     }
+
+    public List<GroupResponseDTO> getAllGroups() {
+        List<Group> groups = groupRepository.findAll();
+        if (groups.isEmpty()) {
+            throw new RecordNotFoundException("No groups found");
+        }
+        List<GroupResponseDTO> dtos = new ArrayList<>();
+        for (Group group : groups) {
+            dtos.add(groupMapper.mapToResponseDTO(group));
+        }
+        return dtos;
+    }
+
+
+//    public List<CIModuleDto> getAllCIModules() {
+//        List<CIModule> ciModules = ciModuleRepository.findAll();
+//        List<CIModuleDto> dtos = new ArrayList<>();
+//        for (CIModule ci : ciModules) {
+//            dtos.add(transferToDto(ci));
+//        }
+//        return dtos;
+//    }
 }

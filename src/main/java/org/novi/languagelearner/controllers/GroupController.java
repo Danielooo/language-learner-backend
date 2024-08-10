@@ -27,26 +27,18 @@ import java.util.Optional;
 // Vanuit service mappen naar ResponseDTO en en teruggeven aan controller
 // vanuit controller ResponseDTO teruggeven aan client (Of BadRequestException)
 
-// TODO: add GET for group by id
-// TODO: add GET for all groups
-// TODO: add PUT for group by id
-// TODO: add DELETE for group by id
 // TODO: implement exception handling
 
 @RestController
-@RequestMapping("/group")
+@RequestMapping("/groups")
 public class GroupController {
 
-    private final GroupMapper groupMapper;
-    private final GroupRepository groupRepository;
     private final GroupService groupService;
     private Authentication authentication;
 
 
     @Autowired
-    public GroupController(GroupService groupService, GroupMapper groupMapper, GroupRepository groupRepository) {
-        this.groupMapper = groupMapper;
-        this.groupRepository = groupRepository;
+    public GroupController(GroupService groupService) {
         this.groupService = groupService;
     }
 
@@ -60,6 +52,15 @@ public class GroupController {
         try {
             GroupResponseDTO groupResponseDTO = groupService.getGroupById(id);
             return ResponseEntity.ok().body(groupResponseDTO);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllGroups() {
+        try {
+            return ResponseEntity.ok().body(groupService.getAllGroups());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
@@ -107,8 +108,5 @@ public class GroupController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
-
-
 
 }

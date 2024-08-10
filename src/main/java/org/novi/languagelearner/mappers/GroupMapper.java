@@ -56,6 +56,7 @@ public class GroupMapper {
 
     public GroupResponseDTO mapToResponseDTO(Group group) {
         var groupResponseDTO = new GroupResponseDTO();
+        groupResponseDTO.setId(group.getId());
         groupResponseDTO.setGroupName(group.getGroupName());
         groupResponseDTO.setExercises(group.getExercises());
         return groupResponseDTO;
