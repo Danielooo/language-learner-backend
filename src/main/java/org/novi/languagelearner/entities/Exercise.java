@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "excercises")
-public class Excercise {
+@Table(name = "exercises")
+public class Exercise {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

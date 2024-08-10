@@ -34,8 +34,8 @@ insert into user_role (role_id, user_id) values (2,3);
 ---------------------
 
 -- LOSSE EXERCISES
-insert into excercises (question, answer) values  ('Friend', 'Amico');
-insert into excercises (question, answer) values  ('Veel', 'Molto');
+insert into exercises (question, answer) values  ('Friend', 'Amico');
+insert into exercises (question, answer) values  ('Veel', 'Molto');
 
 ---------------------
 
@@ -44,7 +44,7 @@ insert into excercises (question, answer) values  ('Veel', 'Molto');
 insert into groups (user_id, group_name) values (null, 'First Group');
 
 -- Insert exercises and link to group
-insert into excercises (question, answer, group_id) values ('auto', 'machina', (select id from groups where group_name = 'First Group'));
-insert into excercises (question, answer, group_id) values ('schoonmaken', 'pulire', (select id from groups where group_name = 'First Group'));
-insert into excercises (question, answer, group_id) values ('doen', 'fare', (select id from groups where group_name = 'First Group'));
+insert into exercises (question, answer, group_id) values ('auto', 'machina', (select id from groups where group_name = 'First Group'));
+insert into exercises (question, answer, group_id) values ('schoonmaken', 'pulire', (select id from groups where group_name = 'First Group'));
+insert into exercises (question, answer, group_id) values ('doen', 'fare', (select id from groups where group_name = 'First Group'));
 

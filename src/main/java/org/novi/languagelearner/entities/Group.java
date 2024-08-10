@@ -19,7 +19,7 @@ public class Group {
 
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    private List<Excercise> excercises;
+    private List<Exercise> exercises;
 
     public Long getId() {
         return id;
@@ -46,11 +46,14 @@ public class Group {
     }
 
 
-    public List<Excercise> getExcercises() {
-        return excercises;
+    public List<Exercise> getExercises() {
+        return exercises;
     }
 
-    public void setExcercises(List<Excercise> excercises) {
-        this.excercises = excercises;
+    public void setExercises(List<Exercise> exercises) {
+        this.exercises.clear();
+        if (exercises != null) {
+            this.exercises.addAll(exercises);
+        }
     }
 }

@@ -9,6 +9,7 @@ import org.novi.languagelearner.mappers.GroupMapper;
 import org.novi.languagelearner.repositories.GroupRepository;
 import org.novi.languagelearner.services.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -54,12 +55,13 @@ public class GroupController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GroupResponseDTO> getGroupById(@PathVariable Long id) {
-        Optional<Group> group = groupRepository.findById(id);
-        if (group.isPresent()) {
-            return ResponseEntity.ok(groupMapper.mapToResponseDTO(group.get()));
-        } else {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<?> getGroupById(@PathVariable Long id) {
+
+        try {
+            GroupResponseDTO groupResponseDTO = groupService.getGroupById(id);
+            return ResponseEntity.ok().body(groupResponseDTO);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
@@ -76,14 +78,6 @@ public class GroupController {
     @PutMapping("/{id}")
     public ResponseEntity<?> updateGroup(@PathVariable Long id, @RequestBody GroupRequestDTO groupRequestDTO) {
 
-        // service aanroepen
-        // maak daar van requestdto een entity
-        // vanuit servise persisten
-        // vanuit repository krijg je Optional terug in de Service
-        // In de service optional logica (isPresent)
-        // Vanuit service mappen naar ResponseDTO en en teruggeven aan controller
-        // vanuit controller ResponseDTO teruggeven aan client (Of BadRequestException)
-
         try {
             GroupResponseDTO groupResponseDTO = groupService.updateGroup(id, groupRequestDTO);
             return ResponseEntity.ok().body(groupResponseDTO);
@@ -91,4 +85,30 @@ public class GroupController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    // Works as PATCH
+    @PutMapping("/patch/{id}")
+    public ResponseEntity<?> updatePartOfGroup(@PathVariable Long id, @RequestBody GroupRequestDTO groupRequestDTO) {
+
+        try {
+            GroupResponseDTO groupResponseDTO = groupService.updatePartOfGroup(id, groupRequestDTO);
+            return ResponseEntity.ok().body(groupResponseDTO);
+        } catch (BadRequestException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteGroup(@PathVariable Long id) {
+        try {
+            groupService.deleteGroup(id);
+            return ResponseEntity.ok().body(String.format("Group with id %d is deleted", id));
+        } catch (BadRequestException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+
+
+
 }

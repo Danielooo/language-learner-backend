@@ -1,10 +1,10 @@
 package org.novi.languagelearner.dtos;
 
-public class ExcerciseRequestDTO {
+public class ExerciseResponseDTO {
 
-    public Long id;
-    public String question;
-    public String answer;
+    private Long id;
+    private String question;
+    private String answer;
 
     public Long getId() {
         return id;

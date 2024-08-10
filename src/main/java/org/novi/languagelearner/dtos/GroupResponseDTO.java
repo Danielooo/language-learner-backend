@@ -1,6 +1,6 @@
 package org.novi.languagelearner.dtos;
 
-import org.novi.languagelearner.entities.Excercise;
+import org.novi.languagelearner.entities.Exercise;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ public class GroupResponseDTO {
 
     private String groupName;
 
-    private List<Excercise> excercises;
+    private List<Exercise> exercises;
 
     public Long getUserId() {
         return userId;
@@ -28,12 +28,12 @@ public class GroupResponseDTO {
         this.groupName = groupName;
     }
 
-    public List<Excercise> getExcercises() {
-        return excercises;
+    public List<Exercise> getExercises() {
+        return exercises;
     }
 
-    public void setExcercises(List<Excercise> excercises) {
-        this.excercises = excercises;
+    public void setExercises(List<Exercise> exercises) {
+        this.exercises = exercises;
     }
 }
 
