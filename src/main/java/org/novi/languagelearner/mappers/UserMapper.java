@@ -17,6 +17,7 @@ public class UserMapper{
     private final RoleMapper roleMapper;
     private final PasswordEncoder passwordEncoder;
 
+
     public UserMapper(RoleMapper roleMapper, PasswordEncoder passwordEncoder) {
         this.roleMapper = roleMapper;
         this.passwordEncoder = passwordEncoder;

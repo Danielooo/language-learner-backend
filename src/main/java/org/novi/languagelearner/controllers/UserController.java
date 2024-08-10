@@ -42,7 +42,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<?> CreateUser(@RequestBody @Valid UserRequestDTO userDTO)
+    public ResponseEntity<?> createUser (@RequestBody @Valid UserRequestDTO userDTO)
     {
         var user = userMapper.mapToEntity(userDTO);
         user.setEnabled(true);
@@ -53,7 +53,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> ChangePassword(@PathVariable Long id, @RequestBody @Valid UserChangePasswordRequestDTO userDTO)
+    public ResponseEntity<?> changePassword (@PathVariable Long id, @RequestBody @Valid UserChangePasswordRequestDTO userDTO)
     {
         var user = userMapper.mapToEntity(userDTO, id);
         if(!userService.updatePassword(user)) {

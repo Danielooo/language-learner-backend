@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 @Component
 public class RoleMapper {
 
-    public Role fromEntity(org.novi.languagelearner.entities.Role role) {
+    public Role fromEntity(Role role) {
         if (role == null) {
             return null;
         }
@@ -20,18 +20,18 @@ public class RoleMapper {
         return model;
     }
 
-    public org.novi.languagelearner.entities.Role toEntity(Role model) {
+    public Role toEntity(Role model) {
         if (model == null) {
             return null;
         }
-        org.novi.languagelearner.entities.Role entity = new org.novi.languagelearner.entities.Role(model.getId());
+        Role entity = new Role(model.getId());
         entity.setDescription(model.getDescription());
         entity.setRoleName(model.getRoleName());
         entity.setActive(model.isActive());
         return entity;
     }
 
-    public List<Role> fromEntities(List<org.novi.languagelearner.entities.Role> entities) {
+    public List<Role> fromEntities(List<Role> entities) {
         if (entities == null) {
             return null;
         }
@@ -40,7 +40,7 @@ public class RoleMapper {
                 .collect(Collectors.toList());
     }
 
-    public List<org.novi.languagelearner.entities.Role> toEntities(List<Role> dtos) {
+    public List<Role> toEntities(List<Role> dtos) {
         if (dtos == null) {
             return null;
         }
