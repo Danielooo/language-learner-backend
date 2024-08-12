@@ -1,7 +1,7 @@
 package org.novi.languagelearner.services;
 
 import jakarta.transaction.Transactional;
-import org.novi.languagelearner.dtos.UserResponseDTO;
+import org.novi.languagelearner.entities.Photo;
 import org.novi.languagelearner.entities.Role;
 import org.novi.languagelearner.entities.User;
 import org.novi.languagelearner.exceptions.RecordNotFoundException;
@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 import java.util.List;
@@ -62,6 +63,15 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
+    public Long getUserIdByUserName(String username) {
+        Optional<User> user = userRepository.findByUserName(username);
+        if ( user.isEmpty() ) {
+            throw new RecordNotFoundException("User not found");
+        } else {
+            return user.get().getId();
+        }
+    }
+
 
     public Optional<User> getUserById(Long id) {
         var user = userRepository.findById(id);
@@ -73,13 +83,6 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
-    // TODO: migth be obsolete bc UserModel is deleted
-//    private Optional<User> getOptionalUser(Optional<User> user) {
-//        if (user.isPresent()) {
-//            return Optional.of(userMapper.fromEntity(user.get()));
-//        }
-//        return Optional.empty();
-//    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -96,6 +99,30 @@ public class UserService implements UserDetailsService {
             // If save doesn't work it would throw an error. This return is just to give back True on succes.
             return userRepository.save(user) != null;
         }
+    }
+
+    @Transactional
+    public void uploadPhoto(String username, MultipartFile file) {
+
+        Optional<User> userOptional = userRepository.findByUserName(username);
+        if (userOptional.isEmpty()) {
+            throw new RecordNotFoundException("User not found");
+        }
+        User user = userOptional.get();
+        Photo photo = new Photo();
+        user.setProfilePicture(photo);
+        userRepository.save(user);
+    }
+
+    public void uploadPhotoAsAdmin(Long id, MultipartFile file) {
+        Optional<User> userOptional = userRepository.findById(id);
+        if (userOptional.isEmpty()) {
+            throw new RecordNotFoundException("User not found");
+        }
+        User user = userOptional.get();
+        Photo photo = new Photo();
+        user.setProfilePicture(photo);
+        userRepository.save(user);
     }
 }
 

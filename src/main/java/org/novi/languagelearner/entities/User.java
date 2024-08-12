@@ -19,6 +19,7 @@ public class User {
     private String userName;
     @Column(name = "password", nullable = false)
     private String password;
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
             name = "user_role",
@@ -34,6 +35,9 @@ public class User {
     private boolean areCredentialsExpired = false;
     @Column(nullable = false)
     private boolean isEnabled = true;
+
+    @OneToOne(mappedBy = "user")
+    Photo photo;
 
     public User() {
         id = -1L;
@@ -107,5 +111,11 @@ public class User {
         this.password = password;
     }
 
+    public Photo getProfilePicture() {
+        return photo;
+    }
 
+    public void setProfilePicture(Photo photo) {
+        this.photo = photo;
+    }
 }
