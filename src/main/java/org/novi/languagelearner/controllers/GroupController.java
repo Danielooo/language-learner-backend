@@ -18,16 +18,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
-// MAPPING SEQUENCE
-// service aanroepen
-// maak daar van requestdto een entity
-// vanuit servise persisten
-// vanuit repository krijg je Optional terug in de Service
-// In de service optional logica (isPresent)
-// Vanuit service mappen naar ResponseDTO en en teruggeven aan controller
-// vanuit controller ResponseDTO teruggeven aan client (Of BadRequestException)
 
-// TODO: implement exception handling
+
+// TODO: implement exception handling voor RecordNotFoundException
 
 @RestController
 @RequestMapping("/groups")

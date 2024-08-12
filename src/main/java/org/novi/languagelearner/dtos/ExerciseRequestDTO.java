@@ -1,5 +1,6 @@
 package org.novi.languagelearner.dtos;
 
+
 public class ExerciseRequestDTO {
 
     public Long id;

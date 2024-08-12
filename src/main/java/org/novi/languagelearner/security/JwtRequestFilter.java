@@ -19,8 +19,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
+// TODO: getAllStatsOfBert doesn't work, username is null when debugging  jwtService.extractUsername(jwt)
+// TODO: push code to github
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
 

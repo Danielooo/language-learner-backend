@@ -48,3 +48,13 @@ insert into exercises (question, answer, group_id) values ('auto', 'machina', (s
 insert into exercises (question, answer, group_id) values ('schoonmaken', 'pulire', (select id from groups where group_name = 'First Group'));
 insert into exercises (question, answer, group_id) values ('doen', 'fare', (select id from groups where group_name = 'First Group'));
 
+-- STAT
+-- stat for Kim (Admin en User
+insert into stat (user_id, exercise_id, times_wrong, times_right) values (1, 1, 0, 0);
+insert into stat (user_id, exercise_id, times_wrong, times_right) values (1, 2, 0, 0);
+
+-- Jelle heeft geen stats > is alleen Admin
+
+-- stat for Bert (User)
+insert into stat (user_id, exercise_id, times_wrong, times_right) values (3, 1, 0, 0);
+insert into stat (user_id, exercise_id, times_wrong, times_right) values (3, 2, 0, 0);

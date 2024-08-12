@@ -31,12 +31,12 @@ public class ExerciseService {
     public ExerciseResponseDTO createExercise(ExerciseRequestDTO requestDTO) {
         Exercise exercise = exerciseMapper.toEntity(requestDTO);
         Exercise savedExercise = exerciseRepository.save(exercise);
-        return exerciseMapper.toResponseDTO(savedExercise) ;
+        return exerciseMapper.mapToResponseDTO(savedExercise) ;
     }
 
     public List<ExerciseResponseDTO> getAllExercises() {
         List<Exercise> exercises = exerciseRepository.findAll();
-        return exercises.stream().map(exerciseMapper::toResponseDTO).collect(Collectors.toList());
+        return exercises.stream().map(exerciseMapper::mapToResponseDTO).collect(Collectors.toList());
     }
 
     public void deleteExercise(Long id) {
@@ -55,7 +55,7 @@ public class ExerciseService {
             updatedExercise.setId(id);
             Exercise persistedExercise =  exerciseRepository.save(updatedExercise);
 
-            return exerciseMapper.toResponseDTO(persistedExercise);
+            return exerciseMapper.mapToResponseDTO(persistedExercise);
 
         } else {
             throw new RecordNotFoundException("Exercise id not found in database");

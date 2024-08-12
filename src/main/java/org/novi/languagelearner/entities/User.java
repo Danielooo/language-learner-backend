@@ -7,6 +7,8 @@ import java.util.List;
 
 // TODO: Add List 'stats' containing exercise id, timesright, timeswrong, and lasttime
 
+// TODO: create check that all usernames are unique
+
 @Entity
 @Table(name = "users")
 public class User {
