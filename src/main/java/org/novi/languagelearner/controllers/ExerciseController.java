@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-// TODO: PostMapping 'processAnswerInput' >> in ExerciseService bepalen of antwoord goed is en dan timesright/timeswrong en lastTimeRight/lastTimeWrong updaten.
 
 @RestController
 @RequestMapping("/exercises")

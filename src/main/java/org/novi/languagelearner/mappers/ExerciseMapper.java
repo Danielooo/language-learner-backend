@@ -16,7 +16,7 @@ public class ExerciseMapper {
     }
 
 
-    public ExerciseResponseDTO toResponseDTO(Exercise exercise) {
+    public ExerciseResponseDTO mapToResponseDTO(Exercise exercise) {
         ExerciseResponseDTO responseDTO = new ExerciseResponseDTO();
         responseDTO.setId(exercise.getId());
         responseDTO.setQuestion(exercise.getQuestion());
