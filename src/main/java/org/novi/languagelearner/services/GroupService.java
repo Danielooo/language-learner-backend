@@ -5,13 +5,16 @@ import org.novi.languagelearner.dtos.GroupResponseDTO;
 import org.novi.languagelearner.dtos.UserResponseDTO;
 import org.novi.languagelearner.entities.User;
 import org.novi.languagelearner.entities.Group;
+import org.novi.languagelearner.exceptions.BadRequestException;
 import org.novi.languagelearner.exceptions.RecordNotFoundException;
 import org.novi.languagelearner.mappers.ExerciseMapper;
 import org.novi.languagelearner.mappers.GroupMapper;
 import org.novi.languagelearner.repositories.GroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -33,6 +36,7 @@ public class GroupService {
     }
 
 
+
     public Long getUserIdByUserName(String userName) {
         UserResponseDTO userResponseDTO = userService.getUserByUserName(userName);
 
@@ -44,6 +48,33 @@ public class GroupService {
         Group savedGroup = groupRepository.save(group);
         return groupMapper.mapToResponseDTO(savedGroup);
     }
+
+    public List<GroupResponseDTO> createGroupsWithJsonFiles(MultipartFile[] jsonFiles) {
+
+        try {
+            List<GroupRequestDTO> groupRequestDTOList = new ArrayList<>();
+            for (MultipartFile jsonFile : jsonFiles) {
+                if (jsonFile.isEmpty()) {
+                    throw new BadRequestException("Uploaded file is empty");
+                }
+                GroupRequestDTO groupRequestDTO = groupMapper.mapJsonFileToGroupRequestDTO(jsonFile);
+                groupRequestDTOList.add(groupRequestDTO);
+            }
+
+            List<GroupResponseDTO> groupResponseDTOS = new ArrayList<>();
+            for (GroupRequestDTO groupRequestDTO : groupRequestDTOList) {
+                Group group = groupMapper.mapToEntity(groupRequestDTO);
+                Group savedGroup = groupRepository.save(group);
+                groupResponseDTOS.add(groupMapper.mapToResponseDTO(savedGroup));
+            }
+
+            return groupResponseDTOS;
+
+        } catch (BadRequestException e) {
+            throw new BadRequestException("Error persisting groups");
+        }
+    }
+
 
     public GroupResponseDTO updateGroup(Long id, GroupRequestDTO groupRequestDTO) {
         Optional<Group> group = groupRepository.findById(id);

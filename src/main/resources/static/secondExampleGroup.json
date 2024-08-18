@@ -1,0 +1,17 @@
+{
+  "groupName" : "Third exampleGroup",
+  "exercises" : [
+    {
+      "question" : "gisteren",
+      "answer" : "ieri"
+    },
+    {
+      "question" : "op",
+      "answer" : "per"
+    },
+    {
+      "question" : "gebouw",
+      "answer" : "edificio"
+    }
+  ]
+}

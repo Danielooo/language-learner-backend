@@ -43,6 +43,7 @@ public class SecurityConfig {
                         .requestMatchers("/exercises/delete/{id}").permitAll()
                         .requestMatchers("/exercises/").permitAll()
                         .requestMatchers("/groups").permitAll()
+                        .requestMatchers("/groups/upload-json-files").permitAll()
                         .requestMatchers("/groups/all").permitAll()
                         .requestMatchers("/groups**").permitAll()
                         .requestMatchers("/groups/**").permitAll()

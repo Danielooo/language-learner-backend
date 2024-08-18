@@ -1,6 +1,7 @@
 package org.novi.languagelearner.controllers;
 
 
+import jakarta.validation.Valid;
 import org.novi.languagelearner.dtos.GroupRequestDTO;
 import org.novi.languagelearner.dtos.GroupResponseDTO;
 import org.novi.languagelearner.entities.Group;
@@ -15,7 +16,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -64,6 +68,17 @@ public class GroupController {
         try {
             GroupResponseDTO groupResponseDTO = groupService.createGroup(groupRequestDTO);
             return ResponseEntity.ok().body(groupResponseDTO);
+        } catch (BadRequestException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/upload-json-files")
+    public ResponseEntity<?> createGroupsFromJsonFiles(@RequestBody MultipartFile[] files) {
+
+        try {
+            List<GroupResponseDTO> listOfGroupResponseDTOs = groupService.createGroupsWithJsonFiles(files);
+            return ResponseEntity.ok().body(listOfGroupResponseDTOs);
         } catch (BadRequestException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

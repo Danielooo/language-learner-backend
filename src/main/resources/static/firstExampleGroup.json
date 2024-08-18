@@ -1,0 +1,17 @@
+{
+  "groupName" : "First exampleGroup",
+  "exercises" : [
+    {
+      "question" : "zeggen",
+      "answer" : "dire"
+    },
+    {
+      "question" : "lopen",
+      "answer" : "camminare"
+    },
+    {
+      "question" : "lezen",
+      "answer" : "leggere"
+    }
+  ]
+}
