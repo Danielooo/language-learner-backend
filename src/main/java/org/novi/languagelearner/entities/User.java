@@ -1,5 +1,6 @@
 package org.novi.languagelearner.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -36,16 +37,9 @@ public class User {
     @Column(nullable = false)
     private boolean isEnabled = true;
 
-    @OneToOne(mappedBy = "user")
-    Photo photo;
-
-    public User() {
-        id = -1L;
-    }
-
-    public User(Long id) {
-        this.id = id;
-    }
+    @OneToOne(cascade = CascadeType.ALL)
+    @JsonManagedReference // prevents infinite recursion
+    private Photo photo;
 
     public void setId(Long id) {
 
@@ -111,11 +105,15 @@ public class User {
         this.password = password;
     }
 
-    public Photo getProfilePicture() {
+    public boolean isAreCredentialsExpired() {
+        return areCredentialsExpired;
+    }
+
+    public Photo getPhoto() {
         return photo;
     }
 
-    public void setProfilePicture(Photo photo) {
+    public void setPhoto(Photo photo) {
         this.photo = photo;
     }
 }

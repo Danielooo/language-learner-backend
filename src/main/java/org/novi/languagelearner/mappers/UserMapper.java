@@ -23,31 +23,9 @@ public class UserMapper{
         this.passwordEncoder = passwordEncoder;
     }
 
-    //TODO: Delete maybe bc not needed when there's no usermodel
-//    public UserModel fromEntity(User entity) {
-//        if (entity == null) {
-//            return null;
-//        }
-//        User user = new User(entity.getId());
-//        user.setPassword(entity.getPassword());
-//        user.setUserName(entity.getUserName());
-//        user.areCredentialsExpired(entity.areCredentialsExpired());
-//        user.setEnabled(entity.isEnabled());
-//        user.setExpired(entity.isExpired());
-//        user.setLocked(entity.isLocked());
-//        user.setRoles(roleMapper.fromEntities(entity.getRoles()));
-//        return user;
-//    }
-
     public User mapToEntity(UserRequestDTO userDTO) {
-        var result = new User(-1L);
+        var result = new User();
         result.setUserName(userDTO.getUserName());
-        result.setPassword(userDTO.getPassword());
-        return result;
-    }
-
-    public User mapToEntity(UserChangePasswordRequestDTO userDTO, Long id) {
-        var result = new User(id);
         result.setPassword(userDTO.getPassword());
         return result;
     }
@@ -62,6 +40,7 @@ public class UserMapper{
             userRoles.add(role.getRoleName());
         }
         userResponseDTO.setRoles(userRoles);
+        userResponseDTO.setPhoto(user.getPhoto());
 
         return userResponseDTO;
     }

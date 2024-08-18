@@ -46,14 +46,13 @@ public class SecureController {
 
     @GetMapping("/secure/user")
     public ResponseEntity<?> getUserData() {
-        setAuthentication(SecurityContextHolder.getContext());
+        try {
+            setAuthentication(SecurityContextHolder.getContext());
 
-        Optional<User> user = userService.getUserByUserName(authentication.getName());
-        if (user.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        } else {
-            UserResponseDTO userResponseDTO = userMapper.mapToResponseDTO(user.get());
+            UserResponseDTO userResponseDTO = userService.getUserByUserName(authentication.getName());
             return ResponseEntity.ok().body(userResponseDTO);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Issue with getting user data");
         }
     }
 

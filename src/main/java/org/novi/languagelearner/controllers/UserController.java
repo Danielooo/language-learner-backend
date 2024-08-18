@@ -54,6 +54,18 @@ public class UserController {
         return ResponseEntity.ok().body(userResponseDTO);
     }
 
+    @GetMapping("/profile")
+    public ResponseEntity<?> getProfile() {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+            UserResponseDTO userResponseDTO = userService.getUserByUserName(authentication.getName());
+            return ResponseEntity.ok().body(userResponseDTO);
+        } catch (BadRequestException e) {
+            throw new BadRequestException("Issue with getting profile");
+        }
+    }
+
     @PostMapping
     public ResponseEntity<?> createUser(@RequestBody @Valid UserRequestDTO userDTO) {
         var user = userMapper.mapToEntity(userDTO);
@@ -64,56 +76,15 @@ public class UserController {
         return ResponseEntity.created(UrlHelper.getCurrentUrlWithId(request, user.getId())).build();
     }
 
-    // TODO: This is the method for uploading a photo as a user. It is not yet implemented in the service layer.
-    @PostMapping("/photo")
-    public ResponseEntity<?> uploadPhoto(@RequestBody MultipartFile file) {
-        try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            String username = authentication.getName();
 
-            userService.uploadPhoto(username, file);
-
-            return ResponseEntity.ok().body("Photo succesfully added to user: " + username);
-        } catch (RecordNotFoundException e) {
-            return ResponseEntity.status(NOT_FOUND).body(e.getMessage());
-        } catch (BadRequestException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-
-    // TODO: Create method for an admin to change the photo of a user. userId as Pathvariable and photo as RequestBody
-    @PostMapping("/{userId}/photo")
-    public ResponseEntity<?> uploadPhotoAsAdmin(@PathVariable Long userId, @RequestBody MultipartFile file) {
-        try {
-
-            String url = ServletUriComponentsBuilder.fromCurrentContextPath()
-                    .path("/users/{id}/photo")
-                    .path(Objects.requireNonNull(userId.toString()))
-                    .path("/photo")
-                    .toUriString();
-
-
-            String filename = photoService.storeFile(file);
-            User user = userService.assignPhotoToUser(filename, userId);
-
-            userService.uploadPhotoAsAdmin(userId, file);
-
-            return ResponseEntity.ok().body("Photo succesfully added to user with id: " + userId);
-        } catch (RecordNotFoundException e) {
-            return ResponseEntity.status(NOT_FOUND).body(e.getMessage());
-        } catch (BadRequestException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<?> changePassword(@PathVariable Long id, @RequestBody @Valid UserChangePasswordRequestDTO userDTO) {
-        var user = userMapper.mapToEntity(userDTO, id);
-        if (!userService.updatePassword(user)) {
-            return ResponseEntity.badRequest().build();
-        }
-        return ResponseEntity.ok().build();
-    }
+//    @PutMapping("/{id}")
+//    public ResponseEntity<?> changePassword(@PathVariable Long id, @RequestBody @Valid UserChangePasswordRequestDTO userDTO) {
+//        var user = userMapper.mapToEntity(userDTO, id);
+//        if (!userService.updatePassword(user)) {
+//            return ResponseEntity.badRequest().build();
+//        }
+//        return ResponseEntity.ok().build();
+//    }
 
 
 }

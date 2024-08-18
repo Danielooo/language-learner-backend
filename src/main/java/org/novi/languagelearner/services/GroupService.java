@@ -2,6 +2,7 @@ package org.novi.languagelearner.services;
 
 import org.novi.languagelearner.dtos.GroupRequestDTO;
 import org.novi.languagelearner.dtos.GroupResponseDTO;
+import org.novi.languagelearner.dtos.UserResponseDTO;
 import org.novi.languagelearner.entities.User;
 import org.novi.languagelearner.entities.Group;
 import org.novi.languagelearner.exceptions.RecordNotFoundException;
@@ -33,12 +34,9 @@ public class GroupService {
 
 
     public Long getUserIdByUserName(String userName) {
-        Optional<User> user = userService.getUserByUserName(userName);
-        if (user.isEmpty()) {
-            throw new RecordNotFoundException(String.format("Username: %s not found in database", userName));
-        }
+        UserResponseDTO userResponseDTO = userService.getUserByUserName(userName);
 
-        return user.get().getId();
+        return userResponseDTO.getId();
     }
 
     public GroupResponseDTO createGroup(GroupRequestDTO groupRequestDTO) {
@@ -103,14 +101,4 @@ public class GroupService {
         }
         return dtos;
     }
-
-
-//    public List<CIModuleDto> getAllCIModules() {
-//        List<CIModule> ciModules = ciModuleRepository.findAll();
-//        List<CIModuleDto> dtos = new ArrayList<>();
-//        for (CIModule ci : ciModules) {
-//            dtos.add(transferToDto(ci));
-//        }
-//        return dtos;
-//    }
 }

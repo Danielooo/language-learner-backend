@@ -1,6 +1,7 @@
 package org.novi.languagelearner.services;
 
 import jakarta.transaction.Transactional;
+import org.novi.languagelearner.dtos.UserResponseDTO;
 import org.novi.languagelearner.entities.Photo;
 import org.novi.languagelearner.entities.Role;
 import org.novi.languagelearner.entities.User;
@@ -57,11 +58,17 @@ public class UserService implements UserDetailsService {
         return createUser(user, Arrays.asList(roles));
     }
 
-    public Optional<User> getUserByUserName(String username) {
-        Optional<User> user = userRepository.findByUserName(username);
-
-        return user;
+    public UserResponseDTO getUserByUserName(String username) {
+        Optional<User> userOptional = userRepository.findByUserName(username);
+        if (userOptional.isEmpty()) {
+            throw new RecordNotFoundException("User not found");
+        } else {
+            User user = userOptional.get();
+            return userMapper.mapToResponseDTO(user);
+        }
     }
+
+
 
     public Long getUserIdByUserName(String username) {
         Optional<User> user = userRepository.findByUserName(username);
@@ -86,7 +93,7 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> user = getUserByUserName(username);
+        Optional<User> user = userRepository.findByUserName(username);
         if (user.isEmpty()) { throw new UsernameNotFoundException(username);}
         return new ApiUserDetails(user.get());
     }
@@ -101,28 +108,6 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    @Transactional
-    public void uploadPhoto(String username, MultipartFile file) {
 
-        Optional<User> userOptional = userRepository.findByUserName(username);
-        if (userOptional.isEmpty()) {
-            throw new RecordNotFoundException("User not found");
-        }
-        User user = userOptional.get();
-        Photo photo = new Photo();
-        user.setProfilePicture(photo);
-        userRepository.save(user);
-    }
-
-    public void uploadPhotoAsAdmin(Long id, MultipartFile file) {
-        Optional<User> userOptional = userRepository.findById(id);
-        if (userOptional.isEmpty()) {
-            throw new RecordNotFoundException("User not found");
-        }
-        User user = userOptional.get();
-        Photo photo = new Photo();
-        user.setProfilePicture(photo);
-        userRepository.save(user);
-    }
 }
 

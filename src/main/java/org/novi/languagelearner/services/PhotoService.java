@@ -1,70 +1,65 @@
 package org.novi.languagelearner.services;
 
+import jakarta.transaction.Transactional;
+import org.novi.languagelearner.dtos.PhotoRequestDTO;
+import org.novi.languagelearner.dtos.PhotoResponseDTO;
+import org.novi.languagelearner.dtos.UserResponseDTO;
 import org.novi.languagelearner.entities.Photo;
-import org.novi.languagelearner.repositories.FileUploadRepository;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
+import org.novi.languagelearner.entities.User;
+import org.novi.languagelearner.exceptions.BadRequestException;
+import org.novi.languagelearner.exceptions.RecordNotFoundException;
+import org.novi.languagelearner.mappers.PhotoMapper;
+import org.novi.languagelearner.mappers.UserMapper;
+import org.novi.languagelearner.repositories.PhotoRepository;
+import org.novi.languagelearner.repositories.UserRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class PhotoService {
 
-    private final Path fileStoragePath;
-    private final String fileStorageLocation;
-    private final FileUploadRepository repo;
 
-    public PhotoService(@Value("${my.upload.location}") String fileStorageLocation, FileUploadRepository repo) throws IOException {
+    private final PhotoRepository photoRepository;
+    private final UserMapper userMapper;
+    private UserRepository userRepository;
+    private PhotoMapper photoMapper;
 
-        fileStoragePath = Paths.get(fileStorageLocation).toAbsolutePath().normalize();
-        this.fileStorageLocation = fileStorageLocation;
-        this.repo = repo;
-
-        Files.createDirectories(fileStoragePath);
-
+    public PhotoService(UserRepository userRepository, PhotoMapper photoMapper, PhotoRepository photoRepository, UserMapper userMapper) {
+        this.userRepository = userRepository;
+        this.photoMapper = photoMapper;
+        this.photoRepository = photoRepository;
+        this.userMapper = userMapper;
     }
 
-    public String storeFile(MultipartFile file) throws IOException {
-        String filename = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
-        Path filePath = Paths.get(fileStoragePath + "\\" + filename);
+    // no return, just ok or exception; separate getPhotoByUserName to check if photo was persisted
 
+    @Transactional
+    public UserResponseDTO uploadPhoto(PhotoRequestDTO photoRequestDTO) throws IOException {
 
-        Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+        Optional<User> userOptional = userRepository.findByUserName(photoRequestDTO.getUserName());
 
-        repo.save(new Photo(filename));
-        return filename;
-    }
-
-    public Resource downloadFile(String filename) {
-
-        Path path = Paths.get(fileStorageLocation).toAbsolutePath().resolve(filename);
-
-        Resource resource;
-
-        try {
-            resource = new UrlResource(path.toUri());
-
-        } catch ( MalformedURLException e ) {
-            throw new RuntimeException("Issue in reading the file", e);
+        if (userOptional.isEmpty()) {
+            throw new RecordNotFoundException("User not found");
         }
 
-        if (resource.exists() && resource.isReadable()) {
-            return resource;
-        } else {
-            throw new RuntimeException("The file doesn't exist or is not readable");
+        User user = userOptional.get();
+        try {
+            Photo newPhoto = photoMapper.mapToEntity(photoRequestDTO);
+
+            newPhoto.setUser(user);
+
+            user.setPhoto(newPhoto);
+
+            UserResponseDTO userResponseDTO = userMapper.mapToResponseDTO(userRepository.save(user));
+            return userResponseDTO;
+        } catch (BadRequestException e) {
+            throw new IOException("Photo could not be persisted");
         }
     }
 }
+
 
 
 

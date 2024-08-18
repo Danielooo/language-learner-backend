@@ -1,5 +1,6 @@
 package org.novi.languagelearner.dtos;
 
+import org.novi.languagelearner.entities.Photo;
 import org.novi.languagelearner.entities.Role;
 
 import java.util.List;
@@ -13,6 +14,16 @@ public class UserResponseDTO {
     private String password;
 
     private List<String> roles;
+
+    private Photo photo;
+
+    public Photo getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(Photo photo) {
+        this.photo = photo;
+    }
 
     public Long getId() {
         return id;
