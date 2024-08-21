@@ -24,7 +24,7 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-
+    // TODO: beter om hier per controller te bepalen welke rol toegang heeft? Dus /controller/admin**
     @Bean
     public SecurityFilterChain filterChain (HttpSecurity httpSecurity, JwtRequestFilter jwtRequestFilter) throws Exception{
         httpSecurity
@@ -42,6 +42,8 @@ public class SecurityConfig {
                         .requestMatchers("/exercises/**").permitAll()
                         .requestMatchers("/exercises/delete/{id}").permitAll()
                         .requestMatchers("/exercises/").permitAll()
+                        .requestMatchers("/answer-validation/**").permitAll()
+                        .requestMatchers("/answer-validation**").permitAll()
                         .requestMatchers("/groups").permitAll()
                         .requestMatchers("/groups/upload-json-files").permitAll()
                         .requestMatchers("/groups/all").permitAll()

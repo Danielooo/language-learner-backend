@@ -2,7 +2,6 @@ package org.novi.languagelearner.services;
 
 import jakarta.transaction.Transactional;
 import org.novi.languagelearner.dtos.UserResponseDTO;
-import org.novi.languagelearner.entities.Photo;
 import org.novi.languagelearner.entities.Role;
 import org.novi.languagelearner.entities.User;
 import org.novi.languagelearner.exceptions.RecordNotFoundException;
@@ -15,7 +14,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 import java.util.List;
@@ -109,5 +107,13 @@ public class UserService implements UserDetailsService {
     }
 
 
+    public User getUserByUserId(Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isEmpty()) {
+            throw new RecordNotFoundException("User not found");
+        } else {
+            return user.get();
+        }
+    }
 }
 

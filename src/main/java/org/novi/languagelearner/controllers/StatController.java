@@ -104,6 +104,8 @@ public class StatController {
         }
     }
 
+    // TODO: Frans answered; GetMapping voor de data die je wil. Kan 1 request methode zijn die in de repository de juiste query doet >> bijv @Query("SELECT * FROM stat WHERE user_id = :userId AND exercise_id = :exerciseId"). Je kan in de query dynamisch injecteren. Er is geen Stat repository, want Stat hoeft niet te worden opgeslagen. // Eigenlijk is Stats een model daardoor, want entities worden opgeslagen in de database. Dus je kan een service maken die de data ophaalt en dan een DTO teruggeeft
+
 
 
 }

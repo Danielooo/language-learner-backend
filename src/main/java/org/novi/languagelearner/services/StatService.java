@@ -10,6 +10,7 @@ import org.novi.languagelearner.exceptions.RecordNotFoundException;
 import org.novi.languagelearner.mappers.StatMapper;
 import org.novi.languagelearner.repositories.ExerciseRepository;
 import org.novi.languagelearner.repositories.StatRepository;
+import org.novi.languagelearner.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,12 +25,16 @@ public class StatService {
     private StatMapper statMapper;
     private StatRepository statRepository;
     private ExerciseRepository exerciseRepository;
+    private UserRepository userRepository;
+    private UserService userService;
+    private ExerciseService exerciseService;
 
 
-    public StatService(StatMapper statMapper, StatRepository statRepository, ExerciseRepository exerciseRepository) {
+    public StatService(StatMapper statMapper, StatRepository statRepository, ExerciseRepository exerciseRepository, UserRepository userRepository) {
         this.statMapper = statMapper;
         this.statRepository = statRepository;
         this.exerciseRepository = exerciseRepository;
+        this.userRepository = userRepository;
     }
 
     public Stat getStatById(Long id) {
@@ -58,6 +63,40 @@ public class StatService {
         }
     }
 
+    // method krijgt exerciseId en userId (want username kan veranderen en moet dan ook cascade hebben) mee, en een boolean die aangeeft of de poging correct was
+    // als er nog geen stat is voor de user en exercise, maak een nieuwe stat aan
+    // als er al een stat is, update de timesRight of timesWrong >> if attemptIsCorrect, timesRight + 1, else timesWrong + 1
+    // save stat
+
+    // TODO: Ask Frans; wil je hier id's doorgeven of de objecten zelf? // wil je zoveel mogelijk met userId werken of met username? Username krijg je binnen vanuit de Authorization in de controller namelijk, moet je ergens (waar?) omzetten naar userId
+    public Stat updateStatAfterExerciseAttempt(Long exerciseId, Long userId, boolean attemptIsCorrect) {
+
+        // TODO: Ask Frans; waarom hier de melding 'reassigned local variable'?
+        Stat statToUpdate = findStatByExerciseIdAndUserId(exerciseId, userId);
+        if (statToUpdate == null) {
+//            statToUpdate = new Stat();
+            statToUpdate.setUser(userService.getUserByUserId(userId));
+            statToUpdate.setExercise(exerciseService.getExerciseById(exerciseId));
+            statToUpdate.setTimesRight(0);
+            statToUpdate.setTimesWrong(0);
+        }
+        if (attemptIsCorrect) {
+            statToUpdate.setTimesRight(statToUpdate.getTimesRight() + 1);
+        } else {
+            statToUpdate.setTimesWrong(statToUpdate.getTimesWrong() + 1);
+        }
+        return statRepository.save(statToUpdate);
+    }
+
+    public Stat findStatByExerciseIdAndUserId(Long exerciseId, Long userId) {
+        Optional<Stat> statOptional = statRepository.findStatByExerciseIdAndUserId(exerciseId, userId);
+        if (statOptional.isEmpty()) {
+            throw new RecordNotFoundException("No stat found for exercise id: " + exerciseId + " and user id: " + userId);
+        } else {
+            return statOptional.get();
+        }
+    }
+
     public List<StatResponseDTO> getAllStats() {
 
         List<Stat> stats = statRepository.findAll();
@@ -74,6 +113,7 @@ public class StatService {
             return statMapper.mapToListOfResponseDTOs(stats);
         }
     }
+
 
     public List<StatResponseDTO> getFilteredStats(List<String> username, List<Long> exerciseId) {
         if (username != null && exerciseId != null) {

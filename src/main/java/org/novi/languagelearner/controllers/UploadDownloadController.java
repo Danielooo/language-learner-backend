@@ -54,4 +54,6 @@ public class UploadDownloadController {
               return ResponseEntity.badRequest().body("No upload possible");
         }
     }
+
+    // PostMapping >>
 }

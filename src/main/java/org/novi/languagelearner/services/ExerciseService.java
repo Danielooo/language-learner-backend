@@ -34,6 +34,16 @@ public class ExerciseService {
         return exerciseMapper.mapToResponseDTO(savedExercise) ;
     }
 
+    // TODO: Ask Frans; voor intern verkeer tussen services. Nodig om DTO te gebruiken? Of mag ook Entity? Wil je deze methode gebruiken voor je hele project of mogen andere services ook direct de repository gebruiken? // toch models gebruiken
+    public Exercise getExerciseById(Long id) {
+        Optional<Exercise> exerciseOptional = exerciseRepository.findById(id);
+        if (exerciseOptional.isPresent()) {
+            return exerciseOptional.get();
+        } else {
+            throw new RecordNotFoundException("Exercise id not found in database");
+        }
+    }
+
     public List<ExerciseResponseDTO> getAllExercises() {
         List<Exercise> exercises = exerciseRepository.findAll();
         return exercises.stream().map(exerciseMapper::mapToResponseDTO).collect(Collectors.toList());
@@ -62,14 +72,7 @@ public class ExerciseService {
         }
     }
 
-//    public exerciseResponseDTO updateexercise(Long id, exerciseRequestDTO requestDTO) {
 
-        // Retrieve the existing exercise entity from the repository using the provided id.
-        // Update the specific field(s) of the retrieved exercise entity.
-        // Save the updated exercise entity back to the repository.
-        // Convert the updated exercise entity to a exerciseResponseDTO and return it.
-
-//    }
 
 
 }
