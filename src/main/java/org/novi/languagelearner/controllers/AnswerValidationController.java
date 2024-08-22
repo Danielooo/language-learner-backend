@@ -23,7 +23,7 @@ public class AnswerValidationController {
         this.answerValidationService = answerValidationService;
     }
 
-    // TODO: Ask Frans V; als ik het de frontend makkelijk wil maken is het dan logisch om de id in de url te hebben, of moet de FE dit hebben en meesturen? >> moet naar entity Answer, maakt steeds een nieuwe entity Answer aan met 'userInput' en 'timeStamp' // Is het handig om de AnswerValidationRequestDTO hier aan te vullen met userName en exerciseId? >> Nee, dit wordt dus een enkele json (RequestBody) die gepersist wordt
+    // TODO: Answer Frans; als ik het de frontend makkelijk wil maken is het dan logisch om de id in de url te hebben, of moet de FE dit hebben en meesturen? >> moet naar entity Answer, maakt steeds een nieuwe entity Answer aan met 'userInput' en 'timeStamp' // Is het handig om de AnswerValidationRequestDTO hier aan te vullen met userName en exerciseId? >> Nee, dit wordt dus een enkele json (RequestBody) die gepersist wordt
     @PostMapping("/{exerciseId}")   // een op veel naar Answer
     public ResponseEntity<?> processAnswer(@PathVariable Long exerciseId, @RequestBody AnswerValidationRequestDTO answerValidationRequestDTO) {
 

@@ -21,7 +21,7 @@ public class AnswerValidationService {
         this.statService = statService;
     }
 
-    // TODO: Ask Frans; misschien logisch om hier een in de responseDTO een Stat en Feedback mee te geven? Of is dat teveel dataverkeer? >> Geen Stat teruggeven, Feedback is prima
+    // TODO: Answer Frans; misschien logisch om hier een in de responseDTO een Stat en Feedback mee te geven? Of is dat teveel dataverkeer? >> Geen Stat teruggeven, Feedback is prima
     public AnswerValidationResponseDTO processAnswer(AnswerValidationRequestDTO answerValidationRequestDTO) {
 
         AnswerValidationResponseDTO answerValidationResponseDTO = new AnswerValidationResponseDTO();

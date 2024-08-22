@@ -34,7 +34,7 @@ public class ExerciseService {
         return exerciseMapper.mapToResponseDTO(savedExercise) ;
     }
 
-    // TODO: Ask Frans; voor intern verkeer tussen services. Nodig om DTO te gebruiken? Of mag ook Entity? Wil je deze methode gebruiken voor je hele project of mogen andere services ook direct de repository gebruiken? // toch models gebruiken
+    // TODO: Answer Frans; voor intern verkeer tussen services. Nodig om DTO te gebruiken? Of mag ook Entity? Wil je deze methode gebruiken voor je hele project of mogen andere services ook direct de repository gebruiken? // Nee, hier gebruik je models voor. Zeker als operaties uitvoert op de properties van de model. (De entity wil je niet zomaar aanpassen, als je die saved pas je de database aan)
     public Exercise getExerciseById(Long id) {
         Optional<Exercise> exerciseOptional = exerciseRepository.findById(id);
         if (exerciseOptional.isPresent()) {

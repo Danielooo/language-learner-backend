@@ -68,10 +68,9 @@ public class StatService {
     // als er al een stat is, update de timesRight of timesWrong >> if attemptIsCorrect, timesRight + 1, else timesWrong + 1
     // save stat
 
-    // TODO: Ask Frans; wil je hier id's doorgeven of de objecten zelf? // wil je zoveel mogelijk met userId werken of met username? Username krijg je binnen vanuit de Authorization in de controller namelijk, moet je ergens (waar?) omzetten naar userId
+    // TODO: Answer Frans; wil je hier id's doorgeven of de objecten zelf? // wil je zoveel mogelijk met userId werken of met username? Username krijg je binnen vanuit de Authorization in de controller namelijk, moet je ergens (waar?) omzetten naar userId >> Niet meer relevant. nieuwe aanpak: Answer entities maken en persisten. Database met @Query statistieken laten ophalen. Kan in Stat maar is geen entity (wordt niet gepersist)
     public Stat updateStatAfterExerciseAttempt(Long exerciseId, Long userId, boolean attemptIsCorrect) {
 
-        // TODO: Ask Frans; waarom hier de melding 'reassigned local variable'?
         Stat statToUpdate = findStatByExerciseIdAndUserId(exerciseId, userId);
         if (statToUpdate == null) {
 //            statToUpdate = new Stat();
