@@ -2,7 +2,6 @@ package org.novi.languagelearner.services;
 
 import org.novi.languagelearner.dtos.UserInputAnswer.UserInputAnswerFeedbackResponseDTO;
 import org.novi.languagelearner.dtos.UserInputAnswer.UserInputAnswerRequestDTO;
-import org.novi.languagelearner.dtos.UserInputAnswer.UserInputAnswerResponseDTO;
 import org.novi.languagelearner.entities.UserInputAnswer;
 import org.novi.languagelearner.entities.Exercise;
 import org.novi.languagelearner.entities.User;
@@ -14,14 +13,14 @@ import static org.novi.languagelearner.utils.AnswerCompare.answerWrongOrRight;
 import static org.novi.languagelearner.utils.AnswerCompare.getFeedbackAfterCompare;
 
 @Service
-public class AnswerService {
+public class UserInputAnswerService {
 
     private final ExerciseService exerciseService;
     private final UserInputAnswerRepository userInputAnswerRepository;
     private final UserService userService;
     private final UserInputAnswerMapper userInputAnswerMapper;
 
-    public AnswerService(ExerciseService exerciseService, UserInputAnswerRepository userInputAnswerRepository, UserService userService, UserInputAnswerMapper userInputAnswerMapper) {
+    public UserInputAnswerService(ExerciseService exerciseService, UserInputAnswerRepository userInputAnswerRepository, UserService userService, UserInputAnswerMapper userInputAnswerMapper) {
         this.exerciseService = exerciseService;
         this.userInputAnswerRepository = userInputAnswerRepository;
         this.userService = userService;

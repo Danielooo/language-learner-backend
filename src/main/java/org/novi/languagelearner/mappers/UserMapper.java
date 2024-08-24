@@ -1,7 +1,7 @@
 package org.novi.languagelearner.mappers;
 
-import org.novi.languagelearner.dtos.Unsorted.UserRequestDTO;
-import org.novi.languagelearner.dtos.Unsorted.UserResponseDTO;
+import org.novi.languagelearner.dtos.User.UserRequestDTO;
+import org.novi.languagelearner.dtos.User.UserResponseDTO;
 import org.novi.languagelearner.entities.Role;
 import org.novi.languagelearner.entities.User;
 import org.springframework.security.crypto.password.PasswordEncoder;

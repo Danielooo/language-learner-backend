@@ -1,4 +1,4 @@
-package org.novi.languagelearner.dtos.Unsorted;
+package org.novi.languagelearner.dtos.Photo;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

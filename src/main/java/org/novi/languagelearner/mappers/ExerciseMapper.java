@@ -1,7 +1,7 @@
 package org.novi.languagelearner.mappers;
 
-import org.novi.languagelearner.dtos.Unsorted.ExerciseRequestDTO;
-import org.novi.languagelearner.dtos.Unsorted.ExerciseResponseDTO;
+import org.novi.languagelearner.dtos.Exercise.ExerciseRequestDTO;
+import org.novi.languagelearner.dtos.Exercise.ExerciseResponseDTO;
 import org.novi.languagelearner.entities.Exercise;
 import org.springframework.stereotype.Component;
 

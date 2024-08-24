@@ -11,7 +11,7 @@ import jakarta.persistence.*;
 // TODO: seem unneccessary. Delete >> connectedUserId; connectedExerciseId;
 
 @Entity
-public class Stat {
+public class Stats {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

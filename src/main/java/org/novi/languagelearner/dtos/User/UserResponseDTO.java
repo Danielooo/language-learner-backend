@@ -1,4 +1,4 @@
-package org.novi.languagelearner.dtos.Unsorted;
+package org.novi.languagelearner.dtos.User;
 
 import org.novi.languagelearner.entities.Photo;
 

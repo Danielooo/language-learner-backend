@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserInputAnswerMapper {
 
-    //TODO: Feature build; Stat just contains the user input, should contain the Feedback dto, so it's clear how the user is doing
+    //TODO: Feature build; Stats just contains the user input, should contain the Feedback dto, so it's clear how the user is doing
 
     public UserInputAnswerFeedbackResponseDTO mapToAnswerSubmitResponseDTO(String exerciseAnswer, boolean isCorrect, String feedback) {
         UserInputAnswerFeedbackResponseDTO userInputAnswerFeedbackResponseDTO = new UserInputAnswerFeedbackResponseDTO();

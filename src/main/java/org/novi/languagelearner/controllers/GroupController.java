@@ -1,15 +1,15 @@
 package org.novi.languagelearner.controllers;
 
 
-import org.novi.languagelearner.dtos.Unsorted.GroupRequestDTO;
-import org.novi.languagelearner.dtos.Unsorted.GroupResponseDTO;
+import org.novi.languagelearner.dtos.Group.GroupRequestDTO;
+import org.novi.languagelearner.dtos.Group.GroupResponseDTO;
 import org.novi.languagelearner.exceptions.BadRequestException;
 import org.novi.languagelearner.services.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,10 +31,7 @@ public class GroupController {
         this.groupService = groupService;
     }
 
-    private void setAuthentication(SecurityContext context) {
-        this.authentication = context.getAuthentication();
-    }
-
+    // TODO: check route
     @GetMapping("/{id}")
     public ResponseEntity<?> getGroupById(@PathVariable Long id) {
 
@@ -42,22 +39,29 @@ public class GroupController {
             GroupResponseDTO groupResponseDTO = groupService.getGroupById(id);
             return ResponseEntity.ok().body(groupResponseDTO);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
     @GetMapping("/all")
-    public ResponseEntity<?> getAllGroups() {
+    public ResponseEntity<?> getAllGroupsOfUser() {
         try {
-            return ResponseEntity.ok().body(groupService.getAllGroups());
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String userName = authentication.getName();
+
+            return ResponseEntity.ok().body(groupService.getAllGroups(userName));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
+    // TODO: also adjust data.sql and
     @PostMapping
     public ResponseEntity<?> createGroup(@RequestBody GroupRequestDTO groupRequestDTO) {
         try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            groupRequestDTO.setUserName(authentication.getName());
+
             GroupResponseDTO groupResponseDTO = groupService.createGroup(groupRequestDTO);
             return ResponseEntity.ok().body(groupResponseDTO);
         } catch (BadRequestException e) {
@@ -70,7 +74,10 @@ public class GroupController {
     public ResponseEntity<?> createGroupsFromJsonFiles(@RequestBody MultipartFile[] files) {
 
         try {
-            List<GroupResponseDTO> listOfGroupResponseDTOs = groupService.createGroupsWithJsonFiles(files);
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String userName = authentication.getName();
+
+            List<GroupResponseDTO> listOfGroupResponseDTOs = groupService.createGroupsWithJsonFiles(files, userName);
             return ResponseEntity.ok().body(listOfGroupResponseDTOs);
         } catch (BadRequestException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

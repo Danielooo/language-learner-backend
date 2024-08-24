@@ -1,8 +1,8 @@
 package org.novi.languagelearner.mappers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.novi.languagelearner.dtos.Unsorted.GroupRequestDTO;
-import org.novi.languagelearner.dtos.Unsorted.GroupResponseDTO;
+import org.novi.languagelearner.dtos.Group.GroupRequestDTO;
+import org.novi.languagelearner.dtos.Group.GroupResponseDTO;
 import org.novi.languagelearner.entities.Exercise;
 import org.novi.languagelearner.entities.Group;
 import org.novi.languagelearner.exceptions.BadRequestException;
@@ -29,9 +29,11 @@ public class GroupMapper {
     }
 
     public Group mapToEntity(GroupRequestDTO groupRequestDTO) {
-        var group = new Group();
-//        group.setUserId(userRepository.findByUserName(userName).get().getId());
+        Group group = new Group();
+
         group.setGroupName(groupRequestDTO.getGroupName());
+
+        group.setUser(userService.getUserByUserName(groupRequestDTO.getUserName()));
 
         List<Exercise> exercises = groupRequestDTO.getExercises();
         for (Exercise exercise : exercises) {
@@ -63,16 +65,18 @@ public class GroupMapper {
     public GroupResponseDTO mapToResponseDTO(Group group) {
         var groupResponseDTO = new GroupResponseDTO();
         groupResponseDTO.setId(group.getId());
+        groupResponseDTO.setUserName(group.getUser().getUserName());
         groupResponseDTO.setGroupName(group.getGroupName());
         groupResponseDTO.setExercises(group.getExercises());
         return groupResponseDTO;
     }
 
-    public GroupRequestDTO mapJsonFileToGroupRequestDTO(MultipartFile jsonFile)  {
+    public GroupRequestDTO mapJsonFileToGroupRequestDTO(MultipartFile jsonFile, String userName)  {
         try {
             String jsonContent = new String(jsonFile.getBytes());
 
             GroupRequestDTO groupRequestDTO = objectMapper.readValue(jsonContent, GroupRequestDTO.class);
+            groupRequestDTO.setUserName(userName);
 
             return groupRequestDTO;
         } catch (BadRequestException e) {

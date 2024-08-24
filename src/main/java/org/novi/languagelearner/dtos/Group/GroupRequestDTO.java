@@ -1,4 +1,4 @@
-package org.novi.languagelearner.dtos.Unsorted;
+package org.novi.languagelearner.dtos.Group;
 
 import org.novi.languagelearner.entities.Exercise;
 
@@ -7,6 +7,8 @@ import java.util.List;
 public class GroupRequestDTO {
 
     private String groupName;
+
+    private String userName;
 
     private List<Exercise> exercises;
 
@@ -24,5 +26,13 @@ public class GroupRequestDTO {
 
     public void setExercises(List<Exercise> exercises) {
         this.exercises = exercises;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

@@ -1,8 +1,8 @@
 package org.novi.languagelearner.services;
 
-import org.novi.languagelearner.dtos.Unsorted.GroupRequestDTO;
-import org.novi.languagelearner.dtos.Unsorted.GroupResponseDTO;
-import org.novi.languagelearner.dtos.Unsorted.UserResponseDTO;
+import org.novi.languagelearner.dtos.Group.GroupRequestDTO;
+import org.novi.languagelearner.dtos.Group.GroupResponseDTO;
+import org.novi.languagelearner.dtos.User.UserResponseDTO;
 import org.novi.languagelearner.entities.Group;
 import org.novi.languagelearner.exceptions.BadRequestException;
 import org.novi.languagelearner.exceptions.RecordNotFoundException;
@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class GroupService {
@@ -44,18 +45,18 @@ public class GroupService {
     public GroupResponseDTO createGroup(GroupRequestDTO groupRequestDTO) {
         Group group = groupMapper.mapToEntity(groupRequestDTO);
         Group savedGroup = groupRepository.save(group);
+
         return groupMapper.mapToResponseDTO(savedGroup);
     }
 
-    public List<GroupResponseDTO> createGroupsWithJsonFiles(MultipartFile[] jsonFiles) {
+    public List<GroupResponseDTO> createGroupsWithJsonFiles(MultipartFile[] jsonFiles, String userName) {
 
-        try {
             List<GroupRequestDTO> groupRequestDTOList = new ArrayList<>();
             for (MultipartFile jsonFile : jsonFiles) {
                 if (jsonFile.isEmpty()) {
                     throw new BadRequestException("Uploaded file is empty");
                 }
-                GroupRequestDTO groupRequestDTO = groupMapper.mapJsonFileToGroupRequestDTO(jsonFile);
+                GroupRequestDTO groupRequestDTO = groupMapper.mapJsonFileToGroupRequestDTO(jsonFile, userName);
                 groupRequestDTOList.add(groupRequestDTO);
             }
 
@@ -67,10 +68,6 @@ public class GroupService {
             }
 
             return groupResponseDTOS;
-
-        } catch (BadRequestException e) {
-            throw new BadRequestException("Error persisting groups");
-        }
     }
 
 
@@ -119,15 +116,20 @@ public class GroupService {
         }
     }
 
-    public List<GroupResponseDTO> getAllGroups() {
-        List<Group> groups = groupRepository.findAll();
+    public List<GroupResponseDTO> getAllGroups(String userName) {
+
+
+        List<Group> groups = groupRepository.findByUser_UserName(userName);
+
         if (groups.isEmpty()) {
+
             throw new RecordNotFoundException("No groups found");
+        } else {
+
+            return groups
+                .stream()
+                .map(groupMapper::mapToResponseDTO)
+                .collect(Collectors.toList());
         }
-        List<GroupResponseDTO> dtos = new ArrayList<>();
-        for (Group group : groups) {
-            dtos.add(groupMapper.mapToResponseDTO(group));
-        }
-        return dtos;
     }
 }

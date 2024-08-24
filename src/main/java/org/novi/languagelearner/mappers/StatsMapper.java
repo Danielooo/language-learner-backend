@@ -1,7 +1,7 @@
 package org.novi.languagelearner.mappers;
 
-import org.novi.languagelearner.dtos.Unsorted.ExerciseResponseDTO;
-import org.novi.languagelearner.dtos.Stat.StatResponseDTO;
+import org.novi.languagelearner.dtos.Exercise.ExerciseResponseDTO;
+import org.novi.languagelearner.dtos.Stats.StatsResponseDTO;
 import org.novi.languagelearner.dtos.UserInputAnswer.UserInputAnswerResponseDTO;
 import org.novi.languagelearner.entities.Exercise;
 import org.novi.languagelearner.entities.UserInputAnswer;
@@ -12,20 +12,20 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class StatMapper {
+public class StatsMapper {
 
     private final ExerciseRepository exerciseRepository;
     private final UserMapper userMapper;
     private final UserInputAnswerMapper userInputAnswerMapper;
 
-    public StatMapper (ExerciseRepository exerciseRepository, UserMapper userMapper, UserInputAnswerMapper userInputAnswerMapper) {
+    public StatsMapper(ExerciseRepository exerciseRepository, UserMapper userMapper, UserInputAnswerMapper userInputAnswerMapper) {
         this.exerciseRepository = exerciseRepository;
         this.userMapper = userMapper;
         this.userInputAnswerMapper = new UserInputAnswerMapper();
     }
 
-    public StatResponseDTO toStatResponseDTO(Exercise exercise, List<UserInputAnswer> userInputAnswers) {
-        StatResponseDTO statResponseDTO = new StatResponseDTO();
+    public StatsResponseDTO toStatResponseDTO(Exercise exercise, List<UserInputAnswer> userInputAnswers) {
+        StatsResponseDTO statsResponseDTO = new StatsResponseDTO();
 
         // create and fill exerciseResponseDTO
         ExerciseResponseDTO exerciseResponseDTO = new ExerciseResponseDTO();
@@ -38,13 +38,13 @@ public class StatMapper {
                 .map(userInputAnswerMapper::mapToUserInputAnswerResponseDTO)
                 .collect(Collectors.toList());
 
-        // put exerciseResponseDTO and List of userInputAnswerResponseDTOs in statResponseDTO
+        // put exerciseResponseDTO and List of userInputAnswerResponseDTOs in statsResponseDTO
 
 
 
-        statResponseDTO.setExerciseResponseDTO(exerciseResponseDTO);
-        statResponseDTO.setUserInputAnswersResponseDTOs(userInputAnswerResponseDTOs);
-        return statResponseDTO;
+        statsResponseDTO.setExerciseResponseDTO(exerciseResponseDTO);
+        statsResponseDTO.setUserInputAnswersResponseDTOs(userInputAnswerResponseDTOs);
+        return statsResponseDTO;
     }
 
 

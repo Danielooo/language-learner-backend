@@ -1,0 +1,17 @@
+{
+  "groupName" : "Fourth exampleGroup",
+  "exercises" : [
+    {
+      "question" : "eten",
+      "answer" : "mangiare"
+    },
+    {
+      "question" : "drinken",
+      "answer" : "bere"
+    },
+    {
+      "question" : "slapen",
+      "answer" : "dormire"
+    }
+  ]
+}

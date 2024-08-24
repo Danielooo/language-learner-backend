@@ -1,12 +1,14 @@
 package org.novi.languagelearner.controllers;
 
-import org.novi.languagelearner.dtos.Unsorted.ExerciseRequestDTO;
-import org.novi.languagelearner.dtos.Unsorted.ExerciseResponseDTO;
+import org.novi.languagelearner.dtos.Exercise.ExerciseRequestDTO;
+import org.novi.languagelearner.dtos.Exercise.ExerciseResponseDTO;
 import org.novi.languagelearner.exceptions.RecordNotFoundException;
 import org.novi.languagelearner.services.ExerciseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,12 +32,6 @@ public class ExerciseController {
 
 
 
-    @GetMapping
-    public List<ExerciseResponseDTO> getAllExercises() {
-        return exerciseService.getAllExercises();
-    }
-
-    // TODO: putmapping updateExercise
     @PutMapping("/{id}")
     public ExerciseResponseDTO updateExercise(@PathVariable Long id, @RequestBody ExerciseRequestDTO requestDTO) {
 
@@ -51,7 +47,4 @@ public class ExerciseController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
-
-    // TODO: Bulk exercise creation PostMapping
-
 }

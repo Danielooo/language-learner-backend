@@ -1,6 +1,6 @@
-package org.novi.languagelearner.dtos.Stat;
+package org.novi.languagelearner.dtos.Stats;
 
-public class StatRequestDTO {
+public class StatsRequestDTO {
 
     private Long exerciseId;
 

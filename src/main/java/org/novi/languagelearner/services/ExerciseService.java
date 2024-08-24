@@ -1,7 +1,7 @@
 package org.novi.languagelearner.services;
 
-import org.novi.languagelearner.dtos.Unsorted.ExerciseRequestDTO;
-import org.novi.languagelearner.dtos.Unsorted.ExerciseResponseDTO;
+import org.novi.languagelearner.dtos.Exercise.ExerciseRequestDTO;
+import org.novi.languagelearner.dtos.Exercise.ExerciseResponseDTO;
 import org.novi.languagelearner.entities.Exercise;
 import org.novi.languagelearner.exceptions.RecordNotFoundException;
 import org.novi.languagelearner.mappers.ExerciseMapper;
@@ -54,10 +54,6 @@ public class ExerciseService {
         }
     }
 
-    public List<ExerciseResponseDTO> getAllExercises() {
-        List<Exercise> exercises = exerciseRepository.findAll();
-        return exercises.stream().map(exerciseMapper::mapToResponseDTO).collect(Collectors.toList());
-    }
 
     public void deleteExercise(Long id) {
         if (exerciseRepository.existsById(id)) {

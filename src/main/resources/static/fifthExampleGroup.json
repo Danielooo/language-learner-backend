@@ -1,0 +1,17 @@
+{
+  "groupName" : "Fifth exampleGroup",
+  "exercises" : [
+    {
+      "question" : "rennen",
+      "answer" : "correre"
+    },
+    {
+      "question" : "schrijven",
+      "answer" : "scrivere"
+    },
+    {
+      "question" : "zingen",
+      "answer" : "cantare"
+    }
+  ]
+}

@@ -18,6 +18,8 @@ public class Exercise {
     private String question;
     private String answer;
 
+
+
     @ManyToOne
     @JoinColumn(name = "group_id")
     @JsonBackReference

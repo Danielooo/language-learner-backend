@@ -1,7 +1,7 @@
 package org.novi.languagelearner.services;
 
 import jakarta.transaction.Transactional;
-import org.novi.languagelearner.dtos.Unsorted.UserResponseDTO;
+import org.novi.languagelearner.dtos.User.UserResponseDTO;
 import org.novi.languagelearner.entities.Role;
 import org.novi.languagelearner.entities.User;
 import org.novi.languagelearner.exceptions.RecordNotFoundException;
@@ -53,11 +53,23 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public boolean createUser(User user, String[] roles) {
+
         return createUser(user, Arrays.asList(roles));
     }
 
     public UserResponseDTO getUserResponseDTOByUserName(String username) {
         Optional<User> userOptional = userRepository.findByUserName(username);
+        if (userOptional.isEmpty()) {
+            throw new RecordNotFoundException("User not found");
+        } else {
+            User user = userOptional.get();
+            return userMapper.mapToResponseDTO(user);
+        }
+    }
+
+    public UserResponseDTO getUserResponseDTOByIdAsAdmin(Long id) {
+
+        Optional<User> userOptional = userRepository.findById(id);
         if (userOptional.isEmpty()) {
             throw new RecordNotFoundException("User not found");
         } else {
@@ -75,12 +87,13 @@ public class UserService implements UserDetailsService {
         }
     }
 
-
-
-
-    public Optional<User> getUserById(Long id) {
-        var user = userRepository.findById(id);
-        return user;
+    public User getUserById(Long id) {
+        Optional<User> userOptional = userRepository.findById(id);
+        if (userOptional.isEmpty()) {
+            throw new RecordNotFoundException("User not found");
+        } else {
+            return userOptional.get();
+        }
     }
 
     public Optional<User> getUserByUserNameAndPassword(String username, String password) {

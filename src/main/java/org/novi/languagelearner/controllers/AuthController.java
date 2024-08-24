@@ -1,7 +1,7 @@
 package org.novi.languagelearner.controllers;
 
 
-import org.novi.languagelearner.dtos.Unsorted.UserLoginRequestDTO;
+import org.novi.languagelearner.dtos.User.UserLoginRequestDTO;
 import org.novi.languagelearner.security.ApiUserDetails;
 import org.novi.languagelearner.security.JwtService;
 import org.springframework.http.HttpHeaders;
@@ -31,7 +31,9 @@ public class AuthController {
     public ResponseEntity<Object> login(@RequestBody UserLoginRequestDTO userLoginRequestDTO
     ) {
         UsernamePasswordAuthenticationToken userPassAuthToken =
-                new UsernamePasswordAuthenticationToken(userLoginRequestDTO.getUsername(), userLoginRequestDTO.getPassword());
+                new UsernamePasswordAuthenticationToken(
+                        userLoginRequestDTO.getUsername(),
+                        userLoginRequestDTO.getPassword());
 
         try {
             Authentication auth = authManager.authenticate(userPassAuthToken);

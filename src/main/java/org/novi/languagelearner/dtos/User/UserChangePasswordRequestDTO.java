@@ -1,4 +1,4 @@
-package org.novi.languagelearner.dtos.Unsorted;
+package org.novi.languagelearner.dtos.User;
 
 public class UserChangePasswordRequestDTO {
 

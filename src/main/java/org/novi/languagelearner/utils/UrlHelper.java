@@ -1,4 +1,4 @@
-package org.novi.languagelearner.helpers;
+package org.novi.languagelearner.utils;
 
 import jakarta.servlet.http.HttpServletRequest;
 

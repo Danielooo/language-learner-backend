@@ -2,11 +2,11 @@ package org.novi.languagelearner.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import org.novi.languagelearner.dtos.Unsorted.UserRequestDTO;
-import org.novi.languagelearner.dtos.Unsorted.UserResponseDTO;
+import org.novi.languagelearner.dtos.User.UserRequestDTO;
+import org.novi.languagelearner.dtos.User.UserResponseDTO;
 import org.novi.languagelearner.entities.User;
 import org.novi.languagelearner.exceptions.BadRequestException;
-import org.novi.languagelearner.helpers.UrlHelper;
+import org.novi.languagelearner.utils.UrlHelper;
 import org.novi.languagelearner.mappers.UserMapper;
 import org.novi.languagelearner.services.PhotoService;
 import org.novi.languagelearner.services.UserService;
@@ -34,14 +34,11 @@ public class UserController {
         this.photoService = photoService;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getUserInfo(@PathVariable Long id) {
-        Optional<User> user = userService.getUserById(id);
-        if (user.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
+    @GetMapping("/admin/{id}")
+    public ResponseEntity<?> getUserInfo(@PathVariable("id") Long id) {
 
-        UserResponseDTO userResponseDTO = userMapper.mapToResponseDTO(user.get());
+        UserResponseDTO userResponseDTO = userService.getUserResponseDTOByIdAsAdmin(id);
+
         return ResponseEntity.ok().body(userResponseDTO);
     }
 
@@ -57,6 +54,8 @@ public class UserController {
         }
     }
 
+
+    // TODO: username has to be unique. First check if username exists, then create user
     @PostMapping
     public ResponseEntity<?> createUser(@RequestBody @Valid UserRequestDTO userDTO) {
         var user = userMapper.mapToEntity(userDTO);
@@ -70,6 +69,7 @@ public class UserController {
 
 //    @PutMapping("/{id}")
 //    public ResponseEntity<?> changePassword(@PathVariable Long id, @RequestBody @Valid UserChangePasswordRequestDTO userDTO) {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 //        var user = userMapper.mapToEntity(userDTO, id);
 //        if (!userService.updatePassword(user)) {
 //            return ResponseEntity.badRequest().build();

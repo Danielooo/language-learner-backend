@@ -1,7 +1,7 @@
 package org.novi.languagelearner.mappers;
 
-import org.novi.languagelearner.dtos.Unsorted.PhotoRequestDTO;
-import org.novi.languagelearner.dtos.Unsorted.PhotoResponseDTO;
+import org.novi.languagelearner.dtos.Photo.PhotoRequestDTO;
+import org.novi.languagelearner.dtos.Photo.PhotoResponseDTO;
 import org.novi.languagelearner.entities.Photo;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;

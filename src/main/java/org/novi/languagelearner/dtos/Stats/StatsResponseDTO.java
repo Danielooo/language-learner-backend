@@ -1,14 +1,12 @@
-package org.novi.languagelearner.dtos.Stat;
+package org.novi.languagelearner.dtos.Stats;
 
 
-import org.novi.languagelearner.dtos.Unsorted.ExerciseResponseDTO;
+import org.novi.languagelearner.dtos.Exercise.ExerciseResponseDTO;
 import org.novi.languagelearner.dtos.UserInputAnswer.UserInputAnswerResponseDTO;
-import org.novi.languagelearner.entities.Exercise;
-import org.novi.languagelearner.entities.UserInputAnswer;
 
 import java.util.List;
 
-public class StatResponseDTO {
+public class StatsResponseDTO {
 
     private ExerciseResponseDTO exerciseResponseDTO;
     private List<UserInputAnswerResponseDTO> userInputAnswersResponseDTOs;
