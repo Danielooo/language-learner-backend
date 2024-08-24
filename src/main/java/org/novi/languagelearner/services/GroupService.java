@@ -1,9 +1,8 @@
 package org.novi.languagelearner.services;
 
-import org.novi.languagelearner.dtos.GroupRequestDTO;
-import org.novi.languagelearner.dtos.GroupResponseDTO;
-import org.novi.languagelearner.dtos.UserResponseDTO;
-import org.novi.languagelearner.entities.User;
+import org.novi.languagelearner.dtos.Unsorted.GroupRequestDTO;
+import org.novi.languagelearner.dtos.Unsorted.GroupResponseDTO;
+import org.novi.languagelearner.dtos.Unsorted.UserResponseDTO;
 import org.novi.languagelearner.entities.Group;
 import org.novi.languagelearner.exceptions.BadRequestException;
 import org.novi.languagelearner.exceptions.RecordNotFoundException;
@@ -14,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -38,7 +36,7 @@ public class GroupService {
 
 
     public Long getUserIdByUserName(String userName) {
-        UserResponseDTO userResponseDTO = userService.getUserByUserName(userName);
+        UserResponseDTO userResponseDTO = userService.getUserResponseDTOByUserName(userName);
 
         return userResponseDTO.getId();
     }

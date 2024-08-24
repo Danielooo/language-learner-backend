@@ -1,11 +1,19 @@
-package org.novi.languagelearner.dtos;
+package org.novi.languagelearner.dtos.UserInputAnswer;
 
-public class AnswerValidationRequestDTO {
 
+public class UserInputAnswerRequestDTO {
+
+    private Long exerciseId;
     private String userInput;
     private String userName;
-    private Long exerciseId;
 
+    public Long getExerciseId() {
+        return exerciseId;
+    }
+
+    public void setExerciseId(Long exerciseId) {
+        this.exerciseId = exerciseId;
+    }
 
     public String getUserInput() {
         return userInput;
@@ -21,13 +29,5 @@ public class AnswerValidationRequestDTO {
 
     public void setUserName(String userName) {
         this.userName = userName;
-    }
-
-    public Long getExerciseId() {
-        return exerciseId;
-    }
-
-    public void setExerciseId(Long exerciseId) {
-        this.exerciseId = exerciseId;
     }
 }

@@ -1,4 +1,4 @@
-package org.novi.languagelearner.dtos;
+package org.novi.languagelearner.dtos.Unsorted;
 
 public class PhotoResponseDTO {
 

@@ -2,20 +2,13 @@ package org.novi.languagelearner.controllers;
 
 
 import jakarta.validation.Valid;
-import org.novi.languagelearner.dtos.PhotoRequestDTO;
-import org.novi.languagelearner.dtos.PhotoResponseDTO;
-import org.novi.languagelearner.dtos.UserResponseDTO;
-import org.novi.languagelearner.entities.Photo;
-import org.novi.languagelearner.exceptions.BadRequestException;
-import org.novi.languagelearner.exceptions.RecordNotFoundException;
+import org.novi.languagelearner.dtos.Unsorted.PhotoRequestDTO;
+import org.novi.languagelearner.dtos.Unsorted.UserResponseDTO;
 import org.novi.languagelearner.services.PhotoService;
-import org.novi.languagelearner.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 

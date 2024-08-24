@@ -41,6 +41,12 @@ public class User {
     @JsonManagedReference // prevents infinite recursion
     private Photo photo;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<UserInputAnswer> userInputAnswers;
+
+
+
     public void setId(Long id) {
 
     }

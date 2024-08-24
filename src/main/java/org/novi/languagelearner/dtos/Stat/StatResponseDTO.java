@@ -1,23 +1,20 @@
-package org.novi.languagelearner.dtos;
+package org.novi.languagelearner.dtos.Stat;
 
 
+import org.novi.languagelearner.dtos.Unsorted.ExerciseResponseDTO;
+import org.novi.languagelearner.dtos.UserInputAnswer.UserInputAnswerResponseDTO;
 import org.novi.languagelearner.entities.Exercise;
+import org.novi.languagelearner.entities.UserInputAnswer;
+
+import java.util.List;
 
 public class StatResponseDTO {
 
     private ExerciseResponseDTO exerciseResponseDTO;
-    private String username;
+    private List<UserInputAnswerResponseDTO> userInputAnswersResponseDTOs;
     private int timesRight;
     private int timesWrong;
 
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
 
     public ExerciseResponseDTO getExerciseResponseDTO() {
         return exerciseResponseDTO;
@@ -25,6 +22,14 @@ public class StatResponseDTO {
 
     public void setExerciseResponseDTO(ExerciseResponseDTO exerciseResponseDTO) {
         this.exerciseResponseDTO = exerciseResponseDTO;
+    }
+
+    public List<UserInputAnswerResponseDTO> getUserInputAnswersResponseDTOs() {
+        return userInputAnswersResponseDTOs;
+    }
+
+    public void setUserInputAnswersResponseDTOs(List<UserInputAnswerResponseDTO> userInputAnswersResponseDTOs) {
+        this.userInputAnswersResponseDTOs = userInputAnswersResponseDTOs;
     }
 
     public int getTimesRight() {

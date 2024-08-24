@@ -2,29 +2,20 @@ package org.novi.languagelearner.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import org.novi.languagelearner.dtos.UserChangePasswordRequestDTO;
-import org.novi.languagelearner.dtos.UserRequestDTO;
-import org.novi.languagelearner.dtos.UserResponseDTO;
+import org.novi.languagelearner.dtos.Unsorted.UserRequestDTO;
+import org.novi.languagelearner.dtos.Unsorted.UserResponseDTO;
 import org.novi.languagelearner.entities.User;
 import org.novi.languagelearner.exceptions.BadRequestException;
-import org.novi.languagelearner.exceptions.RecordNotFoundException;
 import org.novi.languagelearner.helpers.UrlHelper;
 import org.novi.languagelearner.mappers.UserMapper;
-import org.novi.languagelearner.security.JwtService;
 import org.novi.languagelearner.services.PhotoService;
 import org.novi.languagelearner.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.io.IOException;
-import java.util.Objects;
 import java.util.Optional;
-
-import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @RestController
 @RequestMapping("/users")
@@ -59,7 +50,7 @@ public class UserController {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-            UserResponseDTO userResponseDTO = userService.getUserByUserName(authentication.getName());
+            UserResponseDTO userResponseDTO = userService.getUserResponseDTOByUserName(authentication.getName());
             return ResponseEntity.ok().body(userResponseDTO);
         } catch (BadRequestException e) {
             throw new BadRequestException("Issue with getting profile");

@@ -1,7 +1,11 @@
 package org.novi.languagelearner.mappers;
 
-import org.novi.languagelearner.dtos.StatResponseDTO;
-import org.novi.languagelearner.entities.Stat;
+import org.novi.languagelearner.dtos.Unsorted.ExerciseResponseDTO;
+import org.novi.languagelearner.dtos.Stat.StatResponseDTO;
+import org.novi.languagelearner.dtos.UserInputAnswer.UserInputAnswerResponseDTO;
+import org.novi.languagelearner.entities.Exercise;
+import org.novi.languagelearner.entities.UserInputAnswer;
+import org.novi.languagelearner.repositories.ExerciseRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -10,37 +14,38 @@ import java.util.stream.Collectors;
 @Component
 public class StatMapper {
 
-    private final ExerciseMapper exerciseMapper;
+    private final ExerciseRepository exerciseRepository;
     private final UserMapper userMapper;
+    private final UserInputAnswerMapper userInputAnswerMapper;
 
-    public StatMapper (ExerciseMapper exerciseMapper, ExerciseMapper exerciseMapper1, UserMapper userMapper) {
-        this.exerciseMapper = exerciseMapper1;
+    public StatMapper (ExerciseRepository exerciseRepository, UserMapper userMapper, UserInputAnswerMapper userInputAnswerMapper) {
+        this.exerciseRepository = exerciseRepository;
         this.userMapper = userMapper;
+        this.userInputAnswerMapper = new UserInputAnswerMapper();
     }
 
-    public List<StatResponseDTO> mapToListOfResponseDTOs(List<Stat> stats) {
+    public StatResponseDTO toStatResponseDTO(Exercise exercise, List<UserInputAnswer> userInputAnswers) {
+        StatResponseDTO statResponseDTO = new StatResponseDTO();
 
-        return stats.stream()
-                .map(this::mapToResponseDTO)
+        // create and fill exerciseResponseDTO
+        ExerciseResponseDTO exerciseResponseDTO = new ExerciseResponseDTO();
+        exerciseResponseDTO.setId(exercise.getId());
+        exerciseResponseDTO.setQuestion(exercise.getQuestion());
+        exerciseResponseDTO.setAnswer(exercise.getAnswer());
+
+        // create and fill List of userInputAnswerResponseDTOs
+        List<UserInputAnswerResponseDTO> userInputAnswerResponseDTOs = userInputAnswers.stream()
+                .map(userInputAnswerMapper::mapToUserInputAnswerResponseDTO)
                 .collect(Collectors.toList());
-    }
 
-    public StatResponseDTO mapToResponseDTO(Stat stat) {
-        var statResponseDTO = new StatResponseDTO();
-        statResponseDTO.setExerciseResponseDTO(exerciseMapper.mapToResponseDTO(stat.getExercise()));
-        statResponseDTO.setUsername(stat.getUser().getUserName());
+        // put exerciseResponseDTO and List of userInputAnswerResponseDTOs in statResponseDTO
 
-        statResponseDTO.setTimesRight(stat.getTimesRight());
-        statResponseDTO.setTimesWrong(stat.getTimesWrong());
 
+
+        statResponseDTO.setExerciseResponseDTO(exerciseResponseDTO);
+        statResponseDTO.setUserInputAnswersResponseDTOs(userInputAnswerResponseDTOs);
         return statResponseDTO;
     }
-
-    // mapToEntity
-
-
-    // mapToResponseDTO
-    // mapToResponseDTOList
 
 
 }

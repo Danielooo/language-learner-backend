@@ -1,9 +1,8 @@
 package org.novi.languagelearner.services;
 
 import jakarta.transaction.Transactional;
-import org.novi.languagelearner.dtos.PhotoRequestDTO;
-import org.novi.languagelearner.dtos.PhotoResponseDTO;
-import org.novi.languagelearner.dtos.UserResponseDTO;
+import org.novi.languagelearner.dtos.Unsorted.PhotoRequestDTO;
+import org.novi.languagelearner.dtos.Unsorted.UserResponseDTO;
 import org.novi.languagelearner.entities.Photo;
 import org.novi.languagelearner.entities.User;
 import org.novi.languagelearner.exceptions.BadRequestException;

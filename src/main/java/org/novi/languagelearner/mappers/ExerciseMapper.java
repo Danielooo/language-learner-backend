@@ -1,7 +1,7 @@
 package org.novi.languagelearner.mappers;
 
-import org.novi.languagelearner.dtos.ExerciseRequestDTO;
-import org.novi.languagelearner.dtos.ExerciseResponseDTO;
+import org.novi.languagelearner.dtos.Unsorted.ExerciseRequestDTO;
+import org.novi.languagelearner.dtos.Unsorted.ExerciseResponseDTO;
 import org.novi.languagelearner.entities.Exercise;
 import org.springframework.stereotype.Component;
 
@@ -23,11 +23,5 @@ public class ExerciseMapper {
         responseDTO.setAnswer(exercise.getAnswer());
         return responseDTO;
     }
-
-//    // ExercisePutDTO
-//    public exercise toexercisePutDTO(exercisePutDTO exercisePutDTO) {
-//
-//
-//    }
 
 }

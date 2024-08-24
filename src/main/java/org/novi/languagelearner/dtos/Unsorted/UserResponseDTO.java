@@ -1,7 +1,6 @@
-package org.novi.languagelearner.dtos;
+package org.novi.languagelearner.dtos.Unsorted;
 
 import org.novi.languagelearner.entities.Photo;
-import org.novi.languagelearner.entities.Role;
 
 import java.util.List;
 

@@ -1,10 +1,8 @@
 package org.novi.languagelearner.mappers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.novi.languagelearner.dtos.GroupRequestDTO;
-import org.novi.languagelearner.dtos.GroupResponseDTO;
+import org.novi.languagelearner.dtos.Unsorted.GroupRequestDTO;
+import org.novi.languagelearner.dtos.Unsorted.GroupResponseDTO;
 import org.novi.languagelearner.entities.Exercise;
 import org.novi.languagelearner.entities.Group;
 import org.novi.languagelearner.exceptions.BadRequestException;

@@ -1,7 +1,7 @@
 package org.novi.languagelearner.controllers;
 
-import org.novi.languagelearner.dtos.ExerciseRequestDTO;
-import org.novi.languagelearner.dtos.ExerciseResponseDTO;
+import org.novi.languagelearner.dtos.Unsorted.ExerciseRequestDTO;
+import org.novi.languagelearner.dtos.Unsorted.ExerciseResponseDTO;
 import org.novi.languagelearner.exceptions.RecordNotFoundException;
 import org.novi.languagelearner.services.ExerciseService;
 import org.springframework.beans.factory.annotation.Autowired;

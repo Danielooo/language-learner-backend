@@ -1,7 +1,11 @@
 package org.novi.languagelearner.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "exercises")
@@ -18,6 +22,11 @@ public class Exercise {
     @JoinColumn(name = "group_id")
     @JsonBackReference
     private Group group;
+
+    @OneToMany(mappedBy = "exercise", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonIgnore
+    @Column(name = "user_input_answers")
+    private List<UserInputAnswer> userInputAnswers;
 
 
 

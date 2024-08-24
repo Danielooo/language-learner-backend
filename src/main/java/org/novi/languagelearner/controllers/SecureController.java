@@ -1,7 +1,6 @@
 package org.novi.languagelearner.controllers;
 
-import org.novi.languagelearner.dtos.UserResponseDTO;
-import org.novi.languagelearner.entities.User;
+import org.novi.languagelearner.dtos.Unsorted.UserResponseDTO;
 import org.novi.languagelearner.mappers.UserMapper;
 import org.novi.languagelearner.security.JwtService;
 import org.novi.languagelearner.services.UserService;
@@ -11,8 +10,6 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Optional;
 
 
 @RestController
@@ -49,7 +46,7 @@ public class SecureController {
         try {
             setAuthentication(SecurityContextHolder.getContext());
 
-            UserResponseDTO userResponseDTO = userService.getUserByUserName(authentication.getName());
+            UserResponseDTO userResponseDTO = userService.getUserResponseDTOByUserName(authentication.getName());
             return ResponseEntity.ok().body(userResponseDTO);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Issue with getting user data");

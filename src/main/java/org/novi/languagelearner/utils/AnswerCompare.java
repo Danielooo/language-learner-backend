@@ -3,14 +3,17 @@ package org.novi.languagelearner.utils;
 import java.text.Normalizer;
 import java.util.regex.Pattern;
 
-// TODO: implement hard and forgiving comparison settings
-
-
+// TODO: Nice to have; implement hard and forgiving comparison settings
 
 public class AnswerCompare {
 
    public static boolean answerWrongOrRight(String correctAnswer, String userInput) {
-        if (correctAnswer.equals(normalizeString(userInput))) {
+       // write all the checks in here. casing and accents should result in correct answer
+        if (correctAnswer.equals(userInput)) {
+            return true;
+        } else if (compareAnswersIgnoreAccents(correctAnswer, userInput)) {
+            return true;
+        } else if (compareAnswersIgnoreCasing(correctAnswer, userInput)) {
             return true;
         } else {
             return false;

@@ -44,6 +44,8 @@ public class SecurityConfig {
                         .requestMatchers("/exercises/").permitAll()
                         .requestMatchers("/answer-validation/**").permitAll()
                         .requestMatchers("/answer-validation**").permitAll()
+                        .requestMatchers("/answer**").permitAll()
+                        .requestMatchers("/answer/**").permitAll()
                         .requestMatchers("/groups").permitAll()
                         .requestMatchers("/groups/upload-json-files").permitAll()
                         .requestMatchers("/groups/all").permitAll()
@@ -64,7 +66,7 @@ public class SecurityConfig {
                         .requestMatchers("/login**").permitAll()
                         .requestMatchers("/practice**").hasRole("USER")
 
-                        .anyRequest().denyAll()
+                        .anyRequest().permitAll()
                         )
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .csrf(csrf -> csrf.disable())

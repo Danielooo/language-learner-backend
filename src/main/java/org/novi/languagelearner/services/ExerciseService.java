@@ -1,7 +1,7 @@
 package org.novi.languagelearner.services;
 
-import org.novi.languagelearner.dtos.ExerciseRequestDTO;
-import org.novi.languagelearner.dtos.ExerciseResponseDTO;
+import org.novi.languagelearner.dtos.Unsorted.ExerciseRequestDTO;
+import org.novi.languagelearner.dtos.Unsorted.ExerciseResponseDTO;
 import org.novi.languagelearner.entities.Exercise;
 import org.novi.languagelearner.exceptions.RecordNotFoundException;
 import org.novi.languagelearner.mappers.ExerciseMapper;
@@ -34,13 +34,23 @@ public class ExerciseService {
         return exerciseMapper.mapToResponseDTO(savedExercise) ;
     }
 
-    // TODO: Answer Frans; voor intern verkeer tussen services. Nodig om DTO te gebruiken? Of mag ook Entity? Wil je deze methode gebruiken voor je hele project of mogen andere services ook direct de repository gebruiken? // Nee, hier gebruik je models voor. Zeker als operaties uitvoert op de properties van de model. (De entity wil je niet zomaar aanpassen, als je die saved pas je de database aan)
     public Exercise getExerciseById(Long id) {
         Optional<Exercise> exerciseOptional = exerciseRepository.findById(id);
         if (exerciseOptional.isPresent()) {
             return exerciseOptional.get();
         } else {
             throw new RecordNotFoundException("Exercise id not found in database");
+        }
+    }
+
+    // just get exercise without the userInputAnswers
+    public Exercise getExerciseWithoutUserInputAnswersById(Long id) {
+
+        Optional<Exercise> exerciseOptional = exerciseRepository.findExerciseWithoutUserInputAnswersById(id);
+        if (exerciseOptional.isEmpty()) {
+            throw new RecordNotFoundException("Exercise id not found in database");
+        } else {
+            return exerciseOptional.get();
         }
     }
 
