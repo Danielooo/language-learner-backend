@@ -3,13 +3,13 @@ package org.novi.languagelearner.entities;
 
 
 
-// TODO: implement timestamp
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 
-// TODO: rename to SubmittedAnswer or UserInputAnswer
+
+// TODO: implement timestamp
 @Entity
 @Table(name = "user_input_answers")
 public class UserInputAnswer {

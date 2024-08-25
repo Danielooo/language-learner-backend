@@ -83,6 +83,7 @@ public class GroupService {
         }
     }
 
+    // TODO: test if this is working and has a use case
     public GroupResponseDTO updatePartOfGroup(Long id, GroupRequestDTO groupRequestDTO) {
         Optional<Group> group = groupRepository.findById(id);
         if (group.isEmpty()) {
@@ -96,6 +97,7 @@ public class GroupService {
         }
     }
 
+    // TODO: implement user authentication
     public GroupResponseDTO getGroupById(Long id) {
 
         Optional<Group> group = groupRepository.findById(id);
@@ -106,6 +108,8 @@ public class GroupService {
         }
     }
 
+
+    // TODO: implement user authentication, only user that created group can delete group
     public GroupResponseDTO deleteGroup(Long id) {
         Optional<Group> group = groupRepository.findById(id);
         if (group.isEmpty()) {
@@ -116,8 +120,9 @@ public class GroupService {
         }
     }
 
-    public List<GroupResponseDTO> getAllGroups(String userName) {
 
+    // TODO: implement user authentication
+    public List<GroupResponseDTO> getAllGroups(String userName) {
 
         List<Group> groups = groupRepository.findByUser_UserName(userName);
 

@@ -1,12 +1,14 @@
-// TODO: Implement Lombok
+// TODO: Fix security per endpoint
+
+
+// TODO: Read up on Exception handler. Add exceptions to handler
+// TODO: Read up on when to use Param, PathVariable, RequestBody
 
 // TODO: Create endpoints per resource
-// TODO: Fix exceptions throughout project
-// TODO: Fix security per endpoint
-// TODO: Test and fix all endpoints in Postman
-
-
 // TODO: Stats repository retrieves stats with @Query and puts it in ResponseDTO
-
+// TODO: Test and fix all endpoints in Postman
 // TODO: Make every endpoint authenticated
 // TODO: Admin endpoints per controller (resource)
+
+
+

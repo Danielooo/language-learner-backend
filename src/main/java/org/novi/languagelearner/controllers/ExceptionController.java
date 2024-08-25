@@ -8,6 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+
+// TODO: Waarom sommige returns met Object en sommige met String?
+// TODO: Meer exceptions toevoegen
 @ControllerAdvice
 public class ExceptionController {
 

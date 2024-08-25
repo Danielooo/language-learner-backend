@@ -17,7 +17,8 @@ import java.util.List;
 
 
 // TODO: implement exception handling voor RecordNotFoundException
-
+// TODO: Admin endpoints toevoegen
+//
 @RestController
 @RequestMapping("/groups")
 public class GroupController {
@@ -31,14 +32,17 @@ public class GroupController {
         this.groupService = groupService;
     }
 
-    // TODO: check route
+    // TODO: implement user authentication
     @GetMapping("/{id}")
     public ResponseEntity<?> getGroupById(@PathVariable Long id) {
 
         try {
+
             GroupResponseDTO groupResponseDTO = groupService.getGroupById(id);
+
             return ResponseEntity.ok().body(groupResponseDTO);
         } catch (Exception e) {
+
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
@@ -55,7 +59,6 @@ public class GroupController {
         }
     }
 
-    // TODO: also adjust data.sql and
     @PostMapping
     public ResponseEntity<?> createGroup(@RequestBody GroupRequestDTO groupRequestDTO) {
         try {
@@ -86,6 +89,7 @@ public class GroupController {
 
     // TODO: Fix 500 error when putGroup 1 is called from Postman
     // TODO: implement user authentication for adding userId to group. Also only allow corresponding user to update group
+    // TODO: put id also in request dto, not necessary in url
     @PutMapping("/{id}")
     public ResponseEntity<?> updateGroup(@PathVariable Long id, @RequestBody GroupRequestDTO groupRequestDTO) {
 
@@ -97,7 +101,11 @@ public class GroupController {
         }
     }
 
+    // TODO: Post/Put AddExercisesToGroup
+
+
     // Works as PATCH
+    // TODO: implement user authentication
     @PutMapping("/patch/{id}")
     public ResponseEntity<?> updatePartOfGroup(@PathVariable Long id, @RequestBody GroupRequestDTO groupRequestDTO) {
 
@@ -109,6 +117,7 @@ public class GroupController {
         }
     }
 
+    // TODO: implement user authentication, only user that created group can delete group
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteGroup(@PathVariable Long id) {
         try {

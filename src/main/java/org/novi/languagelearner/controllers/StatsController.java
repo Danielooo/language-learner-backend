@@ -25,8 +25,9 @@ public class StatsController {
         this.statsMapper = statsMapper;
     }
 
-    @GetMapping
-    public ResponseEntity<?> getStats(@RequestParam Long exerciseId) {
+    // TODO: implement timestamp for UserInputAnswer >> then: get for query param request. Use utility class for reading timestamp as time
+    @GetMapping("/exercise")
+    public ResponseEntity<?> getStatsOfExercise(@RequestParam Long exerciseId) {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String userName = authentication.getName();
@@ -39,6 +40,10 @@ public class StatsController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("getStats failed: " + e.getMessage());
         }
     }
+
+    // TODO: Stats contain the following: UserIntputAnswer (with timestamps), Group, ExerciseResponseDTO, Per exercise: timesright/timeswrong, lastInput: right/wrong, lastInputTimestamp
+    // TODO: get all stats of user with user auth >> can use stat param for category, period of time
+    // TODO: get all stats of user as admin
 
 
 

@@ -25,6 +25,7 @@ public class SecurityConfig {
     }
 
     // TODO: beter om hier per controller te bepalen welke rol toegang heeft? Dus /controller/admin**
+    // TODO: Alles authenticated maken behalve login en register
     @Bean
     public SecurityFilterChain filterChain (HttpSecurity httpSecurity, JwtRequestFilter jwtRequestFilter) throws Exception{
         httpSecurity

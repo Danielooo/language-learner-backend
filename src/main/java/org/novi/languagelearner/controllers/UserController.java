@@ -34,6 +34,9 @@ public class UserController {
         this.photoService = photoService;
     }
 
+    // TODO: Add putmapping for updating user info >> username has to stay unique
+    // TODO: Add admin endpoints >> also delete user
+
     @GetMapping("/admin/{id}")
     public ResponseEntity<?> getUserInfo(@PathVariable("id") Long id) {
 
@@ -55,7 +58,7 @@ public class UserController {
     }
 
 
-    // TODO: username has to be unique. First check if username exists, then create user
+    // TODO: make username has to be unique. First check if username exists, then create user
     @PostMapping
     public ResponseEntity<?> createUser(@RequestBody @Valid UserRequestDTO userDTO) {
         var user = userMapper.mapToEntity(userDTO);
@@ -65,6 +68,7 @@ public class UserController {
         }
         return ResponseEntity.created(UrlHelper.getCurrentUrlWithId(request, user.getId())).build();
     }
+
 
 
 //    @PutMapping("/{id}")

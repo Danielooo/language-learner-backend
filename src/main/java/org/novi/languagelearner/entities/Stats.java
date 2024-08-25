@@ -2,13 +2,7 @@ package org.novi.languagelearner.entities;
 
 import jakarta.persistence.*;
 
-// TODO: create links to User and Exercise
-// TODO: Add List 'stats' containing exercise id, timesright, timeswrong
-// TODO: create controller, service, and repository, mapper, dto
-// TODO: add 'stats' to SecurityConfig
-// TODO: test with Postman
-// TODO: add lastTimeRight, lastTimeWrong
-// TODO: seem unneccessary. Delete >> connectedUserId; connectedExerciseId;
+// TODO: Maybe @Entity annotation not necessary? Is not persisted to database
 
 @Entity
 public class Stats {

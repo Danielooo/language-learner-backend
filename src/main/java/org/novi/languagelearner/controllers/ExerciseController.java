@@ -25,13 +25,15 @@ public class ExerciseController {
         this.exerciseService = exerciseService;
     }
 
+
+    // TODO: add String category (make category constant with 'other' for the fringe cases), has to be added to the ExerciseRequestDTO, >> make it a query param >>
     @PostMapping
     public ExerciseResponseDTO createExercise(@RequestBody ExerciseRequestDTO requestDTO) {
         return exerciseService.createExercise(requestDTO);
     }
 
 
-
+    // TODO: Only make this available for admin. User has to adjust via the Group
     @PutMapping("/{id}")
     public ExerciseResponseDTO updateExercise(@PathVariable Long id, @RequestBody ExerciseRequestDTO requestDTO) {
 
