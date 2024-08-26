@@ -48,4 +48,7 @@ public class UserInputAnswerService {
                 getFeedbackAfterCompare(exercise.getAnswer(), userInputAnswerRequestDTO.getUserInput()));
     }
 
+    public void deleteAnswer(Long id) {
+        userInputAnswerRepository.deleteById(id);
+    }
 }

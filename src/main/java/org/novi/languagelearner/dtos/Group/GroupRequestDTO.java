@@ -1,10 +1,14 @@
 package org.novi.languagelearner.dtos.Group;
 
 import org.novi.languagelearner.entities.Exercise;
+import lombok.Data;
 
 import java.util.List;
 
+@Data
 public class GroupRequestDTO {
+
+    private Long id;
 
     private String groupName;
 
@@ -12,27 +16,5 @@ public class GroupRequestDTO {
 
     private List<Exercise> exercises;
 
-    public String getGroupName() {
-        return groupName;
-    }
 
-    public void setGroupName(String groupName) {
-        this.groupName = groupName;
-    }
-
-    public List<Exercise> getExercises() {
-        return exercises;
-    }
-
-    public void setExercises(List<Exercise> exercises) {
-        this.exercises = exercises;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
 }

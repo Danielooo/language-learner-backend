@@ -2,7 +2,9 @@ package org.novi.languagelearner.controllers;
 
 import org.novi.languagelearner.exceptions.BadRequestException;
 import org.novi.languagelearner.exceptions.RecordNotFoundException;
+import org.novi.languagelearner.exceptions.UserNameAlreadyExistsException;
 import org.novi.languagelearner.exceptions.UsernameNotFoundException;
+import org.novi.languagelearner.exceptions.AccessDeniedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -38,4 +40,16 @@ public class ExceptionController {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
+    // username already exists
+    @ExceptionHandler(value = UserNameAlreadyExistsException.class)
+    public ResponseEntity<String> exception(UserNameAlreadyExistsException exception) {
+
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = AccessDeniedException.class)
+    public ResponseEntity<String> exception(AccessDeniedException exception) {
+
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.FORBIDDEN);
+    }
 }

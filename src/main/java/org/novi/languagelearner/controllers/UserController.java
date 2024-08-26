@@ -2,6 +2,7 @@ package org.novi.languagelearner.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import org.novi.languagelearner.dtos.User.UserNameChangeRequestDTO;
 import org.novi.languagelearner.dtos.User.UserRequestDTO;
 import org.novi.languagelearner.dtos.User.UserResponseDTO;
 import org.novi.languagelearner.entities.User;
@@ -16,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
+import java.util.concurrent.locks.ReentrantLock;
 
 @RestController
 @RequestMapping("/users")
@@ -25,6 +27,8 @@ public class UserController {
     private final UserService userService;
     private final HttpServletRequest request;
     private final PhotoService photoService;
+
+
 
 
     public UserController(UserMapper userMapper, UserService userService, HttpServletRequest request, PhotoService photoService) {
@@ -59,16 +63,33 @@ public class UserController {
 
 
     // TODO: make username has to be unique. First check if username exists, then create user
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<?> createUser(@RequestBody @Valid UserRequestDTO userDTO) {
-        var user = userMapper.mapToEntity(userDTO);
-        user.setEnabled(true);
-        if (!userService.createUser(user, userDTO.getRoles())) {
-            return ResponseEntity.badRequest().build();
+        try {
+
+            UserResponseDTO userResponseDTO = userService.createUser(userDTO);
+
+            return ResponseEntity.ok().body(userResponseDTO);
+        } catch (BadRequestException e) {
+            throw new BadRequestException("Issue with creating user");
         }
-        return ResponseEntity.created(UrlHelper.getCurrentUrlWithId(request, user.getId())).build();
     }
 
+
+    @PutMapping("/change")
+    public ResponseEntity<?> changeUserName(@RequestBody @Valid UserNameChangeRequestDTO requestDTO) {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+            requestDTO.setCurrentUserName(authentication.getName());
+
+            UserResponseDTO userResponseDTO = userService.changeUserName(requestDTO);
+
+            return ResponseEntity.ok().body(userResponseDTO);
+        } catch (BadRequestException e) {
+            throw new BadRequestException("Issue with changing username");
+        }
+    }
 
 
 //    @PutMapping("/{id}")

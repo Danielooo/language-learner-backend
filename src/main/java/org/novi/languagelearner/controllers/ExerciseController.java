@@ -2,6 +2,7 @@ package org.novi.languagelearner.controllers;
 
 import org.novi.languagelearner.dtos.Exercise.ExerciseRequestDTO;
 import org.novi.languagelearner.dtos.Exercise.ExerciseResponseDTO;
+import org.novi.languagelearner.exceptions.BadRequestException;
 import org.novi.languagelearner.exceptions.RecordNotFoundException;
 import org.novi.languagelearner.services.ExerciseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,28 +26,31 @@ public class ExerciseController {
         this.exerciseService = exerciseService;
     }
 
+    // ADMIN
 
-    // TODO: add String category (make category constant with 'other' for the fringe cases), has to be added to the ExerciseRequestDTO, >> make it a query param >>
-    @PostMapping
-    public ExerciseResponseDTO createExercise(@RequestBody ExerciseRequestDTO requestDTO) {
-        return exerciseService.createExercise(requestDTO);
-    }
-
-
-    // TODO: Only make this available for admin. User has to adjust via the Group
-    @PutMapping("/{id}")
-    public ExerciseResponseDTO updateExercise(@PathVariable Long id, @RequestBody ExerciseRequestDTO requestDTO) {
-
-        return exerciseService.updateExercise(id, requestDTO);
-    }
-
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/admin/{id}")
     public ResponseEntity<?> deleteExercise(@PathVariable Long id) {
         try {
+
             exerciseService.deleteExercise(id);
             return ResponseEntity.ok().body(String.format("exercise with id %d is deleted", id));
         } catch (RecordNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+
+    @PutMapping("/admin/{id}")
+    public ExerciseResponseDTO updateExercise(@PathVariable Long id, @RequestBody ExerciseRequestDTO requestDTO) {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+                return exerciseService.updateExercise(id, requestDTO);
+            } else {
+                throw new BadRequestException("You are not authorized to update exercises");
+            }
+        } catch (BadRequestException e) {
+            throw new BadRequestException("Something went wrong with updating the exercise");
         }
     }
 }

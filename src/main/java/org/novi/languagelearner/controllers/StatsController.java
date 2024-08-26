@@ -26,7 +26,7 @@ public class StatsController {
     }
 
     // TODO: implement timestamp for UserInputAnswer >> then: get for query param request. Use utility class for reading timestamp as time
-    @GetMapping("/exercise")
+    @GetMapping("/user/exercise")
     public ResponseEntity<?> getStatsOfExercise(@RequestParam Long exerciseId) {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

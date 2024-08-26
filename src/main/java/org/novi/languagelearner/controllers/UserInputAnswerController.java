@@ -33,5 +33,23 @@ public class UserInputAnswerController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
+
+    // ADMIN
+    @DeleteMapping("/admin/{id}")
+    public ResponseEntity<?> deleteUserInputAnswer(@PathVariable Long id) {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (!authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are not authorized to delete answers");
+            } else {
+                userInputAnswerService.deleteAnswer(id);
+                return ResponseEntity.ok().body(String.format("Answer with id %d is deleted", id));
+            }
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
 }
 

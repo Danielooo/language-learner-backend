@@ -27,9 +27,25 @@ public class GroupController {
     private Authentication authentication;
 
 
+
+
     @Autowired
     public GroupController(GroupService groupService) {
         this.groupService = groupService;
+    }
+
+    @PatchMapping("/add-exercises")
+    public ResponseEntity<?> addExercisesToGroup(@RequestBody GroupRequestDTO groupRequestDTO) {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String userName = authentication.getName();
+            groupRequestDTO.setUserName(userName);
+
+            GroupResponseDTO groupResponseDTO = groupService.addExercisesToGroup(groupRequestDTO);
+            return ResponseEntity.ok().body(groupResponseDTO);
+        } catch (BadRequestException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     // TODO: implement user authentication
@@ -87,35 +103,28 @@ public class GroupController {
         }
     }
 
-    // TODO: Fix 500 error when putGroup 1 is called from Postman
-    // TODO: implement user authentication for adding userId to group. Also only allow corresponding user to update group
-    // TODO: put id also in request dto, not necessary in url
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateGroup(@PathVariable Long id, @RequestBody GroupRequestDTO groupRequestDTO) {
+
+    @PutMapping("/{GroupId}")
+    public ResponseEntity<?> updateGroup(@PathVariable Long GroupId, @RequestBody GroupRequestDTO groupRequestDTO) {
 
         try {
-            GroupResponseDTO groupResponseDTO = groupService.updateGroup(id, groupRequestDTO);
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String userName = authentication.getName();
+            groupRequestDTO.setUserName(userName);
+            groupRequestDTO.setId(GroupId);
+
+            GroupResponseDTO groupResponseDTO = groupService.updateGroup(groupRequestDTO);
             return ResponseEntity.ok().body(groupResponseDTO);
         } catch (BadRequestException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body("Error updating group");
         }
     }
 
     // TODO: Post/Put AddExercisesToGroup
 
 
-    // Works as PATCH
-    // TODO: implement user authentication
-    @PutMapping("/patch/{id}")
-    public ResponseEntity<?> updatePartOfGroup(@PathVariable Long id, @RequestBody GroupRequestDTO groupRequestDTO) {
 
-        try {
-            GroupResponseDTO groupResponseDTO = groupService.updatePartOfGroup(id, groupRequestDTO);
-            return ResponseEntity.ok().body(groupResponseDTO);
-        } catch (BadRequestException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
+
 
     // TODO: implement user authentication, only user that created group can delete group
     @DeleteMapping("/{id}")
@@ -127,5 +136,4 @@ public class GroupController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
 }

@@ -1,8 +1,10 @@
 package org.novi.languagelearner.services;
 
+import jakarta.transaction.Transactional;
 import org.novi.languagelearner.dtos.Group.GroupRequestDTO;
 import org.novi.languagelearner.dtos.Group.GroupResponseDTO;
 import org.novi.languagelearner.dtos.User.UserResponseDTO;
+import org.novi.languagelearner.entities.Exercise;
 import org.novi.languagelearner.entities.Group;
 import org.novi.languagelearner.exceptions.BadRequestException;
 import org.novi.languagelearner.exceptions.RecordNotFoundException;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -25,13 +28,15 @@ public class GroupService {
     private final GroupMapper groupMapper;
     private final ExerciseMapper exerciseMapper;
     private final UserService userService;
+    private final ExerciseService exerciseService;
 
     @Autowired
-    public GroupService(GroupRepository groupRepository, GroupMapper groupMapper, ExerciseMapper exerciseMapper, UserService userService) {
+    public GroupService(GroupRepository groupRepository, GroupMapper groupMapper, ExerciseMapper exerciseMapper, UserService userService, ExerciseService exerciseService) {
         this.groupRepository = groupRepository;
         this.groupMapper = groupMapper;
         this.exerciseMapper = exerciseMapper;
         this.userService = userService;
+        this.exerciseService = exerciseService;
     }
 
 
@@ -71,14 +76,16 @@ public class GroupService {
     }
 
 
-    public GroupResponseDTO updateGroup(Long id, GroupRequestDTO groupRequestDTO) {
-        Optional<Group> group = groupRepository.findById(id);
-        if (group.isEmpty()) {
-            throw new RecordNotFoundException(String.format("Group with id: %d not found", id));
+
+    @Transactional
+    public GroupResponseDTO updateGroup( GroupRequestDTO groupRequestDTO) {
+        Optional<Group> groupOptional = groupRepository.findById(groupRequestDTO.getId());
+        if (groupOptional.isEmpty()) {
+            throw new RecordNotFoundException(String.format("Group with id: %d not found", groupRequestDTO.getId()));
         } else {
-            Group updatedGroup = groupMapper.mapToEntity(groupRequestDTO);
-            updatedGroup.setId(id);
-            Group savedGroup = groupRepository.save(updatedGroup);
+            Group groupUpdated = groupMapper.mapInputIntoCurrentEntity(groupRequestDTO, groupOptional.get());
+
+            Group savedGroup = groupRepository.save(groupUpdated);
             return groupMapper.mapToResponseDTO(savedGroup);
         }
     }
@@ -136,5 +143,23 @@ public class GroupService {
                 .map(groupMapper::mapToResponseDTO)
                 .collect(Collectors.toList());
         }
+    }
+
+    public GroupResponseDTO addExercisesToGroup(GroupRequestDTO groupRequestDTO) throws AccessDeniedException {
+
+
+        Group group = groupRepository.findById(groupRequestDTO.getId()).orElseThrow(() -> new RecordNotFoundException("Group not found"));
+        if ( group.getUser().getUserName().equals(groupRequestDTO.getUserName()) ) {
+            throw new AccessDeniedException("User not authorized to add exercises to group");
+        }
+
+        List<Exercise> exercises = groupRequestDTO.getExercises();
+        for (Exercise exercise : exercises) {
+            exercise.setGroup(group);
+            group.getExercises().add(exercise);
+        }
+
+        Group savedGroup = groupRepository.save(group);
+        return groupMapper.mapToResponseDTO(savedGroup);
     }
 }

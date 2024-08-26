@@ -7,12 +7,14 @@ import org.novi.languagelearner.entities.Exercise;
 import org.novi.languagelearner.entities.Group;
 import org.novi.languagelearner.exceptions.BadRequestException;
 import org.novi.languagelearner.repositories.UserRepository;
+import org.novi.languagelearner.services.GroupService;
 import org.novi.languagelearner.services.UserService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -21,11 +23,13 @@ public class GroupMapper {
     private final UserRepository userRepository;
     private final UserService userService;
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ExerciseMapper exerciseMapper;
 
 
-    public GroupMapper(UserRepository userRepository, UserService userService) {
+    public GroupMapper(UserRepository userRepository, UserService userService, ExerciseMapper exerciseMapper) {
         this.userRepository = userRepository;
         this.userService = userService;
+        this.exerciseMapper = exerciseMapper;
     }
 
     public Group mapToEntity(GroupRequestDTO groupRequestDTO) {
@@ -51,16 +55,12 @@ public class GroupMapper {
             updatedGroup.setGroupName(groupRequestDTO.getGroupName());
         }
 
-        if (groupRequestDTO.getExercises() != null) {
-            List<Exercise> exercises = groupRequestDTO.getExercises();
-            for (Exercise exercise : exercises) {
-                exercise.setGroup(updatedGroup); // Set the group reference in each exercise
-            }
-            updatedGroup.setExercises(exercises);
-        }
 
         return updatedGroup;
+
     }
+
+
 
     public GroupResponseDTO mapToResponseDTO(Group group) {
         var groupResponseDTO = new GroupResponseDTO();

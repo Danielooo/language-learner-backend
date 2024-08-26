@@ -2,6 +2,7 @@ package org.novi.languagelearner.config;
 import org.novi.languagelearner.security.JwtRequestFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -32,46 +33,31 @@ public class SecurityConfig {
                 // hp.disable schakelt uit dat er toegang kan worden verkregen met username en password. Je moet een jwt token hebben. Daar zorgt de .addFilterBefore voor.
                 .httpBasic(hp -> hp.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/users**").permitAll()
-                        .requestMatchers("/users/**").permitAll()
-                        .requestMatchers("/users/profile").hasRole("USER")
-                        .requestMatchers("/upload**").permitAll()
-                        .requestMatchers("/upload/**").permitAll()
-                        .requestMatchers("/upload/1").permitAll()
-                        .requestMatchers("/upload/photo").hasRole("USER")
-                        .requestMatchers("/exercises**").permitAll()
-                        .requestMatchers("/exercises/**").permitAll()
-                        .requestMatchers("/exercises/delete/{id}").permitAll()
-                        .requestMatchers("/exercises/").permitAll()
-                        .requestMatchers("/answer-validation/**").permitAll()
-                        .requestMatchers("/answer-validation**").permitAll()
-                        .requestMatchers("/answer**").permitAll()
-                        .requestMatchers("/answer/**").permitAll()
-                        .requestMatchers("/groups").permitAll()
-                        .requestMatchers("/groups/upload-json-files").permitAll()
-                        .requestMatchers("/groups/all").permitAll()
-                        .requestMatchers("/groups**").permitAll()
-                        .requestMatchers("/groups/**").permitAll()
-                        .requestMatchers("/groups/delete/{id}").permitAll()
-                        .requestMatchers("/stats").permitAll()
-                        .requestMatchers("/stats**").permitAll()
-                        .requestMatchers("/stats/**").permitAll()
-                        .requestMatchers("/stats/user/all").permitAll()
-                        .requestMatchers("/stats/admin**").hasRole("ADMIN")
-                        .requestMatchers("/public/**").permitAll()
-                        .requestMatchers("/public/more").permitAll()
-                        .requestMatchers("/secure/**").permitAll()
-                        .requestMatchers("/secure/admin").hasRole("ADMIN")
-                        .requestMatchers("/users/**").hasRole("ADMIN")
-                        .requestMatchers("/secure/user").permitAll()
-                        .requestMatchers("/login**").permitAll()
-                        .requestMatchers("/practice**").hasRole("USER")
+                        .requestMatchers(HttpMethod.POST,"/login").permitAll()
+
+                        .requestMatchers(HttpMethod.POST,"/users/register").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/users/admin**").hasRole("ADMIN")
+                        .requestMatchers("/users").hasRole("USER")
+                        .requestMatchers("/users/**").hasRole("USER")
+
+                        .requestMatchers("/photo").hasAnyRole("USER", "ADMIN")
+
+                        .requestMatchers("/exercises/admin**").hasRole("ADMIN")
+
+                        .requestMatchers("/answer").hasRole("USER")
+                        .requestMatchers("/answer/admin").hasRole("ADMIN")
+
+                        .requestMatchers("/groups/admin").hasRole("ADMIN")
+                        .requestMatchers("/groups**").hasRole("USER")
+
+                        .requestMatchers("/stats/user/exercise").hasRole("USER")
+                        .requestMatchers("/stats/admin").hasRole("ADMIN")
 
                         .anyRequest().permitAll()
                         )
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .csrf(csrf -> csrf.disable())
-                // de lege lambda zorgt ervoor dat de default CORS configuratie
+                // de lege lambda zorgt ervoor dat de default CORS configuratie is
                 .cors(cors -> cors.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 );

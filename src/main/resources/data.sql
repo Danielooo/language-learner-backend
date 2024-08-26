@@ -41,12 +41,19 @@ insert into exercises (question, answer) values  ('Veel', 'Molto');
 
 -- GROUP
 -- Insert group
+
+-- Group for Bert
 insert into groups (user_id, group_name) values (3, 'First exampleGroup');
+
+-- Group for Kim
+insert into groups (user_id, group_name) values (1, 'Second exampleGroup');
 
 -- Insert exercises and link to group
 insert into exercises (question, answer, group_id) values ('zeggen', 'dire', (select id from groups where group_name = 'First exampleGroup'));
 insert into exercises (question, answer, group_id) values ('lopen', 'camminare', (select id from groups where group_name = 'First exampleGroup'));
 insert into exercises (question, answer, group_id) values ('lezen', 'leggere', (select id from groups where group_name = 'First exampleGroup'));
+
+
 
 -- -- Insert exercises and link to group
 -- insert into exercises (question, answer, group_id) values ('auto', 'machina', (select id from groups where group_name = 'First Group'));

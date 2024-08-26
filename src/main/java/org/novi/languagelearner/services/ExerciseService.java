@@ -67,8 +67,13 @@ public class ExerciseService {
     public ExerciseResponseDTO updateExercise(Long id, ExerciseRequestDTO requestDTO) {
         Optional<Exercise> exerciseOptional = exerciseRepository.findById(id);
         if (exerciseOptional.isPresent()) {
-            Exercise updatedExercise = exerciseMapper.toEntity(requestDTO);
-            updatedExercise.setId(id);
+            Exercise updatedExercise = exerciseOptional.get();
+            if (updatedExercise.getUserInputAnswers() != null) {
+                updatedExercise.getUserInputAnswers().clear();
+            }
+            updatedExercise.setQuestion(requestDTO.getQuestion());
+            updatedExercise.setAnswer(requestDTO.getAnswer());
+
             Exercise persistedExercise =  exerciseRepository.save(updatedExercise);
 
             return exerciseMapper.mapToResponseDTO(persistedExercise);

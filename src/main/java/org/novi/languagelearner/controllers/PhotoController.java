@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 
 
-@RestController
+@RestController("/photo")
 public class PhotoController {
 
 
@@ -26,9 +26,10 @@ public class PhotoController {
 
 
 
-    // TODO: create GET, PUT, DELETE mappings for photo
+    // TODO: create GET, PUT, DELETE mappings for photo per user
+    // TODO: create GET, PUT, DELETE mappings for photo per admin, In requestDto add chosen username
 
-    @PostMapping("/upload/photo")
+    @PostMapping
     public ResponseEntity<?> singleFileUpload(@Valid @ModelAttribute  PhotoRequestDTO photoRequestDTO) throws IOException {
         try {
             // get authenticated username
@@ -43,5 +44,9 @@ public class PhotoController {
               return ResponseEntity.badRequest().body("No upload possible");
         }
     }
+
+
+
+
 
 }

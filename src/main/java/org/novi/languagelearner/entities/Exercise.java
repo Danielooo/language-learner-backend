@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -62,5 +63,13 @@ public class Exercise {
 
     public void setGroup(Group group) {
         this.group = group;
+    }
+
+    public List<UserInputAnswer> getUserInputAnswers() {
+        return userInputAnswers;
+    }
+
+    public void setUserInputAnswers(List<UserInputAnswer> userInputAnswers) {
+        this.userInputAnswers = userInputAnswers;
     }
 }
