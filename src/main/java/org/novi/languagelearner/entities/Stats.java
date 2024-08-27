@@ -1,15 +1,15 @@
 package org.novi.languagelearner.entities;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 // TODO: Maybe @Entity annotation not necessary? Is not persisted to database
 
+@Data
+@EqualsAndHashCode(callSuper = true)
 @Entity
-public class Stats {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Stats extends Base {
 
     private int timesRight;
     private int timesWrong;
@@ -21,49 +21,5 @@ public class Stats {
     @ManyToOne
     @JoinColumn(name = "exercise_id", nullable = false)
     private Exercise exercise;
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Exercise getExercise() {
-        return exercise;
-    }
-
-    public void setExercise(Exercise exercise) {
-        this.exercise = exercise;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-
-
-    public int getTimesRight() {
-        return timesRight;
-    }
-
-    public int getTimesWrong() {
-        return timesWrong;
-    }
-
-
-
-
-
-    public void setTimesRight(int timesRight) {
-        this.timesRight = timesRight;
-    }
-
-
-    public void setTimesWrong(int timesWrong) {
-        this.timesWrong = timesWrong;
-    }
-
 
 }

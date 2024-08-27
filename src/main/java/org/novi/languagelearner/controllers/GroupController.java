@@ -25,12 +25,7 @@ import java.util.List;
 public class GroupController {
 
     private final GroupService groupService;
-    private Authentication authentication;
 
-
-
-
-    @Autowired
     public GroupController(GroupService groupService) {
         this.groupService = groupService;
     }

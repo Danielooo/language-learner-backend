@@ -13,7 +13,7 @@ public class RoleMapper {
         if (role == null) {
             return null;
         }
-        Role model = new Role(role.getId());
+        Role model = new Role();
         model.setDescription(role.getDescription());
         model.setRoleName(role.getRoleName());
         model.setActive(role.isActive());
@@ -24,7 +24,7 @@ public class RoleMapper {
         if (model == null) {
             return null;
         }
-        Role entity = new Role(model.getId());
+        Role entity = new Role();
         entity.setDescription(model.getDescription());
         entity.setRoleName(model.getRoleName());
         entity.setActive(model.isActive());

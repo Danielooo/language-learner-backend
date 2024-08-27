@@ -14,10 +14,6 @@ import lombok.EqualsAndHashCode;
 @Table(name = "user_input_answers")
 public class UserInputAnswer extends Base {
 
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Long id;
-
     private String userInput;
 
     @ManyToOne

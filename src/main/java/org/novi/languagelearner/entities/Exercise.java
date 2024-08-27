@@ -4,17 +4,17 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Collection;
 import java.util.List;
 
+@Data
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "exercises")
-public class Exercise {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Exercise extends Base{
 
     private String question;
     private String answer;
@@ -31,45 +31,4 @@ public class Exercise {
     @Column(name = "user_input_answers")
     private List<UserInputAnswer> userInputAnswers;
 
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getQuestion() {
-        return question;
-    }
-
-    public void setQuestion(String question) {
-        this.question = question;
-    }
-
-    public String getAnswer() {
-        return answer;
-    }
-
-    public void setAnswer(String answer) {
-        this.answer = answer;
-    }
-
-    public Group getGroup() {
-        return group;
-    }
-
-    public void setGroup(Group group) {
-        this.group = group;
-    }
-
-    public List<UserInputAnswer> getUserInputAnswers() {
-        return userInputAnswers;
-    }
-
-    public void setUserInputAnswers(List<UserInputAnswer> userInputAnswers) {
-        this.userInputAnswers = userInputAnswers;
-    }
 }

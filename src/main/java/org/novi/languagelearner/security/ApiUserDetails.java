@@ -65,7 +65,7 @@ public class ApiUserDetails implements UserDetails {
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return !user.areCredentialsExpired();
+        return !user.isAreCredentialsExpired();
     }
 
     @Override

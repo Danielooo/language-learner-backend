@@ -98,7 +98,6 @@ public class GroupService {
         } else {
 //            Group updatedGroup = group.get();
             Group updatedGroup = groupMapper.mapInputIntoCurrentEntity(groupRequestDTO, group.get());
-            updatedGroup.setId(id);
             Group savedGroup = groupRepository.save(updatedGroup);
             return groupMapper.mapToResponseDTO(savedGroup);
         }

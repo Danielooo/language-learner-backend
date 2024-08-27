@@ -10,8 +10,8 @@ public class AccessDeniedException extends RuntimeException {
         super();
     }
 
-    public AccessDeniedException(String username) {
-        super("No access for user: " + username);
+    public AccessDeniedException(String message) {
+        super(message);
     }
 }
 

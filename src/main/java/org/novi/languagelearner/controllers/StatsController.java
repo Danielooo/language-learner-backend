@@ -1,5 +1,7 @@
 package org.novi.languagelearner.controllers;
 
+import org.novi.languagelearner.dtos.Stats.StatsParamRequestDTO;
+import org.novi.languagelearner.dtos.Stats.StatsParamResponseDTO;
 import org.novi.languagelearner.dtos.Stats.StatsResponseDTO;
 import org.novi.languagelearner.exceptions.BadRequestException;
 import org.novi.languagelearner.mappers.StatsMapper;
@@ -9,6 +11,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.nio.file.AccessDeniedException;
+import java.time.LocalDateTime;
+import java.util.List;
 
 
 @RestController
@@ -25,7 +31,7 @@ public class StatsController {
         this.statsMapper = statsMapper;
     }
 
-    // TODO: implement timestamp for UserInputAnswer >> then: get for query param request. Use utility class for reading timestamp as time
+    // edit or delete, has to return stats as question, answer, creationdate, editdate, timesright out of total, lastresult (right or wrong and timestamp)
     @GetMapping("/user/exercise")
     public ResponseEntity<?> getStatsOfExercise(@RequestParam Long exerciseId) {
         try {
@@ -41,13 +47,37 @@ public class StatsController {
         }
     }
 
-    // TODO: Stats contain the following: UserIntputAnswer (with timestamps), Group, ExerciseResponseDTO, Per exercise: timesright/timeswrong, lastInput: right/wrong, lastInputTimestamp
-    // TODO: get all stats of user with user auth >> can use stat param for category, period of time
-    // TODO: get all stats of user as admin
+    // get with Params
+    // authentication on User
+    // params in request dto?
+    // params: inputs time period, group, exercise or all
 
+    @GetMapping("user")
+    public ResponseEntity<?> getStatsViaParams(StatsParamRequestDTO statsParamRequestDTO) {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String userName = authentication.getName();
+            statsParamRequestDTO.setUserName(userName);
 
+            List<StatsParamResponseDTO> responseDTOList = statsService.getStatsByParams(statsParamRequestDTO);
 
+            return ResponseEntity.ok().body(responseDTOList);
 
+        } catch (BadRequestException e) {
 
-
+            return ResponseEntity.badRequest().body("Something went wrong while getting stats of user ");
+            // TODO: Ask Frans; waarom moet ik deze clausule erbij doen. Krijg foutmelding zonder
+        } catch (AccessDeniedException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
+
+
+
+
+
+
+
+
+
