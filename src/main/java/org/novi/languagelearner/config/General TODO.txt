@@ -1,6 +1,5 @@
 // TODO: Fix security per endpoint
 
-// TODO: Check Frans project (Vinyl shop) for dto and timestamp
 // TODO: Read up on Exception handler. Add exceptions to handler
 // TODO: Read up on when to use Param, PathVariable, RequestBody
 
