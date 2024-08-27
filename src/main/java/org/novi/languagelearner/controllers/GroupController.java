@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 
@@ -45,6 +46,8 @@ public class GroupController {
             return ResponseEntity.ok().body(groupResponseDTO);
         } catch (BadRequestException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (AccessDeniedException e) {
+            throw new RuntimeException(e);
         }
     }
 

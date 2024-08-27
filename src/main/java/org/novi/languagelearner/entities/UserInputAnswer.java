@@ -1,22 +1,22 @@
 package org.novi.languagelearner.entities;
 
 
-
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 
-
-// TODO: implement timestamp
+@Data
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "user_input_answers")
-public class UserInputAnswer {
+public class UserInputAnswer extends Base {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Long id;
 
     private String userInput;
 
@@ -29,36 +29,4 @@ public class UserInputAnswer {
     @JsonIgnore
     @JoinColumn(name = "exercise_id")
     private Exercise exercise;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getUserInput() {
-        return userInput;
-    }
-
-    public void setUserInput(String userInput) {
-        this.userInput = userInput;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Exercise getExercise() {
-        return exercise;
-    }
-
-    public void setExercise(Exercise exercise) {
-        this.exercise = exercise;
-    }
 }
