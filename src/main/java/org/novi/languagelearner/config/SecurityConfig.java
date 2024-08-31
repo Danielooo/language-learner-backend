@@ -39,6 +39,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST,"/users/admin**").hasRole("ADMIN")
                         .requestMatchers("/users").hasRole("USER")
                         .requestMatchers("/users/**").hasRole("USER")
+                        .requestMatchers("/users/admin**").hasRole("ADMIN")
 
                         .requestMatchers("/photo").hasAnyRole("USER", "ADMIN")
 
@@ -54,7 +55,7 @@ public class SecurityConfig {
                         .requestMatchers("/stats/user**").hasRole("USER")
                         .requestMatchers("/stats/admin").hasRole("ADMIN")
 
-                        .anyRequest().permitAll()
+                        .anyRequest().denyAll()
                         )
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .csrf(csrf -> csrf.disable())

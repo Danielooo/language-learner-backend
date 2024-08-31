@@ -1,7 +1,5 @@
 package org.novi.languagelearner.repositories;
 
-import org.novi.languagelearner.dtos.Stats.StatsParamResponseDTO;
-import org.novi.languagelearner.entities.Exercise;
 import org.novi.languagelearner.entities.Group;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -9,12 +7,17 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface GroupRepository extends JpaRepository<Group, Long> {
-    List<Group> findByGroupName(String groupName);
-    List<Group> findByExercises(Exercise exercise);
+
     List<Group> findByUser_UserName(String userName);
 
+    Optional<Group> findById(Long id);
+
+    List<Group> findAllByGroupName(String groupName);
+
+    // g.* alles van group
     @Query("SELECT DISTINCT g FROM Group g " +
             "JOIN g.exercises e " +
             "JOIN e.userInputAnswers uia " +
@@ -25,5 +28,8 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
             @Param("userInputStartTime") LocalDateTime userInputStartTime,
             @Param("userInputEndTime") LocalDateTime userInputEndTime
         );
+
+    // <find|read|get|query|count|delete><By><EntityProperty><Condition>
+
 
 }

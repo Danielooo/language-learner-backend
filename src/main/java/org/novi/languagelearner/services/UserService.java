@@ -4,9 +4,10 @@ import jakarta.transaction.Transactional;
 import org.novi.languagelearner.dtos.User.UserNameChangeRequestDTO;
 import org.novi.languagelearner.dtos.User.UserRequestDTO;
 import org.novi.languagelearner.dtos.User.UserResponseDTO;
+import org.novi.languagelearner.dtos.User.UserByLastNameAndRoleRequestDTO;
 import org.novi.languagelearner.entities.Role;
 import org.novi.languagelearner.entities.User;
-import org.novi.languagelearner.exceptions.BadRequestException;
+import org.novi.languagelearner.exceptions.AccessDeniedException;
 import org.novi.languagelearner.exceptions.RecordNotFoundException;
 import org.novi.languagelearner.exceptions.UserNameAlreadyExistsException;
 import org.novi.languagelearner.mappers.RoleMapper;
@@ -14,14 +15,12 @@ import org.novi.languagelearner.mappers.UserMapper;
 import org.novi.languagelearner.repositories.RoleRepository;
 import org.novi.languagelearner.repositories.UserRepository;
 import org.novi.languagelearner.security.ApiUserDetails;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,6 +42,8 @@ public class UserService implements UserDetailsService {
         this.bCryptPasswordEncoder = new BCryptPasswordEncoder();
     }
 
+    // Delete this
+
     @Transactional
     public UserResponseDTO createUser(UserRequestDTO userDTO) {
         Optional<User> userOptional = userRepository.findByUserName(userDTO.getUserName());
@@ -59,7 +60,7 @@ public class UserService implements UserDetailsService {
     }
 
     private void updateRolesWithUser(User user) {
-        for (Role role: user.getRoles()) {
+        for (Role role : user.getRoles()) {
             role.getUsers().add(user);
         }
     }
@@ -113,7 +114,9 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> user = userRepository.findByUserName(username);
-        if (user.isEmpty()) { throw new UsernameNotFoundException(username);}
+        if (user.isEmpty()) {
+            throw new UsernameNotFoundException(username);
+        }
         return new ApiUserDetails(user.get());
     }
 
@@ -153,5 +156,46 @@ public class UserService implements UserDetailsService {
             return user.get();
         }
     }
+
+    public List<UserResponseDTO> getUserResponseDTOByLastNameAndRole(UserByLastNameAndRoleRequestDTO requestDTO) {
+
+        // TODO: Ask Frans: I get a toString() error here. Probably infinite recursion User <> Role. Tried 'reference' annotations etc. but didn't work. Unidirectional relation no dice. Result ResponseEntity is fine though :O
+        Optional<User> userOptional = userRepository.findUserByUserName(requestDTO.getAdminUserName());
+
+        if(userOptional.isEmpty()) {
+            throw new RecordNotFoundException("Username not found for Admin check");
+        }
+
+        User userAdmin = userOptional.get();
+
+
+        if( !isUserAdmin(userAdmin) ) {
+            throw new AccessDeniedException("User is no admin");
+        }
+
+        List<User> userResults = userRepository.findByLastNameContainingIgnoreCaseAndRoles_RoleName(requestDTO.getLastName(), requestDTO.getRole());
+
+        List<UserResponseDTO> responseDTOs = userMapper.mapToListOfResponseDTOs(userResults);
+
+        if (responseDTOs.isEmpty()) {
+            throw new RecordNotFoundException("No users found with given criteria. Last name: " + requestDTO.getLastName() + " and role: " + requestDTO.getRole());
+        }
+
+        return responseDTOs;
+    }
+
+    private boolean isUserAdmin(User userAdmin) {
+        List<Role> roles = userAdmin.getRoles();
+
+        for (Role role : roles) {
+            if (role.getRoleName().equals("ROLE_ADMIN")) {
+                return true;
+            }
+        };
+
+        return false;
+    }
+
+
 }
 

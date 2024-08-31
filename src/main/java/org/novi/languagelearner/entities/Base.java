@@ -1,13 +1,11 @@
 package org.novi.languagelearner.entities;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
+@EqualsAndHashCode
 @Data
 @MappedSuperclass
 public abstract class Base {

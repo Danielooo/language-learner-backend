@@ -1,4 +1,5 @@
 // TODO: Fix security per endpoint
+// TODO: Authentication should check if jwt is expired or not
 
 // TODO: Read up on Exception handler. Add exceptions to handler
 // TODO: Read up on when to use Param, PathVariable, RequestBody
@@ -11,4 +12,8 @@
 
 // TODO: check if necessary or that Lazy loading solves this already >> public class NonNullSerializer extends JsonSerializer<Object> {
 
+// Notes:
+// - params ook teruggeven met de StatsResponseDTO, zodat client weet wat de zoekopdracht was en welke data je daadwerkelijk hebt. In mapper voor ResponseDTO ook de data van de RequestDTO meegeven
+// - Met Query Derivation kan je de repository gefilterd Groups teruggeven, met alleen de data die erbij hoort >> Dus alleen de userInputAnswers tussen startTime en EndTime
+// - Teruggeven Stat met waardevolle properties. Vraag / antwoord / aantal goed / aantal fout / laatste keer gedaan / laatste resultaat (goed of fout)
 

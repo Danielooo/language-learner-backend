@@ -1,6 +1,7 @@
 package org.novi.languagelearner.repositories;
 
 import jakarta.transaction.Transactional;
+import org.novi.languagelearner.entities.Role;
 import org.novi.languagelearner.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -21,4 +22,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findUserByUserName(String username);
 
     List<Long> findGroupIdsByUserName(String userName);
+
+
+    List<User> findByLastNameContainingIgnoreCaseAndRoles_RoleName(String lastName, String roleName);
 }

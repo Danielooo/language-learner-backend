@@ -66,7 +66,7 @@ public class StatsService {
                     .map(String::valueOf)
                     .collect(Collectors.joining(", "));
 
-            throw new AccessDeniedException("You have no access to certain groups: " + groupIdsString);
+            throw new AccessDeniedException("You have no access to these groups: " + groupIdsString);
         }
 
         List<Group> statsParamResponseDTOlist = groupRepository.findStatsByGroupIdsAndTimeRange(

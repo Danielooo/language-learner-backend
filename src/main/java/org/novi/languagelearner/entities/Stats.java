@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-// TODO: Maybe @Entity annotation not necessary? Is not persisted to database
+// TODO: Maybe delete altogether, is not an entity that needs persisting. Probably responseDTO will be fine
 
 @Data
 @EqualsAndHashCode(callSuper = true)

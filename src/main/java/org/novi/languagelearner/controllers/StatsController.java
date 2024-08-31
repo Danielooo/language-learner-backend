@@ -1,5 +1,6 @@
 package org.novi.languagelearner.controllers;
 
+import jakarta.validation.Valid;
 import org.novi.languagelearner.dtos.Stats.StatsParamRequestDTO;
 import org.novi.languagelearner.dtos.Stats.StatsParamResponseDTO;
 import org.novi.languagelearner.dtos.Stats.StatsResponseDTO;
@@ -19,7 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/stats")
-public class StatsController {
+public class  StatsController {
 
 
     private final StatsService statsService;
@@ -53,7 +54,7 @@ public class StatsController {
     // params: inputs time period, group, exercise or all
 
     @GetMapping("user")
-    public ResponseEntity<?> getStatsViaParams(StatsParamRequestDTO statsParamRequestDTO) {
+    public ResponseEntity<?> getStatsViaParams(@Valid StatsParamRequestDTO statsParamRequestDTO) {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String userName = authentication.getName();

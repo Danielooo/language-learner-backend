@@ -33,7 +33,7 @@ public class UserMapper{
         var userResponseDTO = new UserResponseDTO();
         userResponseDTO.setId(user.getId());
         userResponseDTO.setUsername(user.getUserName());
-        userResponseDTO.setPassword(user.getPassword());
+
         List<String> userRoles = new ArrayList<>();
         for (Role role : user.getRoles()) {
             userRoles.add(role.getRoleName());
@@ -42,6 +42,16 @@ public class UserMapper{
         userResponseDTO.setPhoto(user.getPhoto());
 
         return userResponseDTO;
+    }
+
+    public List<UserResponseDTO> mapToListOfResponseDTOs(List<User> users) {
+        List<UserResponseDTO> userResponseDTOs = new ArrayList<>();
+
+        for (User user : users) {
+            userResponseDTOs.add(mapToResponseDTO(user));
+        }
+
+        return userResponseDTOs;
     }
 }
 

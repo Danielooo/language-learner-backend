@@ -5,9 +5,8 @@ import jakarta.validation.Valid;
 import org.novi.languagelearner.dtos.User.UserNameChangeRequestDTO;
 import org.novi.languagelearner.dtos.User.UserRequestDTO;
 import org.novi.languagelearner.dtos.User.UserResponseDTO;
-import org.novi.languagelearner.entities.User;
+import org.novi.languagelearner.dtos.User.UserByLastNameAndRoleRequestDTO;
 import org.novi.languagelearner.exceptions.BadRequestException;
-import org.novi.languagelearner.utils.UrlHelper;
 import org.novi.languagelearner.mappers.UserMapper;
 import org.novi.languagelearner.services.PhotoService;
 import org.novi.languagelearner.services.UserService;
@@ -16,8 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -47,6 +45,30 @@ public class UserController {
         UserResponseDTO userResponseDTO = userService.getUserResponseDTOByIdAsAdmin(id);
 
         return ResponseEntity.ok().body(userResponseDTO);
+    }
+
+    // GetMapping admin getAllUsers
+
+    // GetMapping admin getUsersByRoleAndName
+    @GetMapping("/admin/get-users")
+    public ResponseEntity<?> getUsersLastNameAndRole( @RequestParam String lastName, @RequestParam String role) {
+        try {
+            UserByLastNameAndRoleRequestDTO requestDTO = new UserByLastNameAndRoleRequestDTO();
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String userNameOfAdmin = authentication.getName();
+
+            requestDTO.setAdminUserName(userNameOfAdmin);
+            requestDTO.setLastName(lastName);
+            requestDTO.setRole(role);
+
+            // to service
+            List<UserResponseDTO> responseDTOList = userService.getUserResponseDTOByLastNameAndRole(requestDTO);
+
+            return ResponseEntity.ok().body(responseDTOList);
+
+        } catch (BadRequestException e) {
+            return ResponseEntity.badRequest().body("Issue with retrieving users by role and username");
+        }
     }
 
     @GetMapping("/profile")
