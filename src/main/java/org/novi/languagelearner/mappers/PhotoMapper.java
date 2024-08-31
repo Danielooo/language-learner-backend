@@ -17,12 +17,12 @@ public class PhotoMapper {
         this.userMapper = userMapper;
     }
 
-    public Photo mapToEntity(PhotoRequestDTO photoDTO) throws IOException {
-        var result = new Photo();
-        result.setFilename(photoDTO.getFileName());
-        result.setFileType(photoDTO.getFileType());
-        result.setData(mapMultipartFileToByteArray(photoDTO.getPhotoData()));
-        return result;
+    public Photo mapToEntity(PhotoRequestDTO mapToEntity) throws IOException {
+        Photo photo = new Photo();
+        photo.setFilename(mapToEntity.getFileName());
+        photo.setFileType(mapToEntity.getFileType());
+        photo.setData(mapMultipartFileToByteArray(mapToEntity.getPhotoData()));
+        return photo;
     }
 
     public byte[] mapMultipartFileToByteArray(MultipartFile multipartFile) throws IOException {
@@ -30,7 +30,7 @@ public class PhotoMapper {
     }
 
     public PhotoResponseDTO mapToResponseDTO(Photo photo) {
-        var photoResponseDTO = new PhotoResponseDTO();
+        PhotoResponseDTO photoResponseDTO = new PhotoResponseDTO();
         photoResponseDTO.setPhotoId(photo.getId());
         photoResponseDTO.setFileName(photo.getFilename());
         photoResponseDTO.setFileType(photo.getFileType());

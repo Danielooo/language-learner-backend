@@ -40,4 +40,6 @@ public class PhotoResponseDTO {
     public void setPhotoId(Long photoId) {
         this.photoId = photoId;
     }
+
+
 }

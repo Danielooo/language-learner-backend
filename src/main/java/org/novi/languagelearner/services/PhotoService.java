@@ -2,6 +2,7 @@ package org.novi.languagelearner.services;
 
 import jakarta.transaction.Transactional;
 import org.novi.languagelearner.dtos.Photo.PhotoRequestDTO;
+import org.novi.languagelearner.dtos.Photo.PhotoResponseDTO;
 import org.novi.languagelearner.dtos.User.UserResponseDTO;
 import org.novi.languagelearner.entities.Photo;
 import org.novi.languagelearner.entities.User;
@@ -44,6 +45,11 @@ public class PhotoService {
         }
 
         User user = userOptional.get();
+
+        if (user.getPhoto() != null) {
+            throw new BadRequestException("User already has a photo, delete it first to upload a new one");
+        }
+
         try {
             Photo newPhoto = photoMapper.mapToEntity(photoRequestDTO);
 
@@ -56,6 +62,64 @@ public class PhotoService {
         } catch (BadRequestException e) {
             throw new IOException("Photo could not be persisted");
         }
+    }
+
+    public PhotoResponseDTO getPhoto(String userName) {
+        Optional<User> userOptional = userRepository.findByUserName(userName);
+
+        if (userOptional.isEmpty()) {
+            throw new RecordNotFoundException("User not found");
+        }
+
+        User user = userOptional.get();
+        Photo photo = user.getPhoto();
+
+        if (photo == null) {
+            throw new RecordNotFoundException("No photo found");
+        }
+
+        return photoMapper.mapToResponseDTO(photo);
+
+    }
+
+
+
+    public void deletePhoto(String userName) {
+        Optional<User> userOptional = userRepository.findByUserName(userName);
+
+        if (userOptional.isEmpty()) {
+            throw new RecordNotFoundException("User not found");
+        }
+
+        User user = userOptional.get();
+        Photo photo = user.getPhoto();
+
+        if (photo == null) {
+            throw new RecordNotFoundException("No photo found");
+        }
+
+        user.setPhoto(null);
+        userRepository.save(user);
+        photoRepository.delete(photo);
+    }
+
+    public void deletePhotoAsAdmin(Long userId) {
+        Optional<User> userOptional = userRepository.findById(userId);
+
+        if (userOptional.isEmpty()) {
+            throw new RecordNotFoundException("User not found");
+        }
+
+        User user = userOptional.get();
+        Photo photo = user.getPhoto();
+
+        if (photo == null) {
+            throw new RecordNotFoundException("No photo found");
+        }
+
+        user.setPhoto(null);
+        userRepository.save(user);
+        photoRepository.delete(photo);
     }
 }
 

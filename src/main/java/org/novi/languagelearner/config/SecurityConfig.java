@@ -41,7 +41,8 @@ public class SecurityConfig {
                         .requestMatchers("/users/**").hasRole("USER")
                         .requestMatchers("/users/admin**").hasRole("ADMIN")
 
-                        .requestMatchers("/photo").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/photo**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/photo/download").authenticated()
 
                         .requestMatchers("/exercises/admin**").hasRole("ADMIN")
 

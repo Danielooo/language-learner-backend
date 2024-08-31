@@ -3,6 +3,7 @@ package org.novi.languagelearner.controllers;
 
 import jakarta.validation.Valid;
 import org.novi.languagelearner.dtos.Photo.PhotoRequestDTO;
+import org.novi.languagelearner.dtos.Photo.PhotoResponseDTO;
 import org.novi.languagelearner.dtos.User.UserResponseDTO;
 import org.novi.languagelearner.services.PhotoService;
 import org.springframework.http.ResponseEntity;
@@ -43,6 +44,51 @@ public class PhotoController {
             return ResponseEntity.ok().body(userResponseDTO);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("No upload possible");
+        }
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getPhoto() {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String userName = authentication.getName();
+
+            PhotoResponseDTO photoResponseDTO = photoService.getPhoto(userName);
+            return ResponseEntity.ok().body(photoResponseDTO);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("No photo found");
+        }
+    }
+
+    @GetMapping("/download")
+    public ResponseEntity<?> downloadPhoto() {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String userName = authentication.getName();
+
+            PhotoResponseDTO photoResponseDTO = photoService.getPhoto(userName);
+            byte[] photoData = photoResponseDTO.getData();
+
+            return ResponseEntity.ok()
+                    .header("Content-Disposition", "attachment; filename=\"" + photoResponseDTO.getFileName() + "\"")
+                    .header("Content-Type", photoResponseDTO.getFileType())
+                    .body(photoData);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("No photo found");
+        }
+    }
+
+
+    @DeleteMapping
+    public ResponseEntity<?> deletePhoto() {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String userName = authentication.getName();
+
+            photoService.deletePhoto(userName);
+            return ResponseEntity.ok().body("Photo deleted");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("No photo found");
         }
     }
 
