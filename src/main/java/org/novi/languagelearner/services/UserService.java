@@ -168,7 +168,6 @@ public class UserService implements UserDetailsService {
 
         User userAdmin = userOptional.get();
 
-
         if( !isUserAdmin(userAdmin) ) {
             throw new AccessDeniedException("User is no admin");
         }
