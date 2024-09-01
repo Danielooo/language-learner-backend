@@ -103,23 +103,30 @@ public class PhotoService {
         photoRepository.delete(photo);
     }
 
-    public void deletePhotoAsAdmin(Long userId) {
-        Optional<User> userOptional = userRepository.findById(userId);
+    public String deletePhotoAsAdmin(Long photoId) {
 
-        if (userOptional.isEmpty()) {
-            throw new RecordNotFoundException("User not found");
-        }
+        photoRepository.findById(photoId).orElseThrow(() -> new RecordNotFoundException("Photo not found with id: " + photoId));
 
-        User user = userOptional.get();
-        Photo photo = user.getPhoto();
+        photoRepository.deleteById(photoId);
 
-        if (photo == null) {
-            throw new RecordNotFoundException("No photo found");
-        }
+        return "Photo deleted with id: " + photoId;
 
-        user.setPhoto(null);
-        userRepository.save(user);
-        photoRepository.delete(photo);
+//        Optional<User> userOptional = userRepository.findById(userId);
+//
+//        if (userOptional.isEmpty()) {
+//            throw new RecordNotFoundException("User not found");
+//        }
+//
+//        User user = userOptional.get();
+//        Photo photo = user.getPhoto();
+//
+//        if (photo == null) {
+//            throw new RecordNotFoundException("No photo found");
+//        }
+//
+//        user.setPhoto(null);
+//        userRepository.save(user);
+//        photoRepository.delete(photo);
     }
 }
 

@@ -39,6 +39,7 @@ public class UserController {
     // TODO: Add putmapping for updating user info >> username has to stay unique
     // TODO: Add admin endpoints >> also delete user
 
+
     @GetMapping("/admin/{id}")
     public ResponseEntity<?> getUserInfo(@PathVariable("id") Long id) {
 
@@ -84,7 +85,6 @@ public class UserController {
     }
 
 
-    // TODO: make username has to be unique. First check if username exists, then create user
     @PostMapping("/register")
     public ResponseEntity<?> createUser(@RequestBody @Valid UserRequestDTO userDTO) {
         try {

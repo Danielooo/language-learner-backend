@@ -185,7 +185,7 @@ public class UserService implements UserDetailsService {
         return responseDTOs;
     }
 
-    private boolean isUserAdmin(User userAdmin) {
+    public boolean isUserAdmin(User userAdmin) {
         List<Role> roles = userAdmin.getRoles();
 
         for (Role role : roles) {

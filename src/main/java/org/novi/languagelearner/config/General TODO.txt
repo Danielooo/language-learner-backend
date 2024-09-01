@@ -1,11 +1,4 @@
-// TODO: Fix security per endpoint
-// TODO: Authentication should check if jwt is expired or not
-
-// TODO: Test and fix all endpoints in Postman
-// TODO: Make every endpoint authenticated
-// TODO: Admin endpoints per controller (resource)
-
-// TODO: check if necessary or that Lazy loading solves this already >> public class NonNullSerializer extends JsonSerializer<Object> {
+// Check Trello
 
 // Notes:
 // - params ook teruggeven met de StatsResponseDTO, zodat client weet wat de zoekopdracht was en welke data je daadwerkelijk hebt. In mapper voor ResponseDTO ook de data van de RequestDTO meegeven

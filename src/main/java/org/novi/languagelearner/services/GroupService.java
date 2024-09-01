@@ -6,16 +6,18 @@ import org.novi.languagelearner.dtos.Group.GroupResponseDTO;
 import org.novi.languagelearner.dtos.User.UserResponseDTO;
 import org.novi.languagelearner.entities.Exercise;
 import org.novi.languagelearner.entities.Group;
+import org.novi.languagelearner.entities.User;
 import org.novi.languagelearner.exceptions.BadRequestException;
 import org.novi.languagelearner.exceptions.RecordNotFoundException;
 import org.novi.languagelearner.mappers.ExerciseMapper;
 import org.novi.languagelearner.mappers.GroupMapper;
 import org.novi.languagelearner.repositories.GroupRepository;
+import org.novi.languagelearner.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.novi.languagelearner.exceptions.AccessDeniedException;
 
-import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -29,14 +31,16 @@ public class GroupService {
     private final ExerciseMapper exerciseMapper;
     private final UserService userService;
     private final ExerciseService exerciseService;
+    private final UserRepository userRepository;
 
     @Autowired
-    public GroupService(GroupRepository groupRepository, GroupMapper groupMapper, ExerciseMapper exerciseMapper, UserService userService, ExerciseService exerciseService) {
+    public GroupService(GroupRepository groupRepository, GroupMapper groupMapper, ExerciseMapper exerciseMapper, UserService userService, ExerciseService exerciseService, UserRepository userRepository) {
         this.groupRepository = groupRepository;
         this.groupMapper = groupMapper;
         this.exerciseMapper = exerciseMapper;
         this.userService = userService;
         this.exerciseService = exerciseService;
+        this.userRepository = userRepository;
     }
 
 
@@ -124,6 +128,14 @@ public class GroupService {
             groupRepository.delete(group.get());
             return groupMapper.mapToResponseDTO(group.get());
         }
+    }
+
+    public String deleteGroupAsAdmin(Long id) {
+        groupRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Group not found with following id: " + id));
+
+        groupRepository.deleteById(id);
+
+        return "Group deleted with following id: " + id;
     }
 
 

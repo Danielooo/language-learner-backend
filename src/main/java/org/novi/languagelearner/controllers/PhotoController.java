@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import org.novi.languagelearner.dtos.Photo.PhotoRequestDTO;
 import org.novi.languagelearner.dtos.Photo.PhotoResponseDTO;
 import org.novi.languagelearner.dtos.User.UserResponseDTO;
+import org.novi.languagelearner.exceptions.BadRequestException;
 import org.novi.languagelearner.services.PhotoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -89,6 +90,17 @@ public class PhotoController {
             return ResponseEntity.ok().body("Photo deleted");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("No photo found");
+        }
+    }
+
+    @DeleteMapping("/admin/delete/{id}")
+    public ResponseEntity<?> deletePhotoAsAdmin(@PathVariable Long id) {
+        try {
+
+            return ResponseEntity.ok().body( photoService.deletePhotoAsAdmin(id));
+
+        } catch (BadRequestException e) {
+            return ResponseEntity.badRequest().body("Something went wrong with deleting photo with id: " + id);
         }
     }
 

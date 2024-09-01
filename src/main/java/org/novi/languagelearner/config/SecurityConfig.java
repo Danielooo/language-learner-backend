@@ -41,22 +41,23 @@ public class SecurityConfig {
                         .requestMatchers("/users/**").hasRole("USER")
                         .requestMatchers("/users/admin**").hasRole("ADMIN")
 
-                        .requestMatchers("/photo**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/photo").authenticated()
                         .requestMatchers("/photo/download").authenticated()
+                        .requestMatchers("/photo/admin/delete/**").hasRole("ADMIN")
 
                         .requestMatchers("/exercises/admin**").hasRole("ADMIN")
 
                         .requestMatchers("/answer").hasRole("USER")
                         .requestMatchers("/answer/admin").hasRole("ADMIN")
 
-                        .requestMatchers("/groups/admin").hasRole("ADMIN")
+                        .requestMatchers("/groups/admin/delete/**").hasRole("ADMIN")
                         .requestMatchers("/groups**").hasRole("USER")
 
                         .requestMatchers("/stats/user/exercise/**").hasRole("USER")
                         .requestMatchers("/stats/user**").hasRole("USER")
                         .requestMatchers("/stats/admin").hasRole("ADMIN")
 
-                        .anyRequest().denyAll()
+                        .anyRequest().permitAll()
                         )
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .csrf(csrf -> csrf.disable())

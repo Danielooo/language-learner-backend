@@ -4,16 +4,17 @@ package org.novi.languagelearner.controllers;
 import org.novi.languagelearner.dtos.Group.GroupRequestDTO;
 import org.novi.languagelearner.dtos.Group.GroupResponseDTO;
 import org.novi.languagelearner.exceptions.BadRequestException;
+import org.novi.languagelearner.mappers.GroupMapper;
 import org.novi.languagelearner.services.GroupService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.novi.languagelearner.utils.SecurityUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.novi.languagelearner.exceptions.AccessDeniedException;
 
-import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 
@@ -25,9 +26,11 @@ import java.util.List;
 public class GroupController {
 
     private final GroupService groupService;
+    private final GroupMapper groupMapper;
 
-    public GroupController(GroupService groupService) {
+    public GroupController(GroupService groupService, GroupMapper groupMapper) {
         this.groupService = groupService;
+        this.groupMapper = groupMapper;
     }
 
     @PatchMapping("/add-exercises")
@@ -102,14 +105,14 @@ public class GroupController {
     }
 
 
-    @PutMapping("/{GroupId}")
-    public ResponseEntity<?> updateGroup(@PathVariable Long GroupId, @RequestBody GroupRequestDTO groupRequestDTO) {
+    @PutMapping("/{groupId}")
+    public ResponseEntity<?> updateGroup(@PathVariable Long groupId, @RequestBody GroupRequestDTO groupRequestDTO) {
 
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String userName = authentication.getName();
             groupRequestDTO.setUserName(userName);
-            groupRequestDTO.setId(GroupId);
+            groupRequestDTO.setId(groupId);
 
             GroupResponseDTO groupResponseDTO = groupService.updateGroup(groupRequestDTO);
             return ResponseEntity.ok().body(groupResponseDTO);
@@ -117,11 +120,6 @@ public class GroupController {
             return ResponseEntity.badRequest().body("Error updating group");
         }
     }
-
-    // TODO: Post/Put AddExercisesToGroup
-
-
-
 
 
     // TODO: implement user authentication, only user that created group can delete group
@@ -133,5 +131,17 @@ public class GroupController {
         } catch (BadRequestException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    // Add admin deleteGroup
+    @DeleteMapping("/admin/delete/{id}")
+    public ResponseEntity<?> deleteGroupAsAdmin(@PathVariable Long id) {
+        if (!SecurityUtils.isCurrentUserAdmin()) {
+            throw new AccessDeniedException("User with username: " + SecurityContextHolder.getContext().getAuthentication().getName() + " is no Admin");
+        }
+
+        String message = groupService.deleteGroupAsAdmin(id);
+
+        return ResponseEntity.ok().body(message);
     }
 }

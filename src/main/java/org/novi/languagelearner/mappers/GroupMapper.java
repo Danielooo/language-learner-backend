@@ -7,14 +7,12 @@ import org.novi.languagelearner.entities.Exercise;
 import org.novi.languagelearner.entities.Group;
 import org.novi.languagelearner.exceptions.BadRequestException;
 import org.novi.languagelearner.repositories.UserRepository;
-import org.novi.languagelearner.services.GroupService;
 import org.novi.languagelearner.services.UserService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -57,9 +55,7 @@ public class GroupMapper {
 
 
         return updatedGroup;
-
     }
-
 
 
     public GroupResponseDTO mapToResponseDTO(Group group) {
@@ -84,6 +80,13 @@ public class GroupMapper {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
 
+    public GroupRequestDTO mapControllerDataToRequestDTO (Long id) {
+        GroupRequestDTO requestDTO = new GroupRequestDTO();
+//        requestDTO.setUserName(userName);
+        requestDTO.setId(id);
+
+        return requestDTO;
     }
 }
