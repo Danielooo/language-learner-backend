@@ -52,7 +52,7 @@ public class SecurityConfig {
                         .requestMatchers("/groups/admin").hasRole("ADMIN")
                         .requestMatchers("/groups**").hasRole("USER")
 
-                        .requestMatchers("/stats/user/exercise").hasRole("USER")
+                        .requestMatchers("/stats/user/exercise/**").hasRole("USER")
                         .requestMatchers("/stats/user**").hasRole("USER")
                         .requestMatchers("/stats/admin").hasRole("ADMIN")
 

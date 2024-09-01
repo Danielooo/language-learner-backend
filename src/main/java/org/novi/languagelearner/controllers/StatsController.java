@@ -3,7 +3,7 @@ package org.novi.languagelearner.controllers;
 import jakarta.validation.Valid;
 import org.novi.languagelearner.dtos.Stats.StatsParamRequestDTO;
 import org.novi.languagelearner.dtos.Stats.StatsParamResponseDTO;
-import org.novi.languagelearner.dtos.Stats.StatsResponseDTO;
+import org.novi.languagelearner.dtos.Stats.StatsOfExerciseResponseDTO;
 import org.novi.languagelearner.exceptions.BadRequestException;
 import org.novi.languagelearner.mappers.StatsMapper;
 import org.novi.languagelearner.services.StatsService;
@@ -14,7 +14,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.AccessDeniedException;
-import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -33,26 +32,25 @@ public class  StatsController {
     }
 
     // edit or delete, has to return stats as question, answer, creationdate, editdate, timesright out of total, lastresult (right or wrong and timestamp)
-    @GetMapping("/user/exercise")
-    public ResponseEntity<?> getStatsOfExercise(@RequestParam Long exerciseId) {
+    @GetMapping("/user/exercise/{exerciseId}")
+    public ResponseEntity<?> getStatsOfExercise(@PathVariable Long exerciseId) {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String userName = authentication.getName();
 
-            StatsResponseDTO statsResponseDTO = statsService.getUserInputAnswersByUser(userName, exerciseId);
+            StatsOfExerciseResponseDTO statsResponseDTO = statsService.getStatsOfExercise(userName, exerciseId);
 
             return ResponseEntity.ok(statsResponseDTO);
 
         } catch (BadRequestException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("getStats failed: " + e.getMessage());
+        } catch (AccessDeniedException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    // get with Params
-    // authentication on User
-    // params in request dto?
-    // params: inputs time period, group, exercise or all
 
+    // get stats of group owned by user
     @GetMapping("user")
     public ResponseEntity<?> getStatsViaParams(@Valid StatsParamRequestDTO statsParamRequestDTO) {
         try {
@@ -67,7 +65,7 @@ public class  StatsController {
         } catch (BadRequestException e) {
 
             return ResponseEntity.badRequest().body("Something went wrong while getting stats of user ");
-            // TODO: Ask Frans; waarom moet ik deze clausule erbij doen. Krijg foutmelding zonder
+            // TODO: Ask Frans; waarom moet ik AccesDenied clausule er hier bij doen (throw m in de service). Krijg foutmelding zonder
         } catch (AccessDeniedException e) {
             throw new RuntimeException(e);
         }

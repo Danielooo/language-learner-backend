@@ -34,8 +34,8 @@ insert into user_role (role_id, user_id) values (2,3);
 ---------------------
 
 -- LOSSE EXERCISES
-insert into exercises (question, answer) values  ('Friend', 'Amico');
-insert into exercises (question, answer) values  ('Veel', 'Molto');
+-- insert into exercises (question, answer) values  ('Friend', 'Amico');
+-- insert into exercises (question, answer) values  ('Veel', 'Molto');
 
 ---------------------
 
@@ -76,6 +76,9 @@ insert into exercises (question, answer, group_id) values ('rijden', 'guidare', 
 -- UserInputAnswer
 -- inputs for Bert (User)
 insert into user_input_answers (user_id, exercise_id, user_input) values (3, 1, 'DIre');
+insert into user_input_answers (user_id, exercise_id, user_input) values (3, 1, 'Direxx');
+insert into user_input_answers (user_id, exercise_id, user_input) values (3, 1, 'Direxx');
+
 insert into user_input_answers (user_id, exercise_id, user_input) values (3, 2, 'CAmminare');
 
 -- inputs for Kim (Admin en User)

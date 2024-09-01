@@ -96,6 +96,8 @@ public class UserService implements UserDetailsService {
         }
     }
 
+
+
     public User getUserById(Long id) {
         Optional<User> userOptional = userRepository.findById(id);
         if (userOptional.isEmpty()) {

@@ -15,6 +15,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Transactional
     Optional<User> findByUserName(String username);
 
+    // find User by username and retrieve the exercises (by exerciseId) that the user has done. User has one-to-many relationship with Exercise
+//    Optional<User> findByUserNameAndExerciseId(String username, Long exerciseId);
+
     Optional<User> findByUserNameAndPassword(String username, String password);
 
     Optional<User> findUserById(Long id);

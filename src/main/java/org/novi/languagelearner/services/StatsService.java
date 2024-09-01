@@ -2,7 +2,7 @@ package org.novi.languagelearner.services;
 
 import org.novi.languagelearner.dtos.Stats.StatsParamRequestDTO;
 import org.novi.languagelearner.dtos.Stats.StatsParamResponseDTO;
-import org.novi.languagelearner.dtos.Stats.StatsResponseDTO;
+import org.novi.languagelearner.dtos.Stats.StatsOfExerciseResponseDTO;
 import org.novi.languagelearner.entities.Exercise;
 import org.novi.languagelearner.entities.Group;
 import org.novi.languagelearner.entities.User;
@@ -43,7 +43,37 @@ public class StatsService {
         this.groupRepository = groupRepository;
     }
 
-    public StatsResponseDTO getUserInputAnswersByUser(String userName, Long exerciseId) {
+    public StatsOfExerciseResponseDTO getStatsOfExercise(String userName, Long exerciseId) throws AccessDeniedException {
+
+        // check if user has access to exercise
+        User user = userService.getUserByUserName(userName);
+
+
+        if ( !isExerciseFromUser(user, exerciseId) ) {
+            throw new AccessDeniedException("This exercise does not belong to user: " + userName);
+        }
+
+        Exercise exercise = exerciseService.getExerciseById(exerciseId);
+
+
+        List<UserInputAnswer> userInputAnswersList = userInputAnswerRepository.findUserInputAnswersByUserAndExerciseId(user, exerciseId);
+
+        return statsMapper.toStatResponseDTO(exercise, userInputAnswersList);
+    }
+
+    // can go to util?
+    private boolean isExerciseFromUser(User user, Long exerciseId) {
+        for (Group group : user.getGroups()) {
+            for (Exercise exercise : group.getExercises()) {
+                if (exercise.getId().equals(exerciseId)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public StatsOfExerciseResponseDTO getUserInputAnswersByUser(String userName, Long exerciseId) {
 
         User user = userService.getUserByUserName(userName);
 
