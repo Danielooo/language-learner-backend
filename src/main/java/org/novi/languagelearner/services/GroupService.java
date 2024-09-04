@@ -9,11 +9,16 @@ import org.novi.languagelearner.entities.Group;
 import org.novi.languagelearner.entities.User;
 import org.novi.languagelearner.exceptions.BadRequestException;
 import org.novi.languagelearner.exceptions.RecordNotFoundException;
+import org.novi.languagelearner.exceptions.UsernameNotFoundException;
 import org.novi.languagelearner.mappers.ExerciseMapper;
 import org.novi.languagelearner.mappers.GroupMapper;
+import org.novi.languagelearner.repositories.ExerciseRepository;
 import org.novi.languagelearner.repositories.GroupRepository;
 import org.novi.languagelearner.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.novi.languagelearner.exceptions.AccessDeniedException;
@@ -32,17 +37,18 @@ public class GroupService {
     private final UserService userService;
     private final ExerciseService exerciseService;
     private final UserRepository userRepository;
+    private final ExerciseRepository exerciseRepository;
 
     @Autowired
-    public GroupService(GroupRepository groupRepository, GroupMapper groupMapper, ExerciseMapper exerciseMapper, UserService userService, ExerciseService exerciseService, UserRepository userRepository) {
+    public GroupService(GroupRepository groupRepository, GroupMapper groupMapper, ExerciseMapper exerciseMapper, UserService userService, ExerciseService exerciseService, UserRepository userRepository, ExerciseRepository exerciseRepository) {
         this.groupRepository = groupRepository;
         this.groupMapper = groupMapper;
         this.exerciseMapper = exerciseMapper;
         this.userService = userService;
         this.exerciseService = exerciseService;
         this.userRepository = userRepository;
+        this.exerciseRepository = exerciseRepository;
     }
-
 
 
     public Long getUserIdByUserName(String userName) {
@@ -51,6 +57,7 @@ public class GroupService {
         return userResponseDTO.getId();
     }
 
+
     public GroupResponseDTO createGroup(GroupRequestDTO groupRequestDTO) {
         Group group = groupMapper.mapToEntity(groupRequestDTO);
         Group savedGroup = groupRepository.save(group);
@@ -58,41 +65,30 @@ public class GroupService {
         return groupMapper.mapToResponseDTO(savedGroup);
     }
 
+
     public List<GroupResponseDTO> createGroupsWithJsonFiles(MultipartFile[] jsonFiles, String userName) {
 
-            List<GroupRequestDTO> groupRequestDTOList = new ArrayList<>();
-            for (MultipartFile jsonFile : jsonFiles) {
-                if (jsonFile.isEmpty()) {
-                    throw new BadRequestException("Uploaded file is empty");
-                }
-                GroupRequestDTO groupRequestDTO = groupMapper.mapJsonFileToGroupRequestDTO(jsonFile, userName);
-                groupRequestDTOList.add(groupRequestDTO);
+        List<GroupRequestDTO> groupRequestDTOList = new ArrayList<>();
+        for (MultipartFile jsonFile : jsonFiles) {
+            if (jsonFile.isEmpty()) {
+                throw new BadRequestException("Uploaded file is empty");
             }
-
-            List<GroupResponseDTO> groupResponseDTOS = new ArrayList<>();
-            for (GroupRequestDTO groupRequestDTO : groupRequestDTOList) {
-                Group group = groupMapper.mapToEntity(groupRequestDTO);
-                Group savedGroup = groupRepository.save(group);
-                groupResponseDTOS.add(groupMapper.mapToResponseDTO(savedGroup));
-            }
-
-            return groupResponseDTOS;
-    }
-
-
-
-    @Transactional
-    public GroupResponseDTO updateGroup( GroupRequestDTO groupRequestDTO) {
-        Optional<Group> groupOptional = groupRepository.findById(groupRequestDTO.getId());
-        if (groupOptional.isEmpty()) {
-            throw new RecordNotFoundException(String.format("Group with id: %d not found", groupRequestDTO.getId()));
-        } else {
-            Group groupUpdated = groupMapper.mapInputIntoCurrentEntity(groupRequestDTO, groupOptional.get());
-
-            Group savedGroup = groupRepository.save(groupUpdated);
-            return groupMapper.mapToResponseDTO(savedGroup);
+            GroupRequestDTO groupRequestDTO = groupMapper.mapJsonFileToGroupRequestDTO(jsonFile, userName);
+            groupRequestDTOList.add(groupRequestDTO);
         }
+
+        List<GroupResponseDTO> groupResponseDTOS = new ArrayList<>();
+        for (GroupRequestDTO groupRequestDTO : groupRequestDTOList) {
+            Group group = groupMapper.mapToEntity(groupRequestDTO);
+            Group savedGroup = groupRepository.save(group);
+            groupResponseDTOS.add(groupMapper.mapToResponseDTO(savedGroup));
+        }
+
+        return groupResponseDTOS;
     }
+
+
+
 
     // TODO: test if this is working and has a use case
     public GroupResponseDTO updatePartOfGroup(Long id, GroupRequestDTO groupRequestDTO) {
@@ -109,13 +105,23 @@ public class GroupService {
 
     // TODO: implement user authentication
     public GroupResponseDTO getGroupById(Long id) {
-
-        Optional<Group> group = groupRepository.findById(id);
-        if (group.isEmpty()) {
+        Optional<Group> groupOptional = groupRepository.findById(id);
+        if (groupOptional.isEmpty()) {
             throw new RecordNotFoundException(String.format("Group with id: %d not found", id));
-        } else {
-            return groupMapper.mapToResponseDTO(group.get());
         }
+
+        Group group = groupOptional.get();
+
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findUserByUserName(userName).orElseThrow(() -> new UsernameNotFoundException(String.format("User with username %s is not found in database", userName)));
+
+        if (group.getUser().getUserName().equals(user.getUserName())) {
+            return groupMapper.mapToResponseDTO(group);
+        } else {
+            throw new AccessDeniedException("Group does not belong to user with username: " + userName);
+        }
+
+
     }
 
 
@@ -130,18 +136,8 @@ public class GroupService {
         }
     }
 
-    public String deleteGroupAsAdmin(Long id) {
-        groupRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Group not found with following id: " + id));
 
-        groupRepository.deleteById(id);
-
-        return "Group deleted with following id: " + id;
-    }
-
-
-    // TODO: implement user authentication
     public List<GroupResponseDTO> getAllGroups(String userName) {
-
         List<Group> groups = groupRepository.findByUser_UserName(userName);
 
         if (groups.isEmpty()) {
@@ -149,28 +145,58 @@ public class GroupService {
             throw new RecordNotFoundException("No groups found");
         } else {
 
+
             return groups
-                .stream()
-                .map(groupMapper::mapToResponseDTO)
-                .collect(Collectors.toList());
+                    .stream()
+                    .map(groupMapper::mapToResponseDTO)
+                    .collect(Collectors.toList());
         }
     }
 
-    public GroupResponseDTO addExercisesToGroup(GroupRequestDTO groupRequestDTO) throws AccessDeniedException {
-
-
-        Group group = groupRepository.findById(groupRequestDTO.getId()).orElseThrow(() -> new RecordNotFoundException("Group not found"));
-        if ( group.getUser().getUserName().equals(groupRequestDTO.getUserName()) ) {
-            throw new AccessDeniedException("User not authorized to add exercises to group");
+    @Transactional
+    public GroupResponseDTO addExercisesToGroup(GroupRequestDTO groupRequestDTO) {
+        Group group = groupRepository.findById(groupRequestDTO.getId()).orElseThrow(() -> new RecordNotFoundException("Group not found with id: " + groupRequestDTO.getId()));
+        if (!group.getUser().getUserName().equals(groupRequestDTO.getUserName())) {
+            throw new AccessDeniedException("User with username: " + groupRequestDTO.getUserName() + " not authorized to add exercises to group with id: " + groupRequestDTO.getId());
         }
 
-        List<Exercise> exercises = groupRequestDTO.getExercises();
-        for (Exercise exercise : exercises) {
-            exercise.setGroup(group);
-            group.getExercises().add(exercise);
+
+        for (Exercise exercise : groupRequestDTO.getExercises()) {
+            Exercise exerciseToAdd = new Exercise();
+            exerciseToAdd.setGroup(group);
+            exerciseToAdd.setQuestion(exercise.getQuestion());
+            exerciseToAdd.setAnswer(exercise.getAnswer());
+            Exercise exerciseSaved = exerciseRepository.save(exerciseToAdd);
+            group.getExercises().add(exerciseSaved);
         }
 
         Group savedGroup = groupRepository.save(group);
         return groupMapper.mapToResponseDTO(savedGroup);
     }
+
+
+    public List<GroupResponseDTO> getAllGroupsAsAdmin() {
+        List<Group> allGroups = groupRepository.findAll();
+        if (allGroups.isEmpty()) {
+            throw new RecordNotFoundException("No groups found in database");
+        }
+
+        List<GroupResponseDTO> responseDTOs = new ArrayList<>();
+
+        for (Group group : allGroups) {
+            responseDTOs.add(groupMapper.mapToResponseDTO(group));
+        }
+        return responseDTOs;
+    }
+
+
+    public String deleteGroupAsAdmin(Long id) {
+        groupRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Group not found with following id: " + id));
+
+        groupRepository.deleteById(id);
+
+        return "Group deleted with following id: " + id;
+    }
 }
+
+

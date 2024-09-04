@@ -3,6 +3,7 @@ package org.novi.languagelearner.controllers;
 
 import org.novi.languagelearner.dtos.Group.GroupRequestDTO;
 import org.novi.languagelearner.dtos.Group.GroupResponseDTO;
+import org.novi.languagelearner.entities.Group;
 import org.novi.languagelearner.exceptions.BadRequestException;
 import org.novi.languagelearner.mappers.GroupMapper;
 import org.novi.languagelearner.services.GroupService;
@@ -18,9 +19,8 @@ import org.novi.languagelearner.exceptions.AccessDeniedException;
 import java.util.List;
 
 
-// TODO: implement exception handling voor RecordNotFoundException
-// TODO: Admin endpoints toevoegen
-//
+
+
 @RestController
 @RequestMapping("/groups")
 public class GroupController {
@@ -33,7 +33,7 @@ public class GroupController {
         this.groupMapper = groupMapper;
     }
 
-    @PatchMapping("/add-exercises")
+    @PatchMapping("/user/add-exercises")
     public ResponseEntity<?> addExercisesToGroup(@RequestBody GroupRequestDTO groupRequestDTO) {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -44,13 +44,11 @@ public class GroupController {
             return ResponseEntity.ok().body(groupResponseDTO);
         } catch (BadRequestException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (AccessDeniedException e) {
-            throw new RuntimeException(e);
         }
     }
 
     // TODO: implement user authentication
-    @GetMapping("/{id}")
+    @GetMapping("/user/{id}")
     public ResponseEntity<?> getGroupById(@PathVariable Long id) {
 
         try {
@@ -64,7 +62,7 @@ public class GroupController {
         }
     }
 
-    @GetMapping("/all")
+    @GetMapping("/user/all")
     public ResponseEntity<?> getAllGroupsOfUser() {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -76,7 +74,7 @@ public class GroupController {
         }
     }
 
-    @PostMapping
+    @PostMapping("/user/create")
     public ResponseEntity<?> createGroup(@RequestBody GroupRequestDTO groupRequestDTO) {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -90,7 +88,7 @@ public class GroupController {
     }
 
     // TODO: implement user authentication for adding userId to group
-    @PostMapping("/upload-json-files")
+    @PostMapping("/user/upload-json-files")
     public ResponseEntity<?> createGroupsFromJsonFiles(@RequestBody MultipartFile[] files) {
 
         try {
@@ -105,25 +103,22 @@ public class GroupController {
     }
 
 
-    @PutMapping("/{groupId}")
-    public ResponseEntity<?> updateGroup(@PathVariable Long groupId, @RequestBody GroupRequestDTO groupRequestDTO) {
 
+    @GetMapping("/admin/all")
+    public ResponseEntity<?> getAllGroupsAsAdmin() {
         try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            String userName = authentication.getName();
-            groupRequestDTO.setUserName(userName);
-            groupRequestDTO.setId(groupId);
 
-            GroupResponseDTO groupResponseDTO = groupService.updateGroup(groupRequestDTO);
-            return ResponseEntity.ok().body(groupResponseDTO);
+            List<GroupResponseDTO> groupDTOs = groupService.getAllGroupsAsAdmin();
+
+            return ResponseEntity.ok().body(groupDTOs);
         } catch (BadRequestException e) {
-            return ResponseEntity.badRequest().body("Error updating group");
+            return ResponseEntity.badRequest().body("Something went wrong with retrieving all groups");
         }
     }
 
 
     // TODO: implement user authentication, only user that created group can delete group
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/user/delete/{id}")
     public ResponseEntity<?> deleteGroup(@PathVariable Long id) {
         try {
             groupService.deleteGroup(id);
@@ -133,13 +128,9 @@ public class GroupController {
         }
     }
 
-    // Add admin deleteGroup
+
     @DeleteMapping("/admin/delete/{id}")
     public ResponseEntity<?> deleteGroupAsAdmin(@PathVariable Long id) {
-        if (!SecurityUtils.isCurrentUserAdmin()) {
-            throw new AccessDeniedException("User with username: " + SecurityContextHolder.getContext().getAuthentication().getName() + " is no Admin");
-        }
-
         String message = groupService.deleteGroupAsAdmin(id);
 
         return ResponseEntity.ok().body(message);

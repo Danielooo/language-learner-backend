@@ -14,7 +14,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "exercises")
-public class Exercise extends Base{
+public class Exercise extends Base {
 
     private String question;
     private String answer;

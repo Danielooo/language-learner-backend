@@ -2,6 +2,7 @@ package org.novi.languagelearner.controllers;
 
 import org.novi.languagelearner.dtos.Exercise.ExerciseRequestDTO;
 import org.novi.languagelearner.dtos.Exercise.ExerciseResponseDTO;
+import org.novi.languagelearner.entities.Exercise;
 import org.novi.languagelearner.exceptions.BadRequestException;
 import org.novi.languagelearner.exceptions.RecordNotFoundException;
 import org.novi.languagelearner.services.ExerciseService;
@@ -26,13 +27,41 @@ public class ExerciseController {
         this.exerciseService = exerciseService;
     }
 
-    // ADMIN
 
-    @DeleteMapping("/admin/{id}")
-    public ResponseEntity<?> deleteExercise(@PathVariable Long id) {
+
+
+    @DeleteMapping("/user/delete/{id}")
+    public ResponseEntity<?> deleteExerciseById(@PathVariable Long id) {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String userName = authentication.getName();
+
+            exerciseService.deleteExercise(userName, id);
+
+            return ResponseEntity.ok().body(String.format("Exercise deleted with id: %d", id));
+        } catch (BadRequestException e) {
+            return ResponseEntity.badRequest().body((String.format("Something went wrong when deleting exercise with id: %d", id)));
+        }
+    }
+
+    @GetMapping("admin/all")
+    public ResponseEntity<?> getAllExercisesAsAdmin() {
         try {
 
-            exerciseService.deleteExercise(id);
+            List<ExerciseResponseDTO> exerciseDTOs = exerciseService.getAllExercises();
+
+            return ResponseEntity.ok().body(exerciseDTOs);
+        } catch (BadRequestException e) {
+            return ResponseEntity.badRequest().body("Something went wrong with retrieving all exercises");
+        }
+    }
+
+
+    @DeleteMapping("/admin/delete/{id}")
+    public ResponseEntity<?> deleteExerciseAsAdmin(@PathVariable Long id) {
+        try {
+
+            exerciseService.deleteExerciseAsAdmin(id);
             return ResponseEntity.ok().body(String.format("exercise with id %d is deleted", id));
         } catch (RecordNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
@@ -40,15 +69,11 @@ public class ExerciseController {
     }
 
 
-    @PutMapping("/admin/{id}")
-    public ExerciseResponseDTO updateExercise(@PathVariable Long id, @RequestBody ExerciseRequestDTO requestDTO) {
+    @PatchMapping("/admin/update/{id}")
+    public ResponseEntity<?> updateExercise(@PathVariable Long id, @RequestBody ExerciseRequestDTO requestDTO) {
         try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
-                return exerciseService.updateExercise(id, requestDTO);
-            } else {
-                throw new BadRequestException("You are not authorized to update exercises");
-            }
+
+                return ResponseEntity.ok().body(exerciseService.updateExercise(id, requestDTO));
         } catch (BadRequestException e) {
             throw new BadRequestException("Something went wrong with updating the exercise");
         }

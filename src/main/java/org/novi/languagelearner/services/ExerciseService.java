@@ -3,12 +3,14 @@ package org.novi.languagelearner.services;
 import org.novi.languagelearner.dtos.Exercise.ExerciseRequestDTO;
 import org.novi.languagelearner.dtos.Exercise.ExerciseResponseDTO;
 import org.novi.languagelearner.entities.Exercise;
+import org.novi.languagelearner.exceptions.AccessDeniedException;
 import org.novi.languagelearner.exceptions.RecordNotFoundException;
 import org.novi.languagelearner.mappers.ExerciseMapper;
 import org.novi.languagelearner.repositories.ExerciseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -43,6 +45,12 @@ public class ExerciseService {
         }
     }
 
+    public void deleteExercise(String userName, Long id) {
+        Exercise exercise = exerciseRepository.findExerciseByIdAndUserName(userName, id).orElseThrow(() -> new AccessDeniedException(String.format("Exercise with id: %d, does not belong to username: %s", id, userName)));
+
+        exerciseRepository.deleteById(id);
+    }
+
     // just get exercise without the userInputAnswers
     public Exercise getExerciseWithoutUserInputAnswersById(Long id) {
 
@@ -55,7 +63,9 @@ public class ExerciseService {
     }
 
 
-    public void deleteExercise(Long id) {
+
+
+    public void deleteExerciseAsAdmin(Long id) {
         if (exerciseRepository.existsById(id)) {
             exerciseRepository.deleteById(id);
         } else {
@@ -84,6 +94,18 @@ public class ExerciseService {
     }
 
 
+    public List<ExerciseResponseDTO> getAllExercises() {
+        List<Exercise> allExercises = exerciseRepository.findAll();
 
+        if ( allExercises.isEmpty()) {
+            throw new RecordNotFoundException("No exercises found in database");
+        }
 
+        List<ExerciseResponseDTO> responseDTOList = new ArrayList<>();
+        for (Exercise exercise : allExercises) {
+            responseDTOList.add(exerciseMapper.mapToResponseDTO(exercise));
+        }
+
+        return responseDTOList;
+    }
 }

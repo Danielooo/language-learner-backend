@@ -103,13 +103,25 @@ public class PhotoService {
         photoRepository.delete(photo);
     }
 
+    @Transactional
     public String deletePhotoAsAdmin(Long photoId) {
 
-        photoRepository.findById(photoId).orElseThrow(() -> new RecordNotFoundException("Photo not found with id: " + photoId));
+        Photo photo = photoRepository.findById(photoId).orElseThrow(() -> new RecordNotFoundException("Photo not found with id: " + photoId));
 
-        photoRepository.deleteById(photoId);
+        User user = photo.getUser();
+        user.setPhoto(null);
+        photoRepository.delete(photo);
+//        photoRepository.deleteById(photoId);
+
+//        Photo photoCheck = photoRepository.findById(photoId).orElseThrow(() -> new RecordNotFoundException("Photo not found with id: " + photoId));
 
         return "Photo deleted with id: " + photoId;
+
+
+
+
+
+
 
 //        Optional<User> userOptional = userRepository.findById(userId);
 //

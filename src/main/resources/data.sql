@@ -51,8 +51,8 @@ insert into groups (user_id, group_name) values (1, 'Fourth exampleGroup');
 
 -- EXERCISES INSERT INTO GROUP
 -- Bert
--- Insert exercises to First exampleGroup and link to group
-insert into exercises (question, answer, group_id) values ('zeggen', 'dire', (select id from groups where group_name = 'First exampleGroup'));
+-- Insert exercises to First exampleGroup and link to group  (intentional error at first question that can be fixed with Patch endpoint)
+insert into exercises (question, answer, group_id) values ('zeggenXX', 'dire', (select id from groups where group_name = 'First exampleGroup'));
 insert into exercises (question, answer, group_id) values ('lopen', 'camminare', (select id from groups where group_name = 'First exampleGroup'));
 insert into exercises (question, answer, group_id) values ('lezen', 'leggere', (select id from groups where group_name = 'First exampleGroup'));
 

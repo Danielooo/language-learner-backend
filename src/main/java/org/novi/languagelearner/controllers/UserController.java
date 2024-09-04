@@ -2,10 +2,7 @@ package org.novi.languagelearner.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import org.novi.languagelearner.dtos.User.UserNameChangeRequestDTO;
-import org.novi.languagelearner.dtos.User.UserRequestDTO;
-import org.novi.languagelearner.dtos.User.UserResponseDTO;
-import org.novi.languagelearner.dtos.User.UserByLastNameAndRoleRequestDTO;
+import org.novi.languagelearner.dtos.User.*;
 import org.novi.languagelearner.exceptions.BadRequestException;
 import org.novi.languagelearner.mappers.UserMapper;
 import org.novi.languagelearner.services.PhotoService;
@@ -98,7 +95,7 @@ public class UserController {
     }
 
 
-    @PutMapping("/change")
+    @PutMapping("/change-username")
     public ResponseEntity<?> changeUserName(@RequestBody @Valid UserNameChangeRequestDTO requestDTO) {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -114,15 +111,15 @@ public class UserController {
     }
 
 
-//    @PutMapping("/{id}")
-//    public ResponseEntity<?> changePassword(@PathVariable Long id, @RequestBody @Valid UserChangePasswordRequestDTO userDTO) {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        var user = userMapper.mapToEntity(userDTO, id);
-//        if (!userService.updatePassword(user)) {
-//            return ResponseEntity.badRequest().build();
-//        }
-//        return ResponseEntity.ok().build();
-//    }
+    @PutMapping("/change-password/{id}")
+    public ResponseEntity<?> changePassword(@PathVariable Long id, @RequestBody @Valid UserChangePasswordRequestDTO requestDTO) {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            userService.changePassword(requestDTO);
 
-
+            return ResponseEntity.ok().body("Password is successfully changed");
+        } catch (BadRequestException e ) {
+            throw new BadRequestException("Something went wrong while changing the password");
+        }
+    }
 }

@@ -27,4 +27,5 @@ public class Group extends Base {
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Exercise> exercises = new ArrayList<>();
+
 }

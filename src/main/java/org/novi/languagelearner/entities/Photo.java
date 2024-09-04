@@ -21,7 +21,7 @@ public class Photo extends Base {
     @Lob
     private byte[] data;
 
-    @OneToOne(mappedBy = "photo", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "photo", fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     @JsonBackReference
     private User user;
 

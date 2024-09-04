@@ -97,12 +97,12 @@ public class PhotoController {
     public ResponseEntity<?> deletePhotoAsAdmin(@PathVariable Long id) {
         try {
 
-            return ResponseEntity.ok().body( photoService.deletePhotoAsAdmin(id));
+            String message = photoService.deletePhotoAsAdmin(id);
+
+            return ResponseEntity.ok().body(message);
 
         } catch (BadRequestException e) {
             return ResponseEntity.badRequest().body("Something went wrong with deleting photo with id: " + id);
         }
     }
-
-
 }

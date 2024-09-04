@@ -1,10 +1,7 @@
 package org.novi.languagelearner.services;
 
 import jakarta.transaction.Transactional;
-import org.novi.languagelearner.dtos.User.UserNameChangeRequestDTO;
-import org.novi.languagelearner.dtos.User.UserRequestDTO;
-import org.novi.languagelearner.dtos.User.UserResponseDTO;
-import org.novi.languagelearner.dtos.User.UserByLastNameAndRoleRequestDTO;
+import org.novi.languagelearner.dtos.User.*;
 import org.novi.languagelearner.entities.Role;
 import org.novi.languagelearner.entities.User;
 import org.novi.languagelearner.exceptions.AccessDeniedException;
@@ -15,6 +12,8 @@ import org.novi.languagelearner.mappers.UserMapper;
 import org.novi.languagelearner.repositories.RoleRepository;
 import org.novi.languagelearner.repositories.UserRepository;
 import org.novi.languagelearner.security.ApiUserDetails;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -139,14 +138,18 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public boolean updatePassword(User user) {
-        Optional<User> userOptional = userRepository.findById(user.getId());
-        if (userOptional.isEmpty()) {
-            throw new UsernameNotFoundException(user.getId().toString());
-        } else {
-            // If save doesn't work it would throw an error. This return is just to give back True on succes.
-            return userRepository.save(user) != null;
-        }
+    @Transactional
+    public boolean changePassword(UserChangePasswordRequestDTO requestDTO) {
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        User user = userRepository.findByUserName(userName).orElseThrow(
+                () -> new UsernameNotFoundException(String.format("Username: %s, not found in database", userName)));
+
+        user.setPassword(bCryptPasswordEncoder.encode(requestDTO.getPassword()));
+
+        userRepository.save(user);
+
+        return true;
     }
 
 

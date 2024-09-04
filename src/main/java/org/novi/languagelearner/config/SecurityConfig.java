@@ -30,38 +30,37 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain (HttpSecurity httpSecurity, JwtRequestFilter jwtRequestFilter) throws Exception{
         httpSecurity
-                // hp.disable schakelt uit dat er toegang kan worden verkregen met username en password. Je moet een jwt token hebben. Daar zorgt de .addFilterBefore voor.
                 .httpBasic(hp -> hp.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST,"/login").permitAll()
 
                         .requestMatchers(HttpMethod.POST,"/users/register").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/users/admin**").hasRole("ADMIN")
-                        .requestMatchers("/users").hasRole("USER")
-                        .requestMatchers("/users/**").hasRole("USER")
-                        .requestMatchers("/users/admin**").hasRole("ADMIN")
+                        .requestMatchers("/users/profile").authenticated()
+                        .requestMatchers("/users/change-username").authenticated()
+                        .requestMatchers("/users/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/users/user/**").hasRole("USER")
 
                         .requestMatchers("/photo").authenticated()
                         .requestMatchers("/photo/download").authenticated()
                         .requestMatchers("/photo/admin/delete/**").hasRole("ADMIN")
 
-                        .requestMatchers("/exercises/admin**").hasRole("ADMIN")
+                        .requestMatchers("/exercises/user/**").hasRole("USER")
+                        .requestMatchers("/exercises/admin/**").hasRole("ADMIN")
 
-                        .requestMatchers("/answer").hasRole("USER")
-                        .requestMatchers("/answer/admin").hasRole("ADMIN")
+                        .requestMatchers("/answer/user/**").hasRole("USER")
+                        .requestMatchers("/answer/admin/**").hasRole("ADMIN")
 
-                        .requestMatchers("/groups/admin/delete/**").hasRole("ADMIN")
-                        .requestMatchers("/groups**").hasRole("USER")
+                        .requestMatchers("/groups/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/groups/user/**").hasRole("USER")
 
                         .requestMatchers("/stats/user/exercise/**").hasRole("USER")
-                        .requestMatchers("/stats/user**").hasRole("USER")
                         .requestMatchers("/stats/admin").hasRole("ADMIN")
+                        .requestMatchers("/stats/user**").hasRole("USER")
 
-                        .anyRequest().permitAll()
+                        .anyRequest().denyAll()
                         )
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .csrf(csrf -> csrf.disable())
-                // de lege lambda zorgt ervoor dat de default CORS configuratie is
                 .cors(cors -> cors.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 );
