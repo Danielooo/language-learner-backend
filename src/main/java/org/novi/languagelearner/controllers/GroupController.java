@@ -1,6 +1,7 @@
 package org.novi.languagelearner.controllers;
 
 
+import jakarta.validation.Valid;
 import org.novi.languagelearner.dtos.Group.GroupRequestDTO;
 import org.novi.languagelearner.dtos.Group.GroupResponseDTO;
 import org.novi.languagelearner.entities.Group;
@@ -34,7 +35,7 @@ public class GroupController {
     }
 
     @PatchMapping("/user/add-exercises")
-    public ResponseEntity<?> addExercisesToGroup(@RequestBody GroupRequestDTO groupRequestDTO) {
+    public ResponseEntity<?> addExercisesToGroup(@RequestBody @Valid GroupRequestDTO groupRequestDTO) {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String userName = authentication.getName();
@@ -75,7 +76,7 @@ public class GroupController {
     }
 
     @PostMapping("/user/create")
-    public ResponseEntity<?> createGroup(@RequestBody GroupRequestDTO groupRequestDTO) {
+    public ResponseEntity<?> createGroup(@RequestBody @Valid GroupRequestDTO groupRequestDTO) {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             groupRequestDTO.setUserName(authentication.getName());

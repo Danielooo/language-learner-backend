@@ -50,7 +50,7 @@ public class  StatsController {
     }
 
 
-    // get stats of group owned by user
+    // TODO: Kill bc it's not working
     @GetMapping("user")
     public ResponseEntity<?> getStatsViaParams(@Valid StatsParamRequestDTO statsParamRequestDTO) {
         try {

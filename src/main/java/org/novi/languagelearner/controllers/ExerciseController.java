@@ -1,5 +1,6 @@
 package org.novi.languagelearner.controllers;
 
+import jakarta.validation.Valid;
 import org.novi.languagelearner.dtos.Exercise.ExerciseRequestDTO;
 import org.novi.languagelearner.dtos.Exercise.ExerciseResponseDTO;
 import org.novi.languagelearner.entities.Exercise;
@@ -70,7 +71,7 @@ public class ExerciseController {
 
 
     @PatchMapping("/admin/update/{id}")
-    public ResponseEntity<?> updateExercise(@PathVariable Long id, @RequestBody ExerciseRequestDTO requestDTO) {
+    public ResponseEntity<?> updateExercise(@PathVariable Long id, @RequestBody @Valid ExerciseRequestDTO requestDTO) {
         try {
 
                 return ResponseEntity.ok().body(exerciseService.updateExercise(id, requestDTO));

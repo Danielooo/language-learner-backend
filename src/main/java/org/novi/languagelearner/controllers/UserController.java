@@ -7,6 +7,7 @@ import org.novi.languagelearner.exceptions.BadRequestException;
 import org.novi.languagelearner.mappers.UserMapper;
 import org.novi.languagelearner.services.PhotoService;
 import org.novi.languagelearner.services.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,8 +25,6 @@ public class UserController {
     private final PhotoService photoService;
 
 
-
-
     public UserController(UserMapper userMapper, UserService userService, HttpServletRequest request, PhotoService photoService) {
         this.userMapper = userMapper;
         this.userService = userService;
@@ -38,18 +37,29 @@ public class UserController {
 
 
     @GetMapping("/admin/{id}")
-    public ResponseEntity<?> getUserInfo(@PathVariable("id") Long id) {
+    public ResponseEntity<?> getUserInfoAsAdmin(@PathVariable("id") Long id) {
 
         UserResponseDTO userResponseDTO = userService.getUserResponseDTOByIdAsAdmin(id);
 
         return ResponseEntity.ok().body(userResponseDTO);
     }
 
-    // GetMapping admin getAllUsers
+    @GetMapping("/admin/get-all-users")
+    public ResponseEntity<?> getAllUsersAsAdmin() {
+        try {
 
-    // GetMapping admin getUsersByRoleAndName
+            List<UserResponseDTO> listOfUserResponseDTOs = userService.getAll();
+
+            return ResponseEntity.ok().body(listOfUserResponseDTOs);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An unforeseen error occurred while retrieving all users. System message: " + e.getMessage());
+        }
+    }
+
+
     @GetMapping("/admin/get-users")
-    public ResponseEntity<?> getUsersLastNameAndRole( @RequestParam String lastName, @RequestParam String role) {
+    public ResponseEntity<?> getUsersLastNameAndRoleAsAdmin(@RequestParam String lastName, @RequestParam String role) {
         try {
             UserByLastNameAndRoleRequestDTO requestDTO = new UserByLastNameAndRoleRequestDTO();
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -111,14 +121,13 @@ public class UserController {
     }
 
 
-    @PutMapping("/change-password/{id}")
-    public ResponseEntity<?> changePassword(@PathVariable Long id, @RequestBody @Valid UserChangePasswordRequestDTO requestDTO) {
+    @PutMapping("/change-password")
+    public ResponseEntity<?> changePassword(@RequestBody @Valid UserChangePasswordRequestDTO requestDTO) {
         try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             userService.changePassword(requestDTO);
 
             return ResponseEntity.ok().body("Password is successfully changed");
-        } catch (BadRequestException e ) {
+        } catch (BadRequestException e) {
             throw new BadRequestException("Something went wrong while changing the password");
         }
     }

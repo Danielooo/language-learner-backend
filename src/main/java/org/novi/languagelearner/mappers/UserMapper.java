@@ -23,16 +23,21 @@ public class UserMapper{
     }
 
     public User mapToEntity(UserRequestDTO userDTO) {
-        var result = new User();
-        result.setUserName(userDTO.getUserName());
-        result.setPassword(userDTO.getPassword());
-        return result;
+        User newUser = new User();
+        newUser.setUserName(userDTO.getUserName());
+        newUser.setPassword(userDTO.getPassword());
+        newUser.setFirstName(userDTO.getFirstName());
+        newUser.setLastName(userDTO.getLastName());
+
+        return newUser;
     }
 
     public UserResponseDTO mapToResponseDTO(User user) {
-        var userResponseDTO = new UserResponseDTO();
+        UserResponseDTO userResponseDTO = new UserResponseDTO();
         userResponseDTO.setId(user.getId());
         userResponseDTO.setUsername(user.getUserName());
+        userResponseDTO.setFirstName(user.getFirstName());
+        userResponseDTO.setLastName(user.getLastName());
 
         List<String> userRoles = new ArrayList<>();
         for (Role role : user.getRoles()) {

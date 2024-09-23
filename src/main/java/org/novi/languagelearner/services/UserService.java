@@ -12,7 +12,6 @@ import org.novi.languagelearner.mappers.UserMapper;
 import org.novi.languagelearner.repositories.RoleRepository;
 import org.novi.languagelearner.repositories.UserRepository;
 import org.novi.languagelearner.security.ApiUserDetails;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -139,7 +138,7 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public boolean changePassword(UserChangePasswordRequestDTO requestDTO) {
+    public void changePassword(UserChangePasswordRequestDTO requestDTO) {
         String userName = SecurityContextHolder.getContext().getAuthentication().getName();
 
         User user = userRepository.findByUserName(userName).orElseThrow(
@@ -148,8 +147,6 @@ public class UserService implements UserDetailsService {
         user.setPassword(bCryptPasswordEncoder.encode(requestDTO.getPassword()));
 
         userRepository.save(user);
-
-        return true;
     }
 
 
@@ -201,5 +198,14 @@ public class UserService implements UserDetailsService {
     }
 
 
+    public List<UserResponseDTO> getAll() {
+
+        List<User> users = userRepository.findAll();
+        if (users.isEmpty()) {
+            throw new RecordNotFoundException("No users found in repository");
+        }
+
+        return userMapper.mapToListOfResponseDTOs(users);
+    }
 }
 

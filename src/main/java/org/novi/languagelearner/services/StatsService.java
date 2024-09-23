@@ -18,7 +18,7 @@ import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-// TODO: Answer Frans; wil je hier id's doorgeven of de objecten zelf? // wil je zoveel mogelijk met userId werken of met username? Username krijg je binnen vanuit de Authorization in de controller namelijk, moet je ergens (waar?) omzetten naar userId >> Niet meer relevant. nieuwe aanpak: UserInputAnswer entities maken en persisten. Database met @Query statistieken laten ophalen. Kan in Stats maar is geen entity (wordt niet gepersist)
+
 
 @Service
 public class StatsService {
@@ -49,7 +49,7 @@ public class StatsService {
         User user = userService.getUserByUserName(userName);
 
 
-        if ( !isExerciseFromUser(user, exerciseId) ) {
+        if ( !isExerciseFromUser(user, exerciseId ) ) {
             throw new AccessDeniedException("This exercise does not belong to user: " + userName);
         }
 
@@ -73,6 +73,7 @@ public class StatsService {
         return false;
     }
 
+    // TODO: kill for time reasons, not working now.
     public StatsOfExerciseResponseDTO getUserInputAnswersByUser(String userName, Long exerciseId) {
 
         User user = userService.getUserByUserName(userName);
@@ -85,6 +86,7 @@ public class StatsService {
     }
 
 
+    // TODO: Kill bc it's not working
     public List<StatsParamResponseDTO> getStatsByParams(StatsParamRequestDTO statsParamRequestDTO) throws AccessDeniedException {
 
         // check if group belongs to user
@@ -109,6 +111,7 @@ public class StatsService {
         return null;
     }
 
+    // TODO: Kill bc it's not working
     public List<Long> findMismatchedGroupIds(String userName, List<Long> requestGroupIds) {
         List<Long> userGroupIds = userRepository.findGroupIdsByUserName(userName);
 

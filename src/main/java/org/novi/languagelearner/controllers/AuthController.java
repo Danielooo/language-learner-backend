@@ -1,6 +1,7 @@
 package org.novi.languagelearner.controllers;
 
 
+import jakarta.validation.Valid;
 import org.novi.languagelearner.dtos.User.UserLoginRequestDTO;
 import org.novi.languagelearner.security.ApiUserDetails;
 import org.novi.languagelearner.security.JwtService;
@@ -28,7 +29,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Object> login(@RequestBody UserLoginRequestDTO userLoginRequestDTO
+    public ResponseEntity<Object> login(@RequestBody @Valid UserLoginRequestDTO userLoginRequestDTO
     ) {
         UsernamePasswordAuthenticationToken userPassAuthToken =
                 new UsernamePasswordAuthenticationToken(

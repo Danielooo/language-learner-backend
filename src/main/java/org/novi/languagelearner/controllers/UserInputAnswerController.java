@@ -1,5 +1,6 @@
 package org.novi.languagelearner.controllers;
 
+import jakarta.validation.Valid;
 import org.novi.languagelearner.dtos.UserInputAnswer.UserInputAnswerRequestDTO;
 import org.novi.languagelearner.services.UserInputAnswerService;
 import org.springframework.http.HttpStatus;
@@ -22,7 +23,7 @@ public class UserInputAnswerController {
 
 
     @PostMapping("/user/submit")
-    public ResponseEntity<?> submitAnswer(@RequestBody UserInputAnswerRequestDTO userInputAnswerRequestDTO) {
+    public ResponseEntity<?> submitAnswer(@RequestBody @Valid UserInputAnswerRequestDTO userInputAnswerRequestDTO) {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             userInputAnswerRequestDTO.setUserName(authentication.getName());
