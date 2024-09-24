@@ -94,7 +94,11 @@ public class UserService implements UserDetailsService {
         }
     }
 
+    public Long getUserIdByUserName(String userName) {
+        User user = getUserByUserName(userName);
 
+        return user.getId();
+    }
 
     public User getUserById(Long id) {
         Optional<User> userOptional = userRepository.findById(id);
@@ -148,6 +152,7 @@ public class UserService implements UserDetailsService {
 
         userRepository.save(user);
     }
+
 
 
     public User getUserByUserId(Long userId) {

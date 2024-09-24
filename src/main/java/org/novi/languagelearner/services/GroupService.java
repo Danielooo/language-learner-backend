@@ -33,28 +33,17 @@ public class GroupService {
 
     private final GroupRepository groupRepository;
     private final GroupMapper groupMapper;
-    private final ExerciseMapper exerciseMapper;
     private final UserService userService;
-    private final ExerciseService exerciseService;
     private final UserRepository userRepository;
     private final ExerciseRepository exerciseRepository;
 
     @Autowired
-    public GroupService(GroupRepository groupRepository, GroupMapper groupMapper, ExerciseMapper exerciseMapper, UserService userService, ExerciseService exerciseService, UserRepository userRepository, ExerciseRepository exerciseRepository) {
+    public GroupService(GroupRepository groupRepository, GroupMapper groupMapper, UserService userService, UserRepository userRepository, ExerciseRepository exerciseRepository) {
         this.groupRepository = groupRepository;
         this.groupMapper = groupMapper;
-        this.exerciseMapper = exerciseMapper;
         this.userService = userService;
-        this.exerciseService = exerciseService;
         this.userRepository = userRepository;
         this.exerciseRepository = exerciseRepository;
-    }
-
-
-    public Long getUserIdByUserName(String userName) {
-        UserResponseDTO userResponseDTO = userService.getUserResponseDTOByUserName(userName);
-
-        return userResponseDTO.getId();
     }
 
 

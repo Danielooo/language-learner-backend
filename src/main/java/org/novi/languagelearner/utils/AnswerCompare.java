@@ -8,7 +8,6 @@ import java.util.regex.Pattern;
 public class AnswerCompare {
 
 
-
    public static boolean answerWrongOrRight(String correctAnswer, String userInput) {
        // write all the checks in here. casing and accents should result in correct answer
         if (correctAnswer.equals(userInput)) {

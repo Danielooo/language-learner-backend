@@ -16,8 +16,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-// TODO: Waarom sommige returns met Object en sommige met String?
-// TODO: Meer exceptions toevoegen
 @ControllerAdvice
 public class ExceptionController {
 
