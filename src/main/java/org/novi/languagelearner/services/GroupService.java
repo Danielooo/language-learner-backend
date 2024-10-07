@@ -92,7 +92,6 @@ public class GroupService {
         }
     }
 
-    // TODO: implement user authentication
     public GroupResponseDTO getGroupById(Long id) {
         Optional<Group> groupOptional = groupRepository.findById(id);
         if (groupOptional.isEmpty()) {

@@ -21,6 +21,4 @@ public interface ExerciseRepository extends JpaRepository<Exercise, Long> {
     @Query("SELECT e FROM Exercise e JOIN e.group g JOIN g.user u WHERE e.id = :exerciseId AND u.userName = :userName")
     Optional<Exercise> findExerciseByIdAndUserName(@Param("userName") String userName, @Param("exerciseId") Long exerciseId);
 
-
-
 }

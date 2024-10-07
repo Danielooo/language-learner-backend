@@ -18,16 +18,12 @@ import java.util.List;
 @Component
 public class GroupMapper {
 
-    private final UserRepository userRepository;
     private final UserService userService;
     private final ObjectMapper objectMapper = new ObjectMapper();
-    private final ExerciseMapper exerciseMapper;
 
 
     public GroupMapper(UserRepository userRepository, UserService userService, ExerciseMapper exerciseMapper) {
-        this.userRepository = userRepository;
         this.userService = userService;
-        this.exerciseMapper = exerciseMapper;
     }
 
     public Group mapToEntity(GroupRequestDTO groupRequestDTO) {

@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 public class GroupRequestDTO {
 
-    @Min(value=0, message = "id can't be a negative integer")
+//    @Min(value=0, message = "id can't be a negative integer")
     private Long id;
 
     private String groupName;

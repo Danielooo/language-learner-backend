@@ -1,64 +1,53 @@
 package org.novi.languagelearner.utils;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class AnswerCompareTest {
 
-    private AnswerCompare answerCompare;
-
-    @BeforeEach
-    void setUp() {
-        answerCompare = new AnswerCompare();
-    }
-
-    @AfterEach
-    void tearDown() {
-
+    public record TestData(String correctAnswer, String userInput, AnswerCompare.AnswerState output) {
     }
 
     @Test
     void answerWrongOrRight() {
+
         // given
-        String correctAnswer1 = "correct";
-        String userInput1 = "correct";
-
-        String correctAnswer2 = "cased";
-        String userInput2 = "CaSeD";
-
-        String correctAnswer3 = "accented";
-        String userInput3 = "äccèntèd";
-
-        String correctAnswer4 = "wrong";
-        String userInput4 = "!wronk!";
+        var testData = new ArrayList<TestData>(){
+            {
+                add(new TestData("correct", "correct", new AnswerCompare.AnswerState(true, true)));
+                add(new TestData("cased", "CaSed", new AnswerCompare.AnswerState(true, true)));
+                add(new TestData("wrong", "!wronk!", new AnswerCompare.AnswerState(false, false)));
+            }
+        };
 
         // when
-        boolean result1 = AnswerCompare.answerWrongOrRight(correctAnswer1, userInput1);
-        boolean result2 = AnswerCompare.answerWrongOrRight(correctAnswer2, userInput2);
-        boolean result3 = AnswerCompare.answerWrongOrRight(correctAnswer3, userInput3);
-        boolean result4 = AnswerCompare.answerWrongOrRight(correctAnswer4, userInput4);
-
-        // then
-        assertEquals(true, result1);
-        assertEquals(true, result2);
-        assertEquals(true, result3);
-        assertEquals(false, result4);
-
+        for (var item : testData) {
+            assertEquals(item.output, AnswerCompare.answerWrongOrRight(item.correctAnswer, item.userInput));
+        }
     }
 
-    // TODO: Test afmaken
     @Test
     void compareAnswersIgnoreAccents() {
         // given
+        var testData = new ArrayList<TestData>(){
+            {
+                add(new TestData("cased", "CaSeD", new AnswerCompare.AnswerState(true, true)));
+                add(new TestData("cased", "cased",  new AnswerCompare.AnswerState(true, true)));
+                add(new TestData("cased", "c@$€d", new AnswerCompare.AnswerState(false, false)));
+                add(new TestData("correct", "çorreçt", new AnswerCompare.AnswerState(false, true)));
+            }
+        };
 
         // when
-
+        for (var item : testData) {
+            assertEquals(item.output, AnswerCompare.answerWrongOrRight(item.correctAnswer, item.userInput));
+        }
         // then
     }
-
 
 
 }

@@ -3,22 +3,14 @@ package org.novi.languagelearner.utils;
 import java.text.Normalizer;
 import java.util.regex.Pattern;
 
-// TODO: Nice to have; implement hard and forgiving comparison settings
 
 public class AnswerCompare {
+    public record AnswerState(boolean allGood, boolean ignoreAccentGood) {}
 
-
-   public static boolean answerWrongOrRight(String correctAnswer, String userInput) {
+    public static AnswerState answerWrongOrRight(String correctAnswer, String userInput) {
        // write all the checks in here. casing and accents should result in correct answer
-        if (correctAnswer.equals(userInput)) {
-            return true;
-        } else if (compareAnswersIgnoreAccents(correctAnswer, userInput)) {
-            return true;
-        } else if (compareAnswersIgnoreCasing(correctAnswer, userInput)) {
-            return true;
-        } else {
-            return false;
-        }
+        return new AnswerState(compareAnswersIgnoreCasing(correctAnswer, userInput),
+                compareAnswersIgnoreAccents(correctAnswer, userInput));
     }
 
     private static boolean compareAnswersIgnoreAccents(String correctAnswer, String userInput) {
@@ -37,16 +29,13 @@ public class AnswerCompare {
         return pattern.matcher(normalized).replaceAll("");
     }
 
-    public static String getFeedbackAfterCompare(String correctAnswer, String userInput) {
-        if (correctAnswer.equals(normalizeString(userInput))) {
-            return "100% Correct!";
-        } else if (compareAnswersIgnoreCasing(correctAnswer, userInput)) {
-            return "Correct, but watch the casing!";
-        } else if (compareAnswersIgnoreAccents(correctAnswer, userInput)) {
-            return "We'll take it! But beware of the accents!";
-        } else {
-            return "Incorrect!";
-        }
+    public static String getFeedbackAfterCompare(AnswerState state) {
+        return switch (state) {
+            case AnswerState(boolean all, boolean accent) when all && accent ->  "100% correct";
+            case AnswerState(boolean all, boolean accent) when !all && accent ->  "accents dude";
+            case AnswerState(boolean all, boolean accent) when !all && !accent -> "plain wrong, my guy";
+            default ->  "invalid";
+        };
 
     }
 }

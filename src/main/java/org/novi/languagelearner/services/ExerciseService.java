@@ -30,11 +30,6 @@ public class ExerciseService {
         this.exerciseMapper = exerciseMapper;
     }
 
-    public ExerciseResponseDTO createExercise(ExerciseRequestDTO requestDTO) {
-        Exercise exercise = exerciseMapper.toEntity(requestDTO);
-        Exercise savedExercise = exerciseRepository.save(exercise);
-        return exerciseMapper.mapToResponseDTO(savedExercise) ;
-    }
 
     public Exercise getExerciseById(Long id) {
         Optional<Exercise> exerciseOptional = exerciseRepository.findById(id);
@@ -50,19 +45,6 @@ public class ExerciseService {
 
         exerciseRepository.deleteById(id);
     }
-
-    // just get exercise without the userInputAnswers
-    public Exercise getExerciseWithoutUserInputAnswersById(Long id) {
-
-        Optional<Exercise> exerciseOptional = exerciseRepository.findExerciseWithoutUserInputAnswersById(id);
-        if (exerciseOptional.isEmpty()) {
-            throw new RecordNotFoundException("Exercise id not found in database");
-        } else {
-            return exerciseOptional.get();
-        }
-    }
-
-
 
 
     public void deleteExerciseAsAdmin(Long id) {

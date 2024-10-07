@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class RoleMapper {
+public class  RoleMapper {
 
     public Role fromEntity(Role role) {
         if (role == null) {

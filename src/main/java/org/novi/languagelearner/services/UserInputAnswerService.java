@@ -7,6 +7,7 @@ import org.novi.languagelearner.entities.Exercise;
 import org.novi.languagelearner.entities.User;
 import org.novi.languagelearner.mappers.UserInputAnswerMapper;
 import org.novi.languagelearner.repositories.UserInputAnswerRepository;
+import org.novi.languagelearner.utils.AnswerCompare;
 import org.springframework.stereotype.Service;
 
 import static org.novi.languagelearner.utils.AnswerCompare.answerWrongOrRight;
@@ -42,10 +43,11 @@ public class UserInputAnswerService {
         String correctAnswer = exercise.getAnswer();
         String userInput = userInputAnswer.getUserInput();
 
+
         // creates an response dto where the userInputAnswer is checked
         return userInputAnswerMapper.mapToAnswerSubmitResponseDTO(exercise.getAnswer(),
                 answerWrongOrRight(exercise.getAnswer(), userInputAnswerRequestDTO.getUserInput()),
-                getFeedbackAfterCompare(exercise.getAnswer(), userInputAnswerRequestDTO.getUserInput()));
+                getFeedbackAfterCompare(answerWrongOrRight(exercise.getAnswer(), userInputAnswerRequestDTO.getUserInput())));
     }
 
     public void deleteAnswer(Long id) {
