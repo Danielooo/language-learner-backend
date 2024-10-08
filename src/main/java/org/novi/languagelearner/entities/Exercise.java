@@ -19,6 +19,13 @@ public class Exercise extends Base {
     private String question;
     private String answer;
 
+    public Exercise() {
+    }
+
+    public Exercise(String question, String answer) {
+        this.question = question;
+        this.answer = answer;
+    }
 
 
     @ManyToOne

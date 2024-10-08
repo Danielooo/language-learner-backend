@@ -5,9 +5,8 @@ import org.novi.languagelearner.dtos.Group.GroupRequestDTO;
 import org.novi.languagelearner.dtos.Group.GroupResponseDTO;
 import org.novi.languagelearner.entities.Exercise;
 import org.novi.languagelearner.entities.Group;
+import org.novi.languagelearner.entities.User;
 import org.novi.languagelearner.exceptions.BadRequestException;
-import org.novi.languagelearner.repositories.UserRepository;
-import org.novi.languagelearner.services.UserService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,20 +17,13 @@ import java.util.List;
 @Component
 public class GroupMapper {
 
-    private final UserService userService;
-    private final ObjectMapper objectMapper = new ObjectMapper();
 
-
-    public GroupMapper(UserRepository userRepository, UserService userService, ExerciseMapper exerciseMapper) {
-        this.userService = userService;
-    }
-
-    public Group mapToEntity(GroupRequestDTO groupRequestDTO) {
+    public Group mapToEntity(GroupRequestDTO groupRequestDTO, User user) {
         Group group = new Group();
 
         group.setGroupName(groupRequestDTO.getGroupName());
 
-        group.setUser(userService.getUserByUserName(groupRequestDTO.getUserName()));
+        group.setUser(user);
 
         List<Exercise> exercises = groupRequestDTO.getExercises();
         for (Exercise exercise : exercises) {
@@ -40,17 +32,6 @@ public class GroupMapper {
         group.setExercises(exercises);
 
         return group;
-    }
-
-    public Group mapInputIntoCurrentEntity(GroupRequestDTO groupRequestDTO, Group currentGroup) {
-        Group updatedGroup = currentGroup;
-
-        if (groupRequestDTO.getGroupName() != null) {
-            updatedGroup.setGroupName(groupRequestDTO.getGroupName());
-        }
-
-
-        return updatedGroup;
     }
 
 
@@ -66,7 +47,7 @@ public class GroupMapper {
     public GroupRequestDTO mapJsonFileToGroupRequestDTO(MultipartFile jsonFile, String userName)  {
         try {
             String jsonContent = new String(jsonFile.getBytes());
-
+            ObjectMapper objectMapper = new ObjectMapper();
             GroupRequestDTO groupRequestDTO = objectMapper.readValue(jsonContent, GroupRequestDTO.class);
             groupRequestDTO.setUserName(userName);
 
@@ -76,13 +57,5 @@ public class GroupMapper {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public GroupRequestDTO mapControllerDataToRequestDTO (Long id) {
-        GroupRequestDTO requestDTO = new GroupRequestDTO();
-//        requestDTO.setUserName(userName);
-        requestDTO.setId(id);
-
-        return requestDTO;
     }
 }

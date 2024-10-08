@@ -48,7 +48,7 @@ public class GroupService {
 
 
     public GroupResponseDTO createGroup(GroupRequestDTO groupRequestDTO) {
-        Group group = groupMapper.mapToEntity(groupRequestDTO);
+        Group group = groupMapper.mapToEntity(groupRequestDTO, userService.getUserByUserName(groupRequestDTO.getUserName()));
         Group savedGroup = groupRepository.save(group);
 
         return groupMapper.mapToResponseDTO(savedGroup);
@@ -68,7 +68,7 @@ public class GroupService {
 
         List<GroupResponseDTO> groupResponseDTOS = new ArrayList<>();
         for (GroupRequestDTO groupRequestDTO : groupRequestDTOList) {
-            Group group = groupMapper.mapToEntity(groupRequestDTO);
+            Group group = groupMapper.mapToEntity(groupRequestDTO, userService.getUserByUserName(userName));
             Group savedGroup = groupRepository.save(group);
             groupResponseDTOS.add(groupMapper.mapToResponseDTO(savedGroup));
         }
@@ -76,21 +76,6 @@ public class GroupService {
         return groupResponseDTOS;
     }
 
-
-
-
-    // TODO: test if this is working and has a use case
-    public GroupResponseDTO updatePartOfGroup(Long id, GroupRequestDTO groupRequestDTO) {
-        Optional<Group> group = groupRepository.findById(id);
-        if (group.isEmpty()) {
-            throw new RecordNotFoundException(String.format("Group with id: %d not found", id));
-        } else {
-//            Group updatedGroup = group.get();
-            Group updatedGroup = groupMapper.mapInputIntoCurrentEntity(groupRequestDTO, group.get());
-            Group savedGroup = groupRepository.save(updatedGroup);
-            return groupMapper.mapToResponseDTO(savedGroup);
-        }
-    }
 
     public GroupResponseDTO getGroupById(Long id) {
         Optional<Group> groupOptional = groupRepository.findById(id);
