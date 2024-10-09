@@ -118,27 +118,6 @@ public class PhotoService {
         return "Photo deleted with id: " + photoId;
 
 
-
-
-
-
-
-//        Optional<User> userOptional = userRepository.findById(userId);
-//
-//        if (userOptional.isEmpty()) {
-//            throw new RecordNotFoundException("User not found");
-//        }
-//
-//        User user = userOptional.get();
-//        Photo photo = user.getPhoto();
-//
-//        if (photo == null) {
-//            throw new RecordNotFoundException("No photo found");
-//        }
-//
-//        user.setPhoto(null);
-//        userRepository.save(user);
-//        photoRepository.delete(photo);
     }
 }
 

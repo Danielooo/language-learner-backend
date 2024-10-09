@@ -40,7 +40,6 @@ public class UserService implements UserDetailsService {
         this.bCryptPasswordEncoder = new BCryptPasswordEncoder();
     }
 
-    // Delete this
 
     @Transactional
     public UserResponseDTO createUser(UserRequestDTO userDTO) {
