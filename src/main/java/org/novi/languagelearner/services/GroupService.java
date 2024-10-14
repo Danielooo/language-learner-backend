@@ -48,6 +48,10 @@ public class GroupService {
 
 
     public GroupResponseDTO createGroup(GroupRequestDTO groupRequestDTO) {
+        if (groupRepository.existsByGroupName(groupRequestDTO.getGroupName())) {
+            throw new BadRequestException("Group with name " + groupRequestDTO.getGroupName() + " already exists, please choose another name");
+        }
+
         Group group = groupMapper.mapToEntity(groupRequestDTO, userService.getUserByUserName(groupRequestDTO.getUserName()));
         Group savedGroup = groupRepository.save(group);
 
@@ -83,6 +87,7 @@ public class GroupService {
             throw new RecordNotFoundException(String.format("Group with id: %d not found", id));
         }
 
+
         Group group = groupOptional.get();
 
         String userName = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -93,8 +98,6 @@ public class GroupService {
         } else {
             throw new AccessDeniedException("Group does not belong to user with username: " + userName);
         }
-
-
     }
 
 

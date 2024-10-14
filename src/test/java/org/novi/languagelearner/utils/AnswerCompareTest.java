@@ -13,7 +13,7 @@ class AnswerCompareTest {
     }
 
     @Test
-    void answerWrongOrRight() {
+    public void answerWrongOrRight() {
 
         // given
         var testData = new ArrayList<TestData>(){
@@ -31,7 +31,7 @@ class AnswerCompareTest {
     }
 
     @Test
-    void compareAnswersIgnoreAccents() {
+    public void compareAnswersIgnoreAccents() {
         // given
         var testData = new ArrayList<TestData>(){
             {

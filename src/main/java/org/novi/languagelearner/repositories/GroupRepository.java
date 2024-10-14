@@ -13,6 +13,7 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
 
     List<Group> findByUser_UserName(String userName);
 
+
     Optional<Group> findById(Long id);
 
     List<Group> findAllByGroupName(String groupName);
@@ -29,7 +30,5 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
             @Param("userInputEndTime") LocalDateTime userInputEndTime
         );
 
-    // <find|read|get|query|count|delete><By><EntityProperty><Condition>
-
-
+    boolean existsByGroupName(String groupName);
 }

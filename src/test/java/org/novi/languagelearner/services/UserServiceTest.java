@@ -9,6 +9,7 @@ import org.novi.languagelearner.dtos.User.UserRequestDTO;
 import org.novi.languagelearner.dtos.User.UserResponseDTO;
 import org.novi.languagelearner.entities.Role;
 import org.novi.languagelearner.entities.User;
+import org.novi.languagelearner.exceptions.RecordNotFoundException;
 import org.novi.languagelearner.exceptions.UserNameAlreadyExistsException;
 import org.novi.languagelearner.mappers.RoleMapper;
 import org.novi.languagelearner.mappers.UserMapper;
@@ -46,7 +47,7 @@ class UserServiceTest {
 
 
     @Test
-    void createUser_ShouldThrowException_WhenUsernameAlreadyExists() {
+    public void createUser_ShouldThrowException_WhenUsernameAlreadyExists() {
         // Arrange
         UserRequestDTO userRequestDTO = new UserRequestDTO();
         userRequestDTO.setUserName("existingUser");
@@ -57,7 +58,7 @@ class UserServiceTest {
     }
 
     @Test
-    void createUser_ShouldCreateUser_WhenUsernameDoesNotExist() {
+    public void createUser_ShouldCreateUser_WhenUsernameDoesNotExist() {
         // Arrange
         UserRequestDTO userRequestDTO = new UserRequestDTO();
         userRequestDTO.setUserName("newUser");
@@ -92,5 +93,34 @@ class UserServiceTest {
         assertNotNull(result);
         assertEquals("newUser", result.getUsername());
         verify(userRepository, times(1)).save(user);
+    }
+
+    @Test
+    public void getUserResponseDTOByUserName_ShouldReturnUserResponseDTO_WhenUserExists() {
+        // Arrange
+        String username = "existingUser";
+        User user = new User();
+        user.setUserName(username);
+        UserResponseDTO userResponseDTO = new UserResponseDTO();
+        userResponseDTO.setUsername(username);
+        when(userRepository.findByUserName(username)).thenReturn(Optional.of(user));
+        when(userMapper.mapToResponseDTO(user)).thenReturn(userResponseDTO);
+
+        // Act
+        UserResponseDTO result = userService.getUserResponseDTOByUserName(username);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(username, result.getUsername());
+    }
+
+    @Test
+    public void getUserResponseDTOByUserName_ShouldThrowException_WhenUserNotFound() {
+        // Arrange
+        String username = "nonExistingUser";
+        when(userRepository.findByUserName(username)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(RecordNotFoundException.class, () -> userService.getUserResponseDTOByUserName(username));
     }
 }

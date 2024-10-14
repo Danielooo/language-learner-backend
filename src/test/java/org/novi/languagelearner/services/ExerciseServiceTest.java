@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.novi.languagelearner.dtos.Exercise.ExerciseRequestDTO;
 import org.novi.languagelearner.dtos.Exercise.ExerciseResponseDTO;
@@ -34,8 +35,7 @@ class ExerciseServiceTest  {
     ExerciseService exerciseService;
 
     @Test
-    @DisplayName("Get Exercise By id")
-    void getExerciseById() {
+    public void getExerciseById() {
 
         // ARRANGE
         var question = "Hello";
@@ -58,8 +58,49 @@ class ExerciseServiceTest  {
 
 
     @Test
-    @DisplayName("delete Exercise")
-    void deleteExercise() {
+    public void testGetExerciseById_Success() {
+        // Arrange
+        Long exerciseId = 1L;
+        Exercise exercise = new Exercise("Sample Question", "Sample Answer");
+
+        // Create a spy to mock getId() method, as we cannot set the ID directly
+        Exercise spyExercise = Mockito.spy(exercise);
+        Mockito.doReturn(exerciseId).when(spyExercise).getId();
+
+        // Mock repository to return an exercise when findById is called
+        when(exerciseRepository.findById(exerciseId)).thenReturn(Optional.of(spyExercise));
+
+        // Act
+        Exercise result = exerciseService.getExerciseById(exerciseId);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(exerciseId, result.getId());
+        assertEquals("Sample Question", result.getQuestion());
+        assertEquals("Sample Answer", result.getAnswer());
+
+        verify(exerciseRepository, times(1)).findById(exerciseId);
+    }
+
+    @Test
+    public void getExerciseById_ExerciseNotFound() {
+        // Arrange
+        Long exerciseId = 1L;
+
+        // Mock repository to return an empty optional when findById is called
+        when(exerciseRepository.findById(exerciseId)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(RecordNotFoundException.class, () -> {
+            exerciseService.getExerciseById(exerciseId);
+        });
+
+        verify(exerciseRepository, times(1)).findById(exerciseId);
+    }
+
+
+    @Test
+    public void deleteExercise_Succes() {
         // ARRANGE
         var question = "Hello";
         var answer = "Salve";
@@ -79,8 +120,7 @@ class ExerciseServiceTest  {
 
 
     @Test
-    @DisplayName("deleteExerciseAsAdmin should delete exercise if it exists")
-    void deleteExerciseAsAdmin_IfExists() {
+    public void deleteExerciseAsAdmin_ShouldDeleteIfExists() {
         // Arrange
         Long exerciseId = 1L;
         when(exerciseRepository.existsById(exerciseId)).thenReturn(true);
@@ -94,8 +134,7 @@ class ExerciseServiceTest  {
 
 
     @Test
-    @DisplayName("deleteExerciseAsAdmin should throw RecordNotFoundException if exercise does not exist")
-    void deleteExerciseAsAdmin_DoesntExist() {
+   public void deleteExerciseAsAdmin_ShouldThrowExceptionIfNotFound() {
         // Arrange
         Long exerciseId = 1L;
         when(exerciseRepository.existsById(exerciseId)).thenReturn(false);
@@ -105,8 +144,7 @@ class ExerciseServiceTest  {
     }
 
     @Test
-    @DisplayName("updateExercise should update exercise if it exists")
-    void updateExercise_ShouldUpdateExerciseIfExists() {
+    public void updateExercise_ShouldUpdateExerciseIfExists() {
         // Arrange
         Long exerciseId = 1L;
         ExerciseRequestDTO requestDTO = new ExerciseRequestDTO();
@@ -124,8 +162,6 @@ class ExerciseServiceTest  {
         Exercise persistedExercise = new Exercise();
         persistedExercise.setQuestion(requestDTO.getQuestion());
         persistedExercise.setAnswer(requestDTO.getAnswer());
-        // Simulate the ID being set by the database
-//        persistedExercise.setId(exerciseId);
 
         ExerciseResponseDTO responseDTO = new ExerciseResponseDTO();
         responseDTO.setQuestion(requestDTO.getQuestion());
@@ -146,8 +182,7 @@ class ExerciseServiceTest  {
     }
 
     @Test
-    @DisplayName("updateExercise should throw RecordNotFoundException if exercise does not exist")
-    void updateExercise_ShouldThrowExceptionIfExerciseDoesNotExist() {
+    public void updateExercise_ShouldThrowExceptionIfExerciseDoesNotExist() {
         // Arrange
         Long exerciseId = 1L;
         ExerciseRequestDTO requestDTO = new ExerciseRequestDTO();
@@ -158,8 +193,7 @@ class ExerciseServiceTest  {
     }
 
     @Test
-    @DisplayName("updateExercise should clear user input answers")
-    void getAllExercises_ShouldGetAllExercises() {
+    public void getAllExercises_ShouldGetAllExercises() {
         // Arrange
         Exercise exercise1 = new Exercise();
         exercise1.setQuestion("Water");
@@ -193,8 +227,7 @@ class ExerciseServiceTest  {
     }
 
     @Test
-    @DisplayName("getAllExercises should throw RecordNotFoundException if no exercises are found")
-    void getAllExercises_ShouldThrowExceptionIfRecordNotFound() {
+    public void getAllExercises_ShouldThrowExceptionIfRecordNotFound() {
         // Arrange
         when(exerciseRepository.findAll()).thenReturn(List.of());
 
