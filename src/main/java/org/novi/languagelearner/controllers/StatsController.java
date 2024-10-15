@@ -65,7 +65,6 @@ public class  StatsController {
         } catch (BadRequestException e) {
 
             return ResponseEntity.badRequest().body("Something went wrong while getting stats of user ");
-            // TODO: Ask Frans; waarom moet ik AccesDenied clausule er hier bij doen (throw m in de service). Krijg foutmelding zonder
         } catch (AccessDeniedException e) {
             throw new RuntimeException(e);
         }

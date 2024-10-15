@@ -16,11 +16,9 @@ public abstract class Base {
     private Long id;
 
     @Column(name = "created_date", updatable = false)
-
     private LocalDateTime createDate;
 
     @Column(name = "edited_date")
-
     private LocalDateTime editDate;
 
     @PrePersist

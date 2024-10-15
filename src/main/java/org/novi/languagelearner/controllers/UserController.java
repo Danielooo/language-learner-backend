@@ -32,7 +32,6 @@ public class UserController {
         this.photoService = photoService;
     }
 
-    // TODO: Add putmapping for updating user info >> username has to stay unique
     // TODO: Add admin endpoints >> also delete user
 
 

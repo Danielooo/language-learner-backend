@@ -29,8 +29,6 @@ public class ExerciseController {
     }
 
 
-
-
     @DeleteMapping("/user/delete/{id}")
     public ResponseEntity<?> deleteExerciseById(@PathVariable Long id) {
         try {
