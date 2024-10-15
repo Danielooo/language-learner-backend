@@ -65,15 +65,6 @@ public class GroupControllerIntegrationTest {
     }
 
 
-
-
-
-
-
-
-
-
-
     @Test
     @WithMockUser(username = "testUser")
     void getGroupById_ShouldReturnGroupResponseDTO() throws Exception {
