@@ -59,12 +59,14 @@ public class GroupControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser(username = "Kim")
+    @WithMockUser(username = "Chef")
     public void createGroup() throws Exception {
         mockMvc.perform(post("/groups/user/create")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect()
+                );
 
     }
 }
