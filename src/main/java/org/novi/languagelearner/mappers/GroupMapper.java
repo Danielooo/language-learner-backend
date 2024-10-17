@@ -27,7 +27,7 @@ public class GroupMapper {
 
         List<Exercise> exercises = groupRequestDTO.getExercises();
         for (Exercise exercise : exercises) {
-            exercise.setGroup(group); // Set the group reference in each exercise
+            exercise.setGroup(group);
         }
         group.setExercises(exercises);
 

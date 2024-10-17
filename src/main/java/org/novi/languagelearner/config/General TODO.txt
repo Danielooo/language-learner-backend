@@ -5,3 +5,5 @@
 // - Met Query Derivation kan je de repository gefilterd Groups teruggeven, met alleen de data die erbij hoort >> Dus alleen de userInputAnswers tussen startTime en EndTime
 // - Teruggeven Stat met waardevolle properties. Vraag / antwoord / aantal goed / aantal fout / laatste keer gedaan / laatste resultaat (goed of fout)
 
+// @CreatedBy: Marks a field to be populated with the creator of the entity.
+   @LastModifiedBy: Marks a field to be populated with the last modifier of the entity.

@@ -27,11 +27,22 @@ import java.util.List;
 public class GroupController {
 
     private final GroupService groupService;
-    private final GroupMapper groupMapper;
 
-    public GroupController(GroupService groupService, GroupMapper groupMapper) {
+    public GroupController(GroupService groupService) {
         this.groupService = groupService;
-        this.groupMapper = groupMapper;
+    }
+
+    @PostMapping("/user/create")
+    public ResponseEntity<?> createGroup(@RequestBody @Valid GroupRequestDTO groupRequestDTO) {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            groupRequestDTO.setUserName(authentication.getName());
+
+            GroupResponseDTO groupResponseDTO = groupService.createGroup(groupRequestDTO);
+            return ResponseEntity.ok().body(groupResponseDTO);
+        } catch (BadRequestException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PatchMapping("/user/add-exercises")
@@ -75,18 +86,6 @@ public class GroupController {
         }
     }
 
-    @PostMapping("/user/create")
-    public ResponseEntity<?> createGroup(@RequestBody @Valid GroupRequestDTO groupRequestDTO) {
-        try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            groupRequestDTO.setUserName(authentication.getName());
-
-            GroupResponseDTO groupResponseDTO = groupService.createGroup(groupRequestDTO);
-            return ResponseEntity.ok().body(groupResponseDTO);
-        } catch (BadRequestException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
 
     // TODO: implement user authentication for adding userId to group
     @PostMapping("/user/upload-json-files")
