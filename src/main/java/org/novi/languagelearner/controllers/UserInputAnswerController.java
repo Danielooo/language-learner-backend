@@ -2,6 +2,7 @@ package org.novi.languagelearner.controllers;
 
 import jakarta.validation.Valid;
 import org.novi.languagelearner.dtos.UserInputAnswer.UserInputAnswerRequestDTO;
+import org.novi.languagelearner.exceptions.BadRequestException;
 import org.novi.languagelearner.services.UserInputAnswerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,8 +31,8 @@ public class UserInputAnswerController {
 
             return ResponseEntity.ok(userInputAnswerService.submitAnswer(userInputAnswerRequestDTO));
 
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (BadRequestException e) {
+            throw new BadRequestException("Something went wrong with submitting the answer " + e.getMessage());
         }
     }
 
@@ -44,9 +45,8 @@ public class UserInputAnswerController {
 
 
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            throw new BadRequestException("Something went wrong de deleting the user input answer" + e.getMessage());
         }
     }
-
 }
 

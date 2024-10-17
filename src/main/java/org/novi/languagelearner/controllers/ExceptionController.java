@@ -1,10 +1,6 @@
 package org.novi.languagelearner.controllers;
 
-import org.novi.languagelearner.exceptions.BadRequestException;
-import org.novi.languagelearner.exceptions.RecordNotFoundException;
-import org.novi.languagelearner.exceptions.UserNameAlreadyExistsException;
-import org.novi.languagelearner.exceptions.UsernameNotFoundException;
-import org.novi.languagelearner.exceptions.AccessDeniedException;
+import org.novi.languagelearner.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;

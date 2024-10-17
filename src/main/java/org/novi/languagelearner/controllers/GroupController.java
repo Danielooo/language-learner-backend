@@ -4,22 +4,16 @@ package org.novi.languagelearner.controllers;
 import jakarta.validation.Valid;
 import org.novi.languagelearner.dtos.Group.GroupRequestDTO;
 import org.novi.languagelearner.dtos.Group.GroupResponseDTO;
-import org.novi.languagelearner.entities.Group;
 import org.novi.languagelearner.exceptions.BadRequestException;
-import org.novi.languagelearner.mappers.GroupMapper;
 import org.novi.languagelearner.services.GroupService;
-import org.novi.languagelearner.utils.SecurityUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.novi.languagelearner.exceptions.AccessDeniedException;
 
 import java.util.List;
-
-
 
 
 @RestController
@@ -59,7 +53,6 @@ public class GroupController {
         }
     }
 
-    // TODO: implement user authentication
     @GetMapping("/user/{id}")
     public ResponseEntity<?> getGroupById(@PathVariable Long id) {
 
@@ -87,7 +80,6 @@ public class GroupController {
     }
 
 
-    // TODO: implement user authentication for adding userId to group
     @PostMapping("/user/upload-json-files")
     public ResponseEntity<?> createGroupsFromJsonFiles(@RequestBody MultipartFile[] files) {
 
@@ -101,7 +93,6 @@ public class GroupController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
 
 
     @GetMapping("/admin/all")

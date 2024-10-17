@@ -1,10 +1,9 @@
 package org.novi.languagelearner.dtos.Group;
 
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import org.novi.languagelearner.entities.Exercise;
 import lombok.Data;
+import org.novi.languagelearner.entities.Exercise;
 
 import java.util.List;
 

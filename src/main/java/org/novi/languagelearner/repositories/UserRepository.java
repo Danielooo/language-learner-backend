@@ -1,7 +1,6 @@
 package org.novi.languagelearner.repositories;
 
 import jakarta.transaction.Transactional;
-import org.novi.languagelearner.entities.Role;
 import org.novi.languagelearner.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

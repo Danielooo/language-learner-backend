@@ -2,7 +2,6 @@ package org.novi.languagelearner.mappers;
 
 import org.novi.languagelearner.dtos.UserInputAnswer.UserInputAnswerFeedbackResponseDTO;
 import org.novi.languagelearner.dtos.UserInputAnswer.UserInputAnswerResponseDTO;
-
 import org.novi.languagelearner.entities.UserInputAnswer;
 import org.novi.languagelearner.utils.AnswerCompare;
 import org.springframework.stereotype.Component;

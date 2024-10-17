@@ -32,8 +32,6 @@ public class UserController {
         this.photoService = photoService;
     }
 
-    // TODO: Add admin endpoints >> also delete user
-
 
     @GetMapping("/admin/{id}")
     public ResponseEntity<?> getUserInfoAsAdmin(@PathVariable("id") Long id) {
@@ -50,9 +48,8 @@ public class UserController {
             List<UserResponseDTO> listOfUserResponseDTOs = userService.getAll();
 
             return ResponseEntity.ok().body(listOfUserResponseDTOs);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("An unforeseen error occurred while retrieving all users. System message: " + e.getMessage());
+        } catch (BadRequestException e) {
+            throw new BadRequestException("An unforeseen error occurred while retrieving all users. System message: " + e.getMessage());
         }
     }
 
@@ -74,7 +71,7 @@ public class UserController {
             return ResponseEntity.ok().body(responseDTOList);
 
         } catch (BadRequestException e) {
-            return ResponseEntity.badRequest().body("Issue with retrieving users by role and username");
+            throw new BadRequestException("Issue with retrieving users by role and username " + e.getMessage() );
         }
     }
 
@@ -86,7 +83,7 @@ public class UserController {
             UserResponseDTO userResponseDTO = userService.getUserResponseDTOByUserName(authentication.getName());
             return ResponseEntity.ok().body(userResponseDTO);
         } catch (BadRequestException e) {
-            throw new BadRequestException("Issue with getting profile");
+            throw new BadRequestException("Issue with getting profile " + e.getMessage());
         }
     }
 
@@ -99,7 +96,7 @@ public class UserController {
 
             return ResponseEntity.ok().body(userResponseDTO);
         } catch (BadRequestException e) {
-            throw new BadRequestException("Issue with creating user");
+            throw new BadRequestException("Issue with creating user " + e.getMessage());
         }
     }
 
@@ -115,7 +112,7 @@ public class UserController {
 
             return ResponseEntity.ok().body(userResponseDTO);
         } catch (BadRequestException e) {
-            throw new BadRequestException("Issue with changing username");
+            throw new BadRequestException("Issue with changing username " + e.getMessage());
         }
     }
 
@@ -127,7 +124,7 @@ public class UserController {
 
             return ResponseEntity.ok().body("Password is successfully changed");
         } catch (BadRequestException e) {
-            throw new BadRequestException("Something went wrong while changing the password");
+            throw new BadRequestException("Something went wrong while changing the password" + e.getMessage());
         }
     }
 }

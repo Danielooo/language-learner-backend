@@ -1,7 +1,10 @@
 package org.novi.languagelearner.entities;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 

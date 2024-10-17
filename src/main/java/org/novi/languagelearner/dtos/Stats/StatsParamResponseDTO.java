@@ -1,7 +1,6 @@
 package org.novi.languagelearner.dtos.Stats;
 
 import lombok.Data;
-import org.novi.languagelearner.dtos.UserInputAnswer.UserInputAnswerResponseDTO;
 
 import java.time.LocalDateTime;
 import java.util.List;

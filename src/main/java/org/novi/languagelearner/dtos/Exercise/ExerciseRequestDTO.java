@@ -1,6 +1,5 @@
 package org.novi.languagelearner.dtos.Exercise;
 
-import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;

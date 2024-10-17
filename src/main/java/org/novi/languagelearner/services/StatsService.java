@@ -1,8 +1,8 @@
 package org.novi.languagelearner.services;
 
+import org.novi.languagelearner.dtos.Stats.StatsOfExerciseResponseDTO;
 import org.novi.languagelearner.dtos.Stats.StatsParamRequestDTO;
 import org.novi.languagelearner.dtos.Stats.StatsParamResponseDTO;
-import org.novi.languagelearner.dtos.Stats.StatsOfExerciseResponseDTO;
 import org.novi.languagelearner.entities.Exercise;
 import org.novi.languagelearner.entities.Group;
 import org.novi.languagelearner.entities.User;

@@ -3,7 +3,6 @@ package org.novi.languagelearner.controllers;
 import jakarta.validation.Valid;
 import org.novi.languagelearner.dtos.Exercise.ExerciseRequestDTO;
 import org.novi.languagelearner.dtos.Exercise.ExerciseResponseDTO;
-import org.novi.languagelearner.entities.Exercise;
 import org.novi.languagelearner.exceptions.BadRequestException;
 import org.novi.languagelearner.exceptions.RecordNotFoundException;
 import org.novi.languagelearner.services.ExerciseService;

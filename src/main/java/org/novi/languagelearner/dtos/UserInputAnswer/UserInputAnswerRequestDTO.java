@@ -13,6 +13,5 @@ public class UserInputAnswerRequestDTO {
     @NotBlank(message = "User input cannot be blank")
     private String userInput;
 
-    @NotBlank(message = "Username cannot be blank")
     private String userName;
 }

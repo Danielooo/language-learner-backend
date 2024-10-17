@@ -26,24 +26,19 @@ public class PhotoController {
     }
 
 
-    // TODO: create GET, PUT, DELETE mappings for photo per user
-    // TODO: create GET, PUT, DELETE mappings for photo per admin, In requestDto add chosen username
 
     @PostMapping
-    public ResponseEntity<?> singleFileUpload(@Valid @ModelAttribute PhotoRequestDTO photoRequestDTO) throws IOException {
+    public ResponseEntity<?> singleFileUpload(@ModelAttribute PhotoRequestDTO photoRequestDTO) {
         try {
-            // get authenticated username
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-            // TODO: put this logic in the mapper, mapToEntity
             photoRequestDTO.setUserName(authentication.getName());
             photoRequestDTO.setFileName(photoRequestDTO.getPhotoData().getOriginalFilename());
             photoRequestDTO.setFileType(photoRequestDTO.getPhotoData().getContentType());
 
-            // return user with photo; for testing purposes
             UserResponseDTO userResponseDTO = photoService.uploadPhoto(photoRequestDTO);
             return ResponseEntity.ok().body(userResponseDTO);
-        } catch (Exception e) {
+        } catch (IOException e) {
             return ResponseEntity.badRequest().body("No upload possible");
         }
     }
@@ -56,7 +51,7 @@ public class PhotoController {
 
             PhotoResponseDTO photoResponseDTO = photoService.getPhoto(userName);
             return ResponseEntity.ok().body(photoResponseDTO);
-        } catch (Exception e) {
+        } catch (BadRequestException e) {
             return ResponseEntity.badRequest().body("No photo found");
         }
     }
@@ -74,7 +69,7 @@ public class PhotoController {
                     .header("Content-Disposition", "attachment; filename=\"" + photoResponseDTO.getFileName() + "\"")
                     .header("Content-Type", photoResponseDTO.getFileType())
                     .body(photoData);
-        } catch (Exception e) {
+        } catch (BadRequestException e) {
             return ResponseEntity.badRequest().body("No photo found");
         }
     }
@@ -88,7 +83,7 @@ public class PhotoController {
 
             photoService.deletePhoto(userName);
             return ResponseEntity.ok().body("Photo deleted");
-        } catch (Exception e) {
+        } catch (BadRequestException e) {
             return ResponseEntity.badRequest().body("No photo found");
         }
     }

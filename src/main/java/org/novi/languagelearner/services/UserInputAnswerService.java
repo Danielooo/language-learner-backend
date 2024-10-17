@@ -2,12 +2,11 @@ package org.novi.languagelearner.services;
 
 import org.novi.languagelearner.dtos.UserInputAnswer.UserInputAnswerFeedbackResponseDTO;
 import org.novi.languagelearner.dtos.UserInputAnswer.UserInputAnswerRequestDTO;
-import org.novi.languagelearner.entities.UserInputAnswer;
 import org.novi.languagelearner.entities.Exercise;
 import org.novi.languagelearner.entities.User;
+import org.novi.languagelearner.entities.UserInputAnswer;
 import org.novi.languagelearner.mappers.UserInputAnswerMapper;
 import org.novi.languagelearner.repositories.UserInputAnswerRepository;
-import org.novi.languagelearner.utils.AnswerCompare;
 import org.springframework.stereotype.Service;
 
 import static org.novi.languagelearner.utils.AnswerCompare.answerWrongOrRight;
